@@ -41,6 +41,8 @@ From here we can increase the dimensionality of the PINN by extending it to the 
 
 Once a successful 2D PINN for a fluid PDE such as the stream function is produced we can take simulated LES data from OpenFOAM and the governing equation (this will need significant expertise in understanding the PDE and the initial/boundary conditions) to create an OpenFOAM-LES PINN.
 
+The PINN process will require some degree of hyper-parameter tuning; particularly model architecture such as number of layers, weights, training epochs and activation functions.
+
 The last step will be to edit OpenFOAM such that a hybrid PINN-solver can be implemented where the smallest cells near the boundary conditions are updated using the PINN but the central turbulent fluid is updated using the solver.
 
 We will then benchmark the accuracy and performance of:
@@ -48,3 +50,10 @@ We will then benchmark the accuracy and performance of:
 - OpenFOAM alone
 - PINN alone
 - Hybrid OpenFOAM-PINN solver
+
+### Likely future work
+PINNs are set in terms of their computational domain so if all the above works then using DeepONets would be desirable to generalise the problem.
+
+Other model architecture incorporated into the DNN.
+
+Use of accelerated libraries such as ZenDNN.
