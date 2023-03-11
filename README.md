@@ -65,6 +65,8 @@ To Do:
   - batch size
   - epochs 
 
+Other ideas that we could look at to investigate the performance of PINNs include Seq2Seq and curriculum learning.
+
 From here we can increase the dimensionality of the PINN by extending it to the 2D heat equation, this will allow us to then change focus from the heat equation to more complex fluid PDEs such as the stream function.
 
 Once a successful 2D PINN for a fluid PDE such as the stream function is produced we can take simulated LES data from OpenFOAM and the governing equation (this will need significant expertise in understanding the PDE and the initial/boundary conditions) to create an OpenFOAM-LES PINN.
