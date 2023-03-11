@@ -42,7 +42,7 @@ To Do:
 - Plot loss function (MSE over epochs to ensure convergence)
   - Adjust epochs if necessary
 - Plot real vs predict vs residual using animation.
-- Do hyper-tuning of parameters 
+- Do hyper-tuning of parameters using TensorBoard for QC
   - activation
   - optimizer
   - number and shape of layers
