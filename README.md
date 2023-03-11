@@ -31,11 +31,13 @@ This project hypothesizes that by replacing traditional simulation code in the r
 
 The full goal of this repository is to gradually build up knowledge of PINNs by using progressively more complex PDEs.
 
-The first step is to solve the 1D heat equation explicitly to provide training data and to define initial and boundary conditions.`
+The first step is to solve the 1D heat equation explicitly to provide training data and to define initial and boundary conditions.`\
+
 To Do:
 - Implement matplotlib animation so we can see the heat profile developing
 
 From this, a traditional deep neural-network will be constructed with which we will contrast a PINN will incorporates the physics conditions described in the explicit solver.\
+
 To Do:
 - Create NN class that outputs u for a given x,t
   - Choose random points over x,t including BC and IC
@@ -50,6 +52,7 @@ To Do:
   - epochs
 
 This process should showcase simply why a PINN is a superior choice for modelling fluid dynamics behavior.\
+
 To Do:
 - Define loss for IC
 - Define loss for BC (left and right wall)
