@@ -81,6 +81,13 @@ We will then benchmark the accuracy and performance of:
 - PINN alone
 - Hybrid OpenFOAM-PINN solver
 
+### Reproducability
+Include definition files and various auxiliary files needed to build a Docker/Apptainer file so that the work can be run agnostically with whatever hardware is available.
+  - c
+  - Run on bare-metal like Archer/Cirrus/Laptop
+  - allow to run on Codespaces with devcontainer.json
+  - supply a Colab notebook to run on Google Colab
+
 ### Likely future work
 PINNs are set in terms of their computational domain so if all the above works then using DeepONets would be desirable to generalise the problem.
 
