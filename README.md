@@ -83,7 +83,6 @@ We will then benchmark the accuracy and performance of:
 
 ### Reproducability
 Include definition files and various auxiliary files needed to build a Docker/Apptainer file so that the work can be run agnostically with whatever hardware is available.
-  - c
   - Run on bare-metal like Archer/Cirrus/Laptop
   - allow to run on Codespaces with devcontainer.json
   - supply a Colab notebook to run on Google Colab
