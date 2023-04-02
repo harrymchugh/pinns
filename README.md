@@ -63,7 +63,10 @@ To Do:
   - optimizer
   - number and shape of layers
   - batch size
-  - epochs 
+  - epochs
+  - use of dropout
+  - use of regularization
+  - variable initialization 
 
 Other ideas that we could look at to investigate the performance of PINNs include Seq2Seq and curriculum learning.
 
