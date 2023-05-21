@@ -1,2 +1,3 @@
-src/runs
+src/*/runs
 src/*/.ipynb_checkpoints
+*/.DS_Store
