@@ -1,3 +1,4 @@
 src/*/runs
 src/*/.ipynb_checkpoints
 .DS_Store
+*.sif
