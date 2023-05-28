@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cfdpinn"
+authors = [
+    {name = "Harry McHugh", email = "harrymchugh@gmail.com"},
+]
+description = "An MSc project using physics-informed nerual networks for computaional fluid dynamics"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "ofpp",
+    "numpy",
+    "torch",
+    "torchvision",
+    "torchaudio",
+    "matplotlib",
+    "scikit-learn"
+]
+license = {file = "LICENSE"}
+
+[project.urls]
+homepage = "https://github.com/harrymchugh/cfdpinn"
+documentation = "https://github.com/harrymchugh/cfdpinn"
+repository = "https://github.com/harrymchugh/cfdpinn"
+
+[project.scripts]
+cfdpinn = "cfdpinn.main:main"
