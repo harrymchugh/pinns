@@ -1,5 +1,3 @@
-LABEL "author"="Harry McHugh"
-
 ARG OS_VER=latest
 
 FROM ubuntu:${OS_VER} AS distro
@@ -7,6 +5,8 @@ FROM ubuntu:${OS_VER} AS distro
 # Version-independent base layer
 FROM distro AS base0
 ARG DEBIAN_FRONTEND=noninteractive
+
+LABEL "author"="Harry McHugh"
 
 RUN apt-get update \
  && apt-get -y install --no-install-recommends \
