@@ -4,6 +4,8 @@ FROM ubuntu:${OS_VER} AS distro
 
 # Version-independent base layer
 FROM distro AS base0
+SHELL ["/bin/bash", "-c"] 
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 LABEL "author"="Harry McHugh"
@@ -28,4 +30,4 @@ RUN apt-get update \
  && pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 \
  && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT [ ". /usr/lib/openfoam/openfoam2212/etc/bashrc" ]
+RUN . /usr/lib/openfoam/openfoam2212/etc/bashrc
