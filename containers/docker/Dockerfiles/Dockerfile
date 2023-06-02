@@ -29,5 +29,3 @@ RUN apt-get update \
  && apt-get -y install python3 python3-pip \
  && pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 \
  && rm -rf /var/lib/apt/lists/*
-
-RUN . /usr/lib/openfoam/openfoam2212/etc/bashrc
