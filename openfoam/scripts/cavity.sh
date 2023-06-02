@@ -2,6 +2,20 @@
 
 set -x
 
+Source the openfoam bashrc
+Check we are in the cavity directory
+Clean up any previous runs
+
+SERIAL:
+Run block mesh and icoFoam
+
+PARALLEL:
+[Clever way to set number of processors]
+Run decomposePar, blockMesh, icoFoam, reconstructPar
+
+Print confirmation and exit
+
+
 #Source openfoam environment
 #Not necessary if using container as it is set
 #automatically
