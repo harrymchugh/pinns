@@ -5,3 +5,8 @@ cd /mnt/cases/cavity
 rm -r 0.* [1-9]*
 time blockMesh
 time icoFoam
+
+#Get number of CPUs available
+#lscpu | grep "^CPU(s):" | sed -e 's/\s\+/,/g' | cut -f 2 -d ","
+#
+#
