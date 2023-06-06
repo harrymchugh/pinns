@@ -71,26 +71,23 @@ def parse_args():
     #MP4 animations
     parser.add_argument("--training-animation",
         action="store_true",
-        type=bool,
+        required=False,
+        default=False,
+        help="Output MP4 showing training locations with training \
+            U_mag,U,V,P over all timesteps",
+        dest="training_animation")
+    
+    parser.add_argument("--prediction-animation",
+        action="store_true",
         required=False,
         default=False,
         help="Output MP4 showing training locations with predicted \
             U_mag,U,V,P over all timesteps",
         dest="prediction_animation")
     
-    parser.add_argument("--prediction-animation",
-        action="store_true",
-        type=bool,
-        required=False,
-        default=False,
-        help="Output MP4 showing training locations with predicted \
-            U_mag,U,V,P over all timesteps",
-        dest="training_animation")
-    
     #Static plots
     parser.add_argument("--no-static-plots",
         action="store_false",
-        type=bool,
         required=False,
         default=True,
         help="Stop output of pre-defined static plots for analysis",
@@ -99,7 +96,6 @@ def parse_args():
     #Output raw training and prediction data
     parser.add_argument("--raw-pred-output",
         action="store_true",
-        type=bool,
         required=False,
         default=False,
         help="Output raw predicted NumPY arrays for U,V,P",
@@ -107,34 +103,44 @@ def parse_args():
 
     parser.add_argument("--raw-train-output",
         action="store_true",
-        type=bool,
         required=False,
         default=False,
         help="Output raw training data NumPY arrays for U,V,P",
         dest="raw_train_output")
     
     #PINN setup and variables
-    parser.add_argument("--model-name",
+    parser.add_argument("--model-path",
         action="store",
         type=str,
         required=True,
-        help="Output name for the trained PINN. If a full path is not \
-            provided the model will be saved in the default location: \
-            $CFDPINN_ROOT/models",
-        dest="pinn_output_name")
+        help="Full path for the output of the trained PINN",
+        dest="pinn_output_path")
     
     parser.add_argument("--tensorboard",
         action="store_true",
-        type=bool,
         required=False,
         default=False,
         help="Log training metrics with Tensorboard functionality",
         dest="tensorboard")
     
+    parser.add_argument("--epochs",
+        action="store",
+        type=int,
+        required=True,
+        help="The number of epochs to train the PINN",
+        dest="epochs")      
+    
+    parser.add_argument("--lr",
+        action="store",
+        type=float,
+        required=False,
+        default=0.001,
+        help="The learning rate of the ADAM Optimizer used to train the PINN",
+        dest="learning_rate")
+    
     #Timing utilities
     parser.add_argument("--timings",
         action="store_true",
-        type=bool,
         required=False,
         default=False,
         help="Report timings for key processes and functions",
@@ -143,7 +149,6 @@ def parse_args():
     #Verbose logging
     parser.add_argument("-v",
         action="store_true",
-        type=bool,
         required=False,
         default=False,
         help="Enable verbose logging",
