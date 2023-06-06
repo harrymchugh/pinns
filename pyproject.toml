@@ -7,6 +7,7 @@ name = "cfdpinn"
 authors = [
     {name = "Harry McHugh", email = "harrymchugh@gmail.com"},
 ]
+version = "0.1"
 description = "An MSc project using physics-informed nerual networks for computaional fluid dynamics"
 readme = "README.md"
 requires-python = ">=3.9"
