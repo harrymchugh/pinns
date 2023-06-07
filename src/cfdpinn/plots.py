@@ -17,6 +17,8 @@ def create_animation(data,geom,num_frames,array_label):
     elif array_label == "residual":
         label = "_residual"
 
+    print(f"Creating animation {label}...")
+
     #Compute magnitude of velocity from prediction
     data[f"u_mag{label}"] = np.sqrt(
             data[f"u{label}"].astype(np.double)**2 + \
@@ -63,6 +65,8 @@ def create_animation(data,geom,num_frames,array_label):
     fig.tight_layout(pad=5)
     
     fluid_animation.save(output_path,writer=writervideo)
+
+    print(f"\tAnimation {label} completed\n")
 
 def animate_subplot(i,ax,data,geom,label,num_frames):
     """

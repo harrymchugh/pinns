@@ -9,7 +9,7 @@ def function_timer(function_to_time):
         start_time = time()
         function_output = function_to_time(*args, **kwargs)
         end_time = time()
-        print(f"{function_to_time.__name__!r} wall-time (seconds): {(end_time-start_time):.3f}")
+        print(f"{function_to_time.__name__!r} wall-time (seconds): {(end_time-start_time):.3f}\n")
         return function_output
     
     return wrap_func

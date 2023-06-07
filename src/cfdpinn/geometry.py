@@ -9,6 +9,8 @@ def setup_geom(args):
     Return a dictionary holding all geometry information
     for the input simulation data
     """
+    print("Setting up geometry...")
+
     geom = dict()
     geom["x_start"] = 0
     geom["x_end"] = 1
@@ -32,4 +34,6 @@ def setup_geom(args):
         linspace(geom["x_start"],geom["x_end"],geom["numx"]),
         linspace(geom["y_start"],geom["y_end"],geom["numy"]))
     
+    print("\tGeometry setup completed\n")
+
     return geom

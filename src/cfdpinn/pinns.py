@@ -242,11 +242,14 @@ class CfdPinn(torch.nn.Module):
             self.writer.add_scalar('test_total_loss',data["test_total_loss"],epoch)
 
     def save_model(self):
+        print(f"Saving CFDPINN model to {self.model_output_path}...")
         torch.save(self.to("cpu"), self.model_output_path)
+        print(f"\tModel {self.model_output_path} saved\n")
 
 def predict_fluid(data,pinn,geom,args):
     """
     """
+    print("Prediction of fluid properties...")
     scaled_features = data["scaler"].transform(data["features"])
 
     t = scaled_features[:,0]
@@ -342,5 +345,7 @@ def predict_fluid(data,pinn,geom,args):
     data["u_residual"] = absolute(data["u"] - data["u_pred"])
     data["v_residual"] = absolute(data["v"] - data["v_pred"])
     data["p_residual"] = absolute(data["p"] - data["p_pred"])
+
+    print("\tFluid properties prediction complete\n")
 
     return data

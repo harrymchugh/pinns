@@ -8,6 +8,7 @@ def load_simulation_data(args, geom):
     """
     
     """
+    print("Loading simulation data...")
     data = dict()
 
     #Get spatio-temporal array shape from geometry
@@ -52,6 +53,8 @@ def load_simulation_data(args, geom):
     data["u"] = u
     data["v"] = v
     data["p"] = p
+
+    print("\tSimulation data loaded\n")
 
     return data
 
