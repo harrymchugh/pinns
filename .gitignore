@@ -2,3 +2,5 @@ src/*/runs
 src/*/.ipynb_checkpoints
 .DS_Store
 *.sif
+src/*.egg-info*
+src/cfdpinn/*pycache*
