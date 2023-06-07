@@ -3,6 +3,7 @@
 import torch
 from numpy import absolute
 from tqdm import tqdm
+from cfdpinn.timing import function_timer
 
 #from torch.utils.tensorboard import SummaryWriter
 
@@ -100,6 +101,7 @@ class CfdPinn(torch.nn.Module):
         
         return self.linear_stack(inputs)
 
+    @function_timer
     def train(self,data):
         """
         """
@@ -239,7 +241,7 @@ class CfdPinn(torch.nn.Module):
     def save_model(self):
         torch.save(self.to("cpu"), self.model_output_path)
 
-
+@function_timer
 def predict_fluid(data,pinn,geom):
     """
     """

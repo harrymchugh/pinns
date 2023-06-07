@@ -9,6 +9,7 @@ from cfdpinn.pinns import CfdPinn
 from cfdpinn.pinns import predict_fluid
 from cfdpinn.plots import static_plots
 from cfdpinn.plots import create_animation
+from cfdpinn.timing import function_timer
 
 def main():
     """
