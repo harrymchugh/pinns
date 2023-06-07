@@ -34,7 +34,7 @@ def load_simulation_data(args, geom):
         openfoam_timestep = args.case_dir + time
         
         if time == "0":
-            u = set_initial_condition_u(u)
+            u = set_initial_condition_u(u,args.initial_u_lid)
             v = set_initial_condition_v(v)
             p = set_initial_condition_p(p)
 
@@ -55,12 +55,12 @@ def load_simulation_data(args, geom):
 
     return data
 
-def set_initial_condition_u(u):
+def set_initial_condition_u(u,velocity):
     """
     Apply the initial conditions for u
     """
     u[0,:,:] = 0
-    u[0,-1,:] = 1
+    u[0,-1,:] = velocity
     return u
 
 def set_initial_condition_v(v):

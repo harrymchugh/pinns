@@ -58,6 +58,14 @@ def parse_args():
         help="The viscosity of the fluid used in the OpenFOAM case",
         dest="viscosity")
 
+    parser.add_argument("--initial_u",
+        action="store",
+        type=float,
+        required=False,
+        default=1,
+        help="The u (x) velocity of the fluid flowing over the cavity top wall",
+        dest="initial_u_lid")
+
     #Data preprocessing for PINN training
     parser.add_argument("--test-percent",
         action="store",

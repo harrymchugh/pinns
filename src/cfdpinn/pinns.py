@@ -103,11 +103,9 @@ class CfdPinn(torch.nn.Module):
     def train(self,data):
         """
         """
-        print("Model training started")
-        for epoch in tqdm(range(1,self.epochs + 1), desc="Training epochs"):
+        for epoch in tqdm(range(1,self.epochs + 1), desc="CFD PINN training progress"):
             self.train_loop(data,epoch)
             self.test_loop(data,epoch)
-        print("Model training finished\n")
 
     def train_loop(self,data,epoch):
         """

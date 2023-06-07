@@ -10,6 +10,7 @@ cfdpinn \
     --numx 20 \
     --numy 20 \
     --viscosity 0.01 \
+    --initial_u 1 \
     --model-path /home/hamchugh/pinns/models/tmp-2d-ns-pinn-1epochs-lr0.001-adam-cavity-nu0.01-u1-20x20.pt\
     --epochs 1 \
     --training-animation \
