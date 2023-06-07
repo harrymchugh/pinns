@@ -10,10 +10,12 @@ def create_animation(data,geom,num_frames,train_pred):
     """
     fig, ax = plt.subplots(2,2, figsize=(15, 12))
 
-    if train_pred == "train":
+    if label == "train":
         label = ""
-    elif train_pred == "pred":
+    elif label == "pred":
         label = "_pred"
+    elif label == "residual":
+        label = "_residual"
 
     #Compute magnitude of velocity from prediction
     data[f"u_mag{label}"] = np.sqrt(

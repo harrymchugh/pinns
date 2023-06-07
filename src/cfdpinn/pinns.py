@@ -266,4 +266,8 @@ def predict_fluid(data,pinn,geom):
     data["v_pred"] = prediction[:,1].reshape(shape)
     data["p_pred"] = prediction[:,2].reshape(shape)
 
+    data["u_residual"] = data["u"] - data["u_pred"] 
+    data["v_residual"] = data["v"] - data["v_pred"]
+    data["p_residual"] = data["p"] - data["p_pred"]
+
     return data

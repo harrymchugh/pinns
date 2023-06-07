@@ -32,24 +32,28 @@ def main():
     
     #Produce animations if necessary
     if args.training_animation:
-        create_animation(data,geom,args.num_frames,train_pred="train")
+        create_animation(data,geom,args.num_frames,label="train")
 
     #PINN training and testing loop
-    # pinn.train(data)
+    pinn.train(data)
     
     #PINN inference
-    # data = predict_fluid(data,pinn,geom)
+    data = predict_fluid(data,pinn,geom)
 
     #Create animation from predicted fluid
-    # if args.prediction_animation:
-    #     create_animation(data,geom,args,train_pred="pred")
+    if args.prediction_animation:
+        create_animation(data,geom,args,label="pred")
+
+    #Create animation from predicted fluid
+    if args.residual_animation:
+        create_animation(data,geom,args,label="residual")
 
     #Save model
-    # pinn.save_model()
+    pinn.save_model()
 
     #Produce plots for analysis
-    #if args.static_plots:
-        #static_plots(data,args,geom)
+    if args.static_plots:
+        static_plots(data,args,geom)
 
 if __name__ == "__main__":
     main()

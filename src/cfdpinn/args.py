@@ -93,6 +93,14 @@ def parse_args():
             U_mag,U,V,P over all timesteps",
         dest="prediction_animation")
     
+    parser.add_argument("--residual-animation",
+        action="store_true",
+        required=False,
+        default=False,
+        help="Output MP4 showing training locations with residual \
+            U_mag,U,V,P over all timesteps",
+        dest="residual_animation")
+    
     #Static plots
     parser.add_argument("--no-static-plots",
         action="store_false",
