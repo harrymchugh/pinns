@@ -24,7 +24,7 @@ def main():
     data = load_simulation_data(args,geom)
 
     #PINN setup
-    pinn = CfdPinn()
+    pinn = CfdPinn(args)
 
     #Preprocess data for PINN training
     data = preprocess(data,geom,args)
@@ -38,10 +38,10 @@ def main():
         #create_animation(data,args,"pred")
 
     #PINN training and testing loop
-    pinn.train()
+    pinn.train(data)
     
     #PINN inference
-    data = predict_fluid(data,pinn)
+    data = predict_fluid(data,pinn,geom)
 
     #Save model
     pinn.save_model()

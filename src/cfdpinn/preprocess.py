@@ -11,7 +11,7 @@ def preprocess(data,geom,args):
     Returns a dict holding the NumPy arrays needed for PINN training
     """
     #Merge features x,y,t into single array in data
-    data = merge_features(data,data,geom)
+    data = merge_features(data,geom)
 
     #Seperate into boundary and interior arrays
     data = extract_boundaries(data)
@@ -28,7 +28,7 @@ def preprocess(data,geom,args):
 
     #Train-test-splitting
     data = apply_scaling(data)
-    data = apply_train_test_split(data,args.test_size)
+    data = apply_train_test_split(data,args.test_size,scaled=True)
 
     #Create animation if needed
     if args.training_animation:
@@ -50,7 +50,11 @@ def scaling_object(data):
 def apply_scaling(data):
     """
     """
-    data["scaled_array"] = data["scaler"].transform(data["array"])
+    data_labels = ["basewall","interior","leftwall","rightwall"]
+    for data_label in data_labels:
+        data[f"scaled_features_{data_label}"] = \
+            data["scaler"].transform(data[f"features_{data_label}"])
+    
     return data
 
 def get_training_locations(data,args):
@@ -58,7 +62,7 @@ def get_training_locations(data,args):
     """
     #First need to apply train_test_splitting to 
     #replicate real train_test_split
-    _data = apply_train_test_split(data,args.test_size)
+    _data = apply_train_test_split(data,args.test_size,scaled=False)
 
     #Now extract locations for all components of
     #training data arrays
@@ -77,9 +81,14 @@ def get_training_locations(data,args):
 
     return _data
 
-def apply_train_test_split(data,test_size):
+def apply_train_test_split(data,test_size,scaled):
     """
     """
+    if scaled == True:
+        label = "scaled_"
+    elif scaled == False:
+        label = ""
+
     #Interior
     (
         data["x_interior_train"],
@@ -95,9 +104,9 @@ def apply_train_test_split(data,test_size):
         data["p_interior_train"],
         data["p_interior_test"],
     ) = train_test_split(
-        data["scaled_features_interior"][:,2], 
-        data["scaled_features_interior"][:,1], 
-        data["scaled_features_interior"][:,0],
+        data[f"{label}features_interior"][:,2], 
+        data[f"{label}features_interior"][:,1], 
+        data[f"{label}features_interior"][:,0],
         data["u_interior_labels"],
         data["v_interior_labels"],
         data["p_interior_labels"],
@@ -118,9 +127,9 @@ def apply_train_test_split(data,test_size):
         data["p_basewall_train"],
         data["p_basewall_test"],
     ) = train_test_split(
-        data["scaled_features_basewall"][:,2], 
-        data["scaled_features_basewall"][:,1], 
-        data["scaled_features_basewall"][:,0],
+        data[f"{label}features_basewall"][:,2], 
+        data[f"{label}features_basewall"][:,1], 
+        data[f"{label}features_basewall"][:,0],
         data["u_basewall_labels"],
         data["v_basewall_labels"],
         data["p_basewall_labels"],
@@ -141,9 +150,9 @@ def apply_train_test_split(data,test_size):
         data["p_leftwall_train"],
         data["p_leftwall_test"],
     ) = train_test_split(
-        data["scaled_features_leftwall"][:,2], 
-        data["scaled_features_leftwall"][:,1], 
-        data["scaled_features_leftwall"][:,0],
+        data[f"{label}features_leftwall"][:,2], 
+        data[f"{label}features_leftwall"][:,1], 
+        data[f"{label}features_leftwall"][:,0],
         data["u_leftwall_labels"],
         data["v_leftwall_labels"],
         data["p_leftwall_labels"],
@@ -164,9 +173,9 @@ def apply_train_test_split(data,test_size):
         data["p_rightwall_train"],
         data["p_rightwall_test"],
     ) = train_test_split(
-        data["scaled_features_rightwall"][:,2], 
-        data["scaled_features_rightwall"][:,1], 
-        data["scaled_features_rightwall"][:,0],
+        data[f"{label}features_rightwall"][:,2], 
+        data[f"{label}features_rightwall"][:,1], 
+        data[f"{label}features_rightwall"][:,0],
         data["u_rightwall_labels"],
         data["v_rightwall_labels"],
         data["p_rightwall_labels"],
@@ -177,16 +186,16 @@ def apply_train_test_split(data,test_size):
 def make_boundary_arrays_contiguous(data):
     """
     """
-    fluid_components = ["u","v","p"]
+    data_components = ["u","v","p","x","y","t"]
     train_test_components = ["train","test"]
 
-    for fluid_component in fluid_components:
+    for data_component in data_components:
         for train_test_component in train_test_components:
-            data[f"{fluid_component}_boundary_{train_test_component}"] = \
+            data[f"{data_component}_boundary_{train_test_component}"] = \
                 np.concatenate((
-                    data[f"{fluid_component}_rightwall_{train_test_component}"],
-                    data[f"{fluid_component}_leftwall_{train_test_component}"],
-                    data[f"{fluid_component}_basewall_{train_test_component}"]
+                    data[f"{data_component}_rightwall_{train_test_component}"],
+                    data[f"{data_component}_leftwall_{train_test_component}"],
+                    data[f"{data_component}_basewall_{train_test_component}"]
             ))
 
     return data
@@ -202,7 +211,7 @@ def extract_boundaries(data):
         data[f"{array_label}_basewall"]  = \
             data[f"{array_label}"][:,0,:]
         
-        data[f"{array_label}_lefwall"]  = \
+        data[f"{array_label}_leftwall"]  = \
             data[f"{array_label}"][:,1:-1,0]
         
         data[f"{array_label}_rightwall"] = \
@@ -212,8 +221,8 @@ def extract_boundaries(data):
         data[f"{array_label}_basewall_labels"]  = \
             data[f"{array_label}_basewall"].flatten().reshape(-1,1)
         
-        data[f"{array_label}_lefwall_labels"]  = \
-            data[f"{array_label}_lefwall"].flatten().reshape(-1,1)
+        data[f"{array_label}_leftwall_labels"]  = \
+            data[f"{array_label}_leftwall"].flatten().reshape(-1,1)
         
         data[f"{array_label}_rightwall_labels"] = \
             data[f"{array_label}_rightwall"].flatten().reshape(-1,1)
@@ -307,16 +316,16 @@ def convert_to_tensors(data,device):
                 from_numpy(data[f"t_{geom_component}_{train_test_component}"]).\
                     float().requires_grad_().to(device)
 
-            data[f"x_{geom_component}_{train_test_component}_tensor"] = \
-                from_numpy(data[f"x_{geom_component}_{train_test_component}"]).\
+            data[f"u_{geom_component}_{train_test_component}_tensor"] = \
+                from_numpy(data[f"u_{geom_component}_{train_test_component}"]).\
                     float().requires_grad_().to(device)
 
-            data[f"y_{geom_component}_{train_test_component}_tensor"] = \
-                from_numpy(data[f"y_{geom_component}_{train_test_component}"]).\
+            data[f"v_{geom_component}_{train_test_component}_tensor"] = \
+                from_numpy(data[f"v_{geom_component}_{train_test_component}"]).\
                     float().requires_grad_().to(device)
 
-            data[f"t_{geom_component}_{train_test_component}_tensor"] = \
-                from_numpy(data[f"t_{geom_component}_{train_test_component}"]).\
+            data[f"p_{geom_component}_{train_test_component}_tensor"] = \
+                from_numpy(data[f"p_{geom_component}_{train_test_component}"]).\
                     float().requires_grad_().to(device)
 
     return data

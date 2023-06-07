@@ -3,7 +3,7 @@
 source /home/hamchugh/pinns-venv/bin/activate
 
 cfdpinn \
-    --case-dir /home/hamchugh/pinns/data/cavity \
+    --case-dir /home/hamchugh/pinns/data/cavity/ \
     --start-time 0 \
     --end-time 5 \
     --dt 0.005 \

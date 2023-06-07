@@ -100,9 +100,9 @@ class CfdPinn(torch.nn.Module):
     def train(self,data):
         """
         """
-        for epoch in self.epochs:
-            self.train_loop(self,data,epoch)
-            self.test_loop(self,data,epoch)
+        for epoch in range(1,self.epochs + 1):
+            self.train_loop(data,epoch)
+            self.test_loop(data,epoch)
 
     def train_loop(self,data,epoch):
         """
@@ -113,8 +113,7 @@ class CfdPinn(torch.nn.Module):
         #Get predictions and labels for fluid properties
         data_labels = ["interior","boundary"]
         for data_label in data_labels:
-            data[f"train_{data_label}_pred"] = self.forward
-            (
+            data[f"train_{data_label}_pred"] = self.forward(
                 data[f"x_{data_label}_train_tensor"], 
                 data[f"y_{data_label}_train_tensor"], 
                 data[f"t_{data_label}_train_tensor"]
@@ -176,8 +175,7 @@ class CfdPinn(torch.nn.Module):
         """
         data_labels = ["interior","boundary"]
         for data_label in data_labels:
-            data[f"test_{data_label}_pred"] = self.forward
-            (
+            data[f"test_{data_label}_pred"] = self.forward(
                 data[f"x_{data_label}_test_tensor"], 
                 data[f"y_{data_label}_test_tensor"], 
                 data[f"t_{data_label}_test_tensor"]
