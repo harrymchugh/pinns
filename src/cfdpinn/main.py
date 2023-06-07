@@ -39,7 +39,7 @@ def main():
     pinn.train(data)
     
     #PINN inference
-    data = predict_fluid(data,pinn,geom)
+    data = predict_fluid(data,pinn,geom,args)
 
     #Create animation from predicted fluid
     if args.prediction_animation:

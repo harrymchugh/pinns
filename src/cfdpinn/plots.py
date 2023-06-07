@@ -49,7 +49,7 @@ def create_animation(data,geom,num_frames,array_label):
         orientation='vertical')
     
     writervideo = animation.FFMpegWriter(fps=20)
-    output_path = (f"./animations/tmp_{label}.mp4")
+    output_path = (f"./animations/tmp{label}.mp4")
     
     fluid_animation = \
         animation.FuncAnimation(

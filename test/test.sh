@@ -16,5 +16,6 @@ cfdpinn \
     --training-animation \
     --prediction-animation \
     --residual-animation \
-    --num-frames 10
+    --num-frames 5 \
+    --inference-timing
     

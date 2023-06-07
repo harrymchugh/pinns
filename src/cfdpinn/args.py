@@ -163,12 +163,12 @@ def parse_args():
         dest="learning_rate")
     
     #Timing utilities
-    parser.add_argument("--timings",
+    parser.add_argument("--inference-timing",
         action="store_true",
         required=False,
         default=False,
-        help="Report timings for key processes and functions",
-        dest="report_timing")
+        help="Report timings for inference of fluid properties",
+        dest="inference_timing")
 
     #Verbose logging
     parser.add_argument("-v",

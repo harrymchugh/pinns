@@ -2,8 +2,11 @@
 
 import torch
 from numpy import absolute
+from numpy import zeros
+import numpy as np
 from tqdm import tqdm
 from cfdpinn.timing import function_timer
+from time import time
 
 #from torch.utils.tensorboard import SummaryWriter
 
@@ -241,8 +244,7 @@ class CfdPinn(torch.nn.Module):
     def save_model(self):
         torch.save(self.to("cpu"), self.model_output_path)
 
-@function_timer
-def predict_fluid(data,pinn,geom):
+def predict_fluid(data,pinn,geom,args):
     """
     """
     scaled_features = data["scaler"].transform(data["features"])
@@ -250,6 +252,72 @@ def predict_fluid(data,pinn,geom):
     t = scaled_features[:,0]
     y = scaled_features[:,1]
     x = scaled_features[:,2]
+
+    # If we are timing inference data we must
+    # take into consideration the GPU initialization time
+    # which can skew results.
+
+    # To overcome this we will have two code paths. One for timing
+    # and the other for simple doing the inferece.
+
+    # In the timing code path, we will manually warm up the GPU
+    # before recording the inference time for a fixed number of 
+    # repetitions.
+
+    # A min,max,median and std.dev will then be reported for inference.
+    # The same approach can be used on the CPU even though it may be
+    # slightly over the top as it will still warm the cache.
+    
+    if args.inference_timing:
+        #Warm up GPU
+        for _ in range(5):
+            pinn(
+                torch.Tensor(x),
+                torch.Tensor(y),
+                torch.Tensor(t)
+                )
+        
+        #Record inference times
+        repetitions = 10
+        timings=zeros((repetitions,1))
+
+        if pinn.device == "cuda":
+            starter = torch.cuda.Event(enable_timing=True) 
+            ender = torch.cuda.Event(enable_timing=True)
+            
+            with torch.inference_mode():
+                #Get stats over 100 inferencing iterations
+                for repetition in range(repetitions):
+                    starter.record()
+                    _ = pinn(
+                        torch.Tensor(x),
+                        torch.Tensor(y),
+                        torch.Tensor(t))
+                    ender.record()
+                    torch.cuda.synchronize()
+                    curr_time = starter.elapsed_time(ender)
+                    timings[repetition] = curr_time
+
+        else:
+            
+            with torch.inference_mode():
+                #Get stats over 100 inferencing iterations
+                for repetition in range(repetitions):
+                    start = time()
+                    _ = pinn(
+                        torch.Tensor(x),
+                        torch.Tensor(y),
+                        torch.Tensor(t))
+                    end = time()
+                    curr_time = end - start
+                    timings[repetition] = curr_time
+        
+        print("\n** Inference Timings **\n")
+        print(f"DEVICE: {pinn.device}")
+        print(f"\tMedian: {np.median(timings)}")
+        print(f"\tMin: {np.min(timings)}")
+        print(f"\tMax: {np.max(timings)}")
+        print(f"\tStd.dev: {np.std(timings)}\n")
 
     with torch.inference_mode():
         prediction = pinn(
