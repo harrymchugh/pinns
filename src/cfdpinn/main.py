@@ -31,20 +31,21 @@ def main():
     data = convert_to_tensors(data,pinn.device)
     
     #Produce animations if necessary
-    #if args.training_animation:
-        #create_animation(data,args,"train")
-
-    #if args.prediction_animation:
-        #create_animation(data,args,"pred")
+    if args.training_animation:
+        create_animation(data,geom,args.num_frames,train_pred="train")
 
     #PINN training and testing loop
-    pinn.train(data)
+    # pinn.train(data)
     
     #PINN inference
-    data = predict_fluid(data,pinn,geom)
+    # data = predict_fluid(data,pinn,geom)
+
+    #Create animation from predicted fluid
+    # if args.prediction_animation:
+    #     create_animation(data,geom,args,train_pred="pred")
 
     #Save model
-    pinn.save_model()
+    # pinn.save_model()
 
     #Produce plots for analysis
     #if args.static_plots:

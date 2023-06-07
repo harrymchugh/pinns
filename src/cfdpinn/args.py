@@ -69,6 +69,14 @@ def parse_args():
         dest="test_size")
     
     #MP4 animations
+    parser.add_argument("--num-frames",
+        action="store",
+        type=int,
+        required=False,
+        default=20,
+        help="Number of frames for the fluid animations",
+        dest="num_frames")
+
     parser.add_argument("--training-animation",
         action="store_true",
         required=False,

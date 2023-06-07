@@ -24,15 +24,11 @@ def preprocess(data,geom,args):
     data["scaler"] = scaling_object(data)
 
     #Create training locations
-    training_locations = get_training_locations(data,args)
+    data = get_training_locations(data,args)
 
     #Train-test-splitting
     data = apply_scaling(data)
     data = apply_train_test_split(data,args.test_size,scaled=True)
-
-    #Create animation if needed
-    if args.training_animation:
-        create_animation(data,training_locations)
 
     #Make boundary arrays contiguous for DL framework
     data = make_boundary_arrays_contiguous(data)
@@ -62,24 +58,24 @@ def get_training_locations(data,args):
     """
     #First need to apply train_test_splitting to 
     #replicate real train_test_split
-    _data = apply_train_test_split(data,args.test_size,scaled=False)
+    data = apply_train_test_split(data,args.test_size,scaled=False)
 
     #Now extract locations for all components of
     #training data arrays
     array_labels = ["interior","basewall","rightwall","leftwall"]
     for array_label in array_labels:
-        _data[f"{array_label}_training_locs"] = np.concatenate(
+        data[f"{array_label}_training_locs"] = np.concatenate(
             (
-                _data[f"t_{array_label}_train"].flatten().reshape(-1,1),
-                _data[f"y_{array_label}_train"].flatten().reshape(-1,1),
-                _data[f"x_{array_label}_train"].flatten().reshape(-1,1)
+                data[f"t_{array_label}_train"].flatten().reshape(-1,1),
+                data[f"y_{array_label}_train"].flatten().reshape(-1,1),
+                data[f"x_{array_label}_train"].flatten().reshape(-1,1)
             ), 
             axis=1)
 
-    _data[f"{array_label}_training_locs"] = \
-        _data[f"{array_label}_training_locs"][_data[f"{array_label}_training_locs"][:,0].argsort()]
+    data[f"{array_label}_training_locs"] = \
+        data[f"{array_label}_training_locs"][data[f"{array_label}_training_locs"][:,0].argsort()]
 
-    return _data
+    return data
 
 def apply_train_test_split(data,test_size,scaled):
     """
