@@ -5,16 +5,16 @@ import matplotlib.animation as animation
 import numpy as np
 import math
 
-def create_animation(data,geom,num_frames,train_pred):
+def create_animation(data,geom,num_frames,array_label):
     """
     """
     fig, ax = plt.subplots(2,2, figsize=(15, 12))
 
-    if label == "train":
+    if array_label == "train":
         label = ""
-    elif label == "pred":
+    elif array_label == "pred":
         label = "_pred"
-    elif label == "residual":
+    elif array_label == "residual":
         label = "_residual"
 
     #Compute magnitude of velocity from prediction
@@ -49,7 +49,7 @@ def create_animation(data,geom,num_frames,train_pred):
         orientation='vertical')
     
     writervideo = animation.FFMpegWriter(fps=20)
-    output_path = f"./animations/tmp.mp4"
+    output_path = (f"./animations/tmp_{label}.mp4")
     
     fluid_animation = \
         animation.FuncAnimation(
@@ -251,7 +251,7 @@ def animate_subplot(i,ax,data,geom,label,num_frames):
     ax[1][1].set_xlabel("Spatial x index")
     ax[1][1].set_box_aspect(1)
 
-def static_plots():
+def static_plots(data,args,geom):
     """
     """
     return 0

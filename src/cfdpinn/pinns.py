@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 import torch
+from numpy import absolute
+from tqdm import tqdm
+
 #from torch.utils.tensorboard import SummaryWriter
 
 class CfdPinn(torch.nn.Module):
@@ -100,9 +103,11 @@ class CfdPinn(torch.nn.Module):
     def train(self,data):
         """
         """
-        for epoch in range(1,self.epochs + 1):
+        print("Model training started")
+        for epoch in tqdm(range(1,self.epochs + 1), desc="Training epochs"):
             self.train_loop(data,epoch)
             self.test_loop(data,epoch)
+        print("Model training finished\n")
 
     def train_loop(self,data,epoch):
         """
@@ -266,8 +271,8 @@ def predict_fluid(data,pinn,geom):
     data["v_pred"] = prediction[:,1].reshape(shape)
     data["p_pred"] = prediction[:,2].reshape(shape)
 
-    data["u_residual"] = data["u"] - data["u_pred"] 
-    data["v_residual"] = data["v"] - data["v_pred"]
-    data["p_residual"] = data["p"] - data["p_pred"]
+    data["u_residual"] = absolute(data["u"] - data["u_pred"])
+    data["v_residual"] = absolute(data["v"] - data["v_pred"])
+    data["p_residual"] = absolute(data["p"] - data["p_pred"])
 
     return data

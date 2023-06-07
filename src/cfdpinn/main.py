@@ -32,7 +32,7 @@ def main():
     
     #Produce animations if necessary
     if args.training_animation:
-        create_animation(data,geom,args.num_frames,label="train")
+        create_animation(data,geom,args.num_frames,array_label="train")
 
     #PINN training and testing loop
     pinn.train(data)
@@ -42,11 +42,11 @@ def main():
 
     #Create animation from predicted fluid
     if args.prediction_animation:
-        create_animation(data,geom,args,label="pred")
+        create_animation(data,geom,args.num_frames,array_label="pred")
 
     #Create animation from predicted fluid
     if args.residual_animation:
-        create_animation(data,geom,args,label="residual")
+        create_animation(data,geom,args.num_frames,array_label="residual")
 
     #Save model
     pinn.save_model()

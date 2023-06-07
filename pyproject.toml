@@ -18,7 +18,8 @@ dependencies = [
     "torchvision",
     "torchaudio",
     "matplotlib",
-    "scikit-learn"
+    "scikit-learn",
+    "tdqm"
 ]
 license = {file = "LICENSE"}
 

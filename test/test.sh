@@ -11,8 +11,9 @@ cfdpinn \
     --numy 20 \
     --viscosity 0.01 \
     --model-path /home/hamchugh/pinns/models/tmp-2d-ns-pinn-1epochs-lr0.001-adam-cavity-nu0.01-u1-20x20.pt\
-    --epochs 10 \
+    --epochs 1 \
     --training-animation \
     --prediction-animation \
-    --residual-animation
+    --residual-animation \
+    --num-frames 10
     
