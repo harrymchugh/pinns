@@ -3,7 +3,7 @@
 import torch
 from numpy import absolute
 from numpy import zeros
-import numpy as np
+from numpy import min,max,median,std
 from tqdm import tqdm
 from cfdpinn.timing import function_timer
 from time import time
@@ -317,10 +317,10 @@ def predict_fluid(data,pinn,geom,args):
         
         print("\n** Inference Timings **\n")
         print(f"DEVICE: {pinn.device}")
-        print(f"\tMedian: {np.median(timings)}")
-        print(f"\tMin: {np.min(timings)}")
-        print(f"\tMax: {np.max(timings)}")
-        print(f"\tStd.dev: {np.std(timings)}\n")
+        print(f"\tMedian: {median(timings)}")
+        print(f"\tMin: {min(timings)}")
+        print(f"\tMax: {max(timings)}")
+        print(f"\tStd.dev: {std(timings)}\n")
 
     with torch.inference_mode():
         prediction = pinn(
