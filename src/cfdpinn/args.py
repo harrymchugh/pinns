@@ -128,19 +128,27 @@ def parse_args():
         dest="static_plots")
     
     #Output raw training and prediction data
-    parser.add_argument("--raw-pred-output",
+    parser.add_argument("--output-pred-data",
         action="store_true",
         required=False,
         default=False,
         help="Output raw predicted NumPY arrays for U,V,P",
-        dest="raw_pred_output")
+        dest="output_pred_data")
 
-    parser.add_argument("--raw-train-output",
+    parser.add_argument("--output-train-data",
         action="store_true",
         required=False,
         default=False,
         help="Output raw training data NumPY arrays for U,V,P",
-        dest="raw_train_output")
+        dest="output_train_data")
+
+    parser.add_argument("--output-data-path",
+        action="store",
+        required=False,
+        type=str,
+        help="Output raw training data NumPY arrays for U,V,P",
+        dest="output_data_path")   
+
     
     #PINN setup and variables
     parser.add_argument("--model-path",

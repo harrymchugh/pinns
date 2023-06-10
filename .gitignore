@@ -6,3 +6,4 @@ src/*.egg-info*
 src/cfdpinn/*pycache*
 models/tmp*pt
 animations/tmp*
+data/tmp-outputs

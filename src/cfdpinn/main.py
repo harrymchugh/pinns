@@ -10,6 +10,8 @@ from cfdpinn.pinns import predict_fluid
 from cfdpinn.plots import static_plots
 from cfdpinn.plots import create_animation
 from cfdpinn.timing import function_timer
+from cfdpinn.outputs import save_prediction_data
+from cfdpinn.outputs import save_training_data
 
 def main():
     """
@@ -49,8 +51,13 @@ def main():
     if args.residual_animation:
         create_animation(data,geom,args.num_frames,array_label="residual")
 
-    #Save model
+    #Save model and if requested training and predicted fields
     pinn.save_model()
+    if args.output_train_data:
+        save_training_data(data,args)
+
+    if args.output_pred_data:
+        save_prediction_data(data,args)
 
     #Produce plots for analysis
     if args.static_plots:
