@@ -25,7 +25,8 @@ def load_simulation_data(args, geom):
     openfoam_outputs = listdir(args.case_dir)
     openfoam_outputs.remove("constant")
     openfoam_outputs.remove("system")
-    openfoam_outputs.remove("0_orig")
+    if "0_orig" in openfoam_outputs:
+        openfoam_outputs.remove("0_orig")
     openfoam_outputs.sort()
 
     spatial_grid_shape = (geom["numy"],geom["numx"])
