@@ -11,6 +11,14 @@ def parse_args():
     parser = argparse.ArgumentParser(description="CFD PINN")
 
     #OpenFOAM and geometry args
+    parser.add_argument("--case-type",
+        action="store",
+        type=str,
+        required=True,
+        choices=["cavity","channel"],
+        help="CFDPINN currently only supports OpenFOAM simulations for lid-driven cavity and channel flow",
+        dest="case_type")
+
     parser.add_argument("--case-dir",
         action="store",
         type=str,
