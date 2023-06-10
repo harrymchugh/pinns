@@ -1,6 +1,9 @@
 #!/bin/bash
 
-source /home/hamchugh/pinns-venv/bin/activate
+#Macbook pro
+export VENV="$HOME/cfdpinn-venv/bin/activate" 
+#Work laptop
+#export VENV="$HOME/pinns-venv/bin/activate"
 
 cfdpinn \
     --case-type cavity \
@@ -19,7 +22,7 @@ cfdpinn \
     --residual-animation \
     --num-frames 5 \
     --inference-timing \
-    --output-raw-data \
+    --output-pred-data \
     --output-train-data \
     --output-data-path $HOME/pinns/data/tmp-outputs
     
