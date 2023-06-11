@@ -3,9 +3,9 @@
 set -x
 
 #Laptop
-export CFDPINN_ROOT="$HOME/pinns"
+#export CFDPINN_ROOT="$HOME/pinns"
 #For Cirrus
-#export CFDPINN_ROOT="/work/mdisspt/mdisspt/z2137380/pinns"
+export CFDPINN_ROOT="/work/mdisspt/mdisspt/z2137380/pinns"
 
 export cavity_base="$CFDPINN_ROOT/openfoam/cases/cavity"
 
