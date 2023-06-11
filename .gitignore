@@ -6,6 +6,7 @@ src/*.egg-info*
 src/cfdpinn/*pycache*
 openfoam/cases/cavity*/0.*
 openfoam/cases/cavity*/[1-9]*
+openfoam/cases/*/constant/polyMesh
 models/tmp*pt
 animations/tmp*
 data/tmp-outputs
