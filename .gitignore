@@ -4,7 +4,8 @@ src/*/.ipynb_checkpoints
 *.sif
 src/*.egg-info*
 src/cfdpinn/*pycache*
-openfoam/cases/cavity_nu*
+openfoam/cases/cavity*/0.*
+openfoam/cases/cavity*/[1-9]*
 models/tmp*pt
 animations/tmp*
 data/tmp-outputs
