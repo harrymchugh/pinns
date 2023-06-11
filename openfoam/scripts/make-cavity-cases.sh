@@ -2,7 +2,12 @@
 
 set -x
 
-export cavity_base="/work/mdisspt/mdisspt/z2137380/pinns/openfoam/cases/cavity"
+#Laptop
+export CFDPINN_ROOT="$HOME/pinns"
+#For Cirrus
+#export CFDPINN_ROOT="/work/mdisspt/mdisspt/z2137380/pinns"
+
+export cavity_base="$CFDPINN_ROOT/openfoam/cases/cavity"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export SED_ARGS="gsed -i"
@@ -13,7 +18,7 @@ fi
 echo $SED_ARGS
 
 for nu in 0.01 0.001 0.0001; do
-    for velocity in 1 4 8; do
+    for velocity in 1; do
         #Copy base case
         cp -r "$cavity_base" "$cavity_base"_nu"$nu"_U"$velocity"
 
@@ -25,9 +30,7 @@ for nu in 0.01 0.001 0.0001; do
     done
 done
 
+#Make a finer mesh example for scaling test
 cp -r "$cavity_base"_nu0.01_U1 "$cavity_base"_nu0.01_U1_100x100
-cp -r "$cavity_base"_nu0.01_U1 "$cavity_base"_nu0.01_U1_200x200
-
 $SED_ARGS "s/(20 20 1)/(100 100 1)/g" "$cavity_base"_nu0.01_U1_100x100/system/blockMeshDict
-$SED_ARGS "s/(20 20 1)/(200 200 1)/g" "$cavity_base"_nu0.01_U1_200x200/system/blockMeshDict
 
