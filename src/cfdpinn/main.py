@@ -19,6 +19,7 @@ from cfdpinn.outputs import save_training_data
 from pickle import load
 
 from torch.profiler import profile, record_function, ProfilerActivity
+from torch.cuda import is_available
 
 def main():
     """
@@ -39,6 +40,10 @@ def main():
         pinn = CfdPinn(args)
     else: 
         pinn = load_pinn(args)
+        pinn.device = 'cuda' if is_available() else 'cpu'
+        pinn.to(pinn.device)
+        if args.debug:
+            print(f"DEBUG: PINN device: {pinn.device}\n")
 
     #Preprocess data for PINN training
     if not args.no_train:
@@ -53,7 +58,7 @@ def main():
     if not args.no_train:
         if args.profile:
             with profile(
-                activities=[ProfilerActivity.CPU],
+                activities=[ProfilerActivity.CPU,ProfilerActivity.CUDA],
                 profile_memory=True,
                 with_stack=True,
                 record_shapes=True) as prof:
@@ -64,11 +69,21 @@ def main():
             print()
             print(prof.key_averages().table(sort_by="cpu_memory_usage", row_limit=10))
             print()
-            print(prof.key_averages(group_by_stack_n=5).table(sort_by="self_cpu_time_total", row_limit=2))
+            print(prof.key_averages(group_by_stack_n=5).table(sort_by="self_cpu_time_total", row_limit=10))
             print()
-            prof.export_chrome_trace(args.trace_path)
-            prof.export_stacks(args.stack_path, "self_cpu_time_total")
 
+            print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
+            print()
+            print(prof.key_averages().table(sort_by="cuda_memory_usage", row_limit=10))
+            print()
+            print(prof.key_averages(group_by_stack_n=5).table(sort_by="self_cuda_time_total", row_limit=10))
+            print()
+
+
+            prof.export_chrome_trace(args.trace_path)
+            prof.export_stacks(f"cpu_{args.stack_path}", "self_cpu_time_total")
+            prof.export_stacks(f"gpu_{args.stack_path}", "self_cuda_time_total")
+        
         else:
             pinn.train(data)
     

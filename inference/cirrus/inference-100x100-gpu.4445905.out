@@ -1,0 +1,59 @@
+Loading python/3.10.8-gpu
+  Loading requirement: gcc/8.2.0 nvidia/nvhpc-nompi/22.2 openmpi/4.1.4-cuda-11.6
+Matplotlib created a temporary config/cache directory at /dev/shm/z2137380_4445905/matplotlib-kt8uokbg because the default path (/home/mdisspt/mdisspt/z2137380/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+STAGE:2023-06-12 20:50:35 1185617:1185617 ActivityProfilerController.cpp:311] Completed Stage: Warm Up
+STAGE:2023-06-12 20:50:42 1185617:1185617 ActivityProfilerController.cpp:317] Completed Stage: Collection
+STAGE:2023-06-12 20:50:42 1185617:1185617 ActivityProfilerController.cpp:321] Completed Stage: Post Processing
+#################
+##  CFD PINN   ##
+#################
+
+Setting up geometry...
+Geometry summary:
+	geom[x_start]: 0
+	geom[x_end]: 1
+	geom[numx]: 100
+	geom[y_start]: 0
+	geom[y_end]: 1
+	geom[numy]: 100
+	geom[t_start]: 0.0
+	geom[t_end]: 5.0
+	geom[t_dt]: 0.001
+	geom[numt]: 5001
+	geom[stride]: 1
+	Geometry setup completed
+
+DEBUG: PINN device: cuda
+
+Prediction of fluid properties...
+	DEBUG: Applying scaler...
+	DEBUG: Scaler applied
+	DEBUG: len(x): 50010000
+	DEBUG: len(y): 50010000
+	DEBUG: len(t): 50010000
+Traceback (most recent call last):
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/venvs/cfdpinn-venv/bin/cfdpinn", line 8, in <module>
+    sys.exit(main())
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/pinns/src/cfdpinn/main.py", line 96, in main
+    data = predict_fluid(data,pinn,geom,args)
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/pinns/src/cfdpinn/pinns.py", line 273, in predict_fluid
+    prediction = inference(pinn,args,x,y,t)
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/pinns/src/cfdpinn/timing.py", line 10, in wrap_func
+    function_output = function_to_time(*args, **kwargs)
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/pinns/src/cfdpinn/pinns.py", line 359, in inference
+    prediction = pinn(x,y,t)
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/venvs/cfdpinn-venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/pinns/src/cfdpinn/pinns.py", line 109, in forward
+    return self.linear_stack(inputs)
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/venvs/cfdpinn-venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/venvs/cfdpinn-venv/lib/python3.10/site-packages/torch/nn/modules/container.py", line 217, in forward
+    input = module(input)
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/venvs/cfdpinn-venv/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/venvs/cfdpinn-venv/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 103, in forward
+    return F.relu(input, inplace=self.inplace)
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/venvs/cfdpinn-venv/lib/python3.10/site-packages/torch/nn/functional.py", line 1457, in relu
+    result = torch.relu(input)
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 11.92 GiB (GPU 0; 15.78 GiB total capacity; 13.05 GiB already allocated; 1.84 GiB free; 13.07 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

@@ -1,0 +1,9 @@
+Loading python/3.10.8-gpu
+  Loading requirement: gcc/8.2.0 nvidia/nvhpc-nompi/22.2 openmpi/4.1.4-cuda-11.6
+Traceback (most recent call last):
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/venvs/cfdpinn-venv/bin/cfdpinn", line 5, in <module>
+    from cfdpinn.main import main
+  File "/mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/pinns/src/cfdpinn/main.py", line 60
+    record_shapes=True) as prof:
+                      ^
+SyntaxError: positional argument follows keyword argument

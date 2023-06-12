@@ -28,6 +28,9 @@ class CfdPinn(torch.nn.Module):
             torch.nn.Linear(64, 3)
         )
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        if args.debug:
+            print(f"DEBUG: PINN device {self.device}")
+
         self.to(self.device)
 
         self.optimizer = torch.optim.Adam(self.parameters(), lr=args.learning_rate)
