@@ -62,7 +62,6 @@ def setup_geom(args):
             msg = "--load-dt is not divisible by --sim-dt. Decimation is not possible"
             raise Exception(msg)
         else:
-            print("here")
             geom["stride"] = int(Decimal(args.load_dt) // Decimal(args.sim_dt))
             geom["t_dt"] = args.load_dt
 
@@ -77,6 +76,24 @@ def setup_geom(args):
         linspace(geom["x_start"],geom["x_end"],geom["numx"]),
         linspace(geom["y_start"],geom["y_end"],geom["numy"]))
     
+    if args.debug:
+        keys = [
+            "x_start",
+            "x_end",
+            "numx",
+            "y_start",
+            "y_end",
+            "numy",
+            "t_start",
+            "t_end",
+            "t_dt",
+            "numt",
+            "stride"]
+        
+        print("Geometry summary:")
+        for key in keys:
+            print(f"\tgeom[{key}]: {geom[key]}")
+
     print("\tGeometry setup completed\n")
 
     return geom

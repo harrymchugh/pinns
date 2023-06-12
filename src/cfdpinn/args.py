@@ -10,6 +10,12 @@ def parse_args():
 
     parser = argparse.ArgumentParser(description="CFD PINN")
 
+    parser.add_argument("--debug",
+        action="store_true",
+        required=False,
+        help="Enable debug output",
+        dest="debug")
+
     #OpenFOAM and geometry args
     parser.add_argument("--case-type",
         action="store",

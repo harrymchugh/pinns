@@ -7,6 +7,7 @@ export VENV="$HOME/cfdpinn-venv/bin/activate"
 #Cirrus
 
 cfdpinn \
+    --debug \
     --case-type cavity \
     --case-dir $HOME/pinns/openfoam/cases/cavity/ \
     --start-time 0 \
