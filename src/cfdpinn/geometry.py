@@ -14,21 +14,60 @@ def setup_geom(args):
     geom = dict()
     geom["x_start"] = 0
     geom["x_end"] = 1
+
+    if args.numx < 0:
+        msg = "The --numx arg value must be positive"
+        Exception(msg)
     geom["numx"] = args.numx
     
     geom["y_start"] = 0
     geom["y_end"] = 1
+
+    if args.numy < 0:
+        msg = "The --numy arg value must be positive"
+        Exception(msg)
     geom["numy"] = args.numy
+
+    if args.start_time < 0:
+        msg = "The --start-time arg value must be positive"
+        Exception(msg)
+
+    if args.start_time > args.end_time:
+        msg = "The --start-time arg value must be less than --end-time"
+        Exception(msg)
 
     geom["t_start"] = args.start_time
     geom["t_end"] = args.end_time
-    geom["t_dt"] = args.dt
-    geom["numt"] = len(
+    
+    if args.sim_dt < 0:
+        msg = "The --sim-dt arg cannot be negative"
+        Exception(msg)
+    
+    geom["t_simdt"] = args.sim_dt
+    geom["simnumt"] = len(
         arange(
             geom["t_start"],
-            geom["t_end"] + geom["t_dt"],
-            geom["t_dt"])
+            geom["t_end"] + geom["t_simdt"],
+            geom["t_simdt"])
         )
+    
+    if args.load_dt:
+        #Check the load_dt is suitable
+        if args.load_dt < args.sim_dt:
+            msg = "The --load-dt arg value must be greater than --sim-dt"
+            Exception(msg)
+
+        if args.load_dt < 0:
+            msg = "The --load-dt arg cannot be negative"
+            Exception(msg)
+        
+        geom["t_loaddt"] = args.load_dt
+        geom["loadnumt"] = len(
+            arange(
+                geom["t_start"],
+                geom["t_end"] + geom["t_loaddt"],
+                geom["t_loaddt"])
+            )
     
     geom["grid2d_x"],geom["grid2d_y"] = meshgrid(
         linspace(geom["x_start"],geom["x_end"],geom["numx"]),
