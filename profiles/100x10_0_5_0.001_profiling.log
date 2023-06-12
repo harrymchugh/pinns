@@ -1,0 +1,75 @@
+STAGE:2023-06-12 16:43:30 2329:14517731 ActivityProfilerController.cpp:311] Completed Stage: Warm Up
+STAGE:2023-06-12 16:52:01 2329:14517731 ActivityProfilerController.cpp:317] Completed Stage: Collection
+STAGE:2023-06-12 16:52:01 2329:14517731 ActivityProfilerController.cpp:321] Completed Stage: Post Processing
+#################
+##  CFD PINN   ##
+#################
+
+Setting up geometry...
+Geometry summary:
+	geom[x_start]: 0
+	geom[x_end]: 1
+	geom[numx]: 100
+	geom[y_start]: 0
+	geom[y_end]: 1
+	geom[numy]: 100
+	geom[t_start]: 0.0
+	geom[t_end]: 5.0
+	geom[t_dt]: 0.001
+	geom[numt]: 5001
+	geom[stride]: 1
+	Geometry setup completed
+
+Prediction of fluid properties...
+	DEBUG: Applying scaler...
+	DEBUG: Scaler applied
+	DEBUG: len(x): 50010000
+	DEBUG: len(y): 50010000
+	DEBUG: len(t): 50010000
+------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                    Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg       CPU Mem  Self CPU Mem    # of Calls  
+------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+         model_inference         0.64%        3.290s       100.00%      511.196s      511.196s     572.32 Mb     -95.95 Gb             1  
+            aten::linear         0.00%       2.746ms        57.13%      292.027s       58.405s      48.25 Gb           0 b             5  
+             aten::addmm        53.09%      271.384s        57.12%      292.019s       58.404s      48.25 Gb      48.25 Gb             5  
+              aten::relu         0.00%       2.267ms        42.15%      215.472s       53.868s      47.69 Gb           0 b             4  
+         aten::clamp_min        42.15%      215.470s        42.15%      215.470s       53.868s      47.69 Gb      47.69 Gb             4  
+             aten::copy_         4.04%       20.634s         4.04%       20.634s        4.127s           0 b           0 b             5  
+               aten::cat         0.08%     406.744ms         0.08%     406.744ms     406.744ms     572.32 Mb     572.32 Mb             1  
+                 aten::t         0.00%       1.233ms         0.00%       5.203ms       1.041ms           0 b           0 b             5  
+         aten::transpose         0.00%       2.443ms         0.00%       3.970ms     794.000us           0 b           0 b             5  
+        aten::as_strided         0.00%       1.536ms         0.00%       1.536ms     153.600us           0 b           0 b            10  
+------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 511.196s
+
+
+------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                    Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg       CPU Mem  Self CPU Mem    # of Calls  
+------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+            aten::linear         0.00%       2.746ms        57.13%      292.027s       58.405s      48.25 Gb           0 b             5  
+             aten::addmm        53.09%      271.384s        57.12%      292.019s       58.404s      48.25 Gb      48.25 Gb             5  
+              aten::relu         0.00%       2.267ms        42.15%      215.472s       53.868s      47.69 Gb           0 b             4  
+         aten::clamp_min        42.15%      215.470s        42.15%      215.470s       53.868s      47.69 Gb      47.69 Gb             4  
+         model_inference         0.64%        3.290s       100.00%      511.196s      511.196s     572.32 Mb     -95.95 Gb             1  
+               aten::cat         0.08%     406.744ms         0.08%     406.744ms     406.744ms     572.32 Mb     572.32 Mb             1  
+           aten::reshape         0.00%      43.000us         0.00%     331.000us     110.333us           0 b           0 b             3  
+    aten::_reshape_alias         0.00%     288.000us         0.00%     288.000us      96.000us           0 b           0 b             3  
+                 aten::t         0.00%       1.233ms         0.00%       5.203ms       1.041ms           0 b           0 b             5  
+         aten::transpose         0.00%       2.443ms         0.00%       3.970ms     794.000us           0 b           0 b             5  
+------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 511.196s
+
+
+------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                    Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg       CPU Mem  Self CPU Mem    # of Calls  
+------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+             aten::addmm        53.09%      271.384s        57.12%      292.019s       58.404s      48.25 Gb      48.25 Gb             5  
+         aten::clamp_min        42.15%      215.470s        42.15%      215.470s       53.868s      47.69 Gb      47.69 Gb             4  
+------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 511.196s
+
+
+'inference' wall-time (seconds): 511.283
+
+	Fluid properties prediction complete
+
