@@ -7,6 +7,7 @@ from cfdpinn.preprocess import preprocess
 from cfdpinn.preprocess import convert_to_tensors
 from cfdpinn.pinns import CfdPinn
 from cfdpinn.pinns import predict_fluid
+from cfdpinn.pinns import compute_residual
 from cfdpinn.plots import static_plots
 from cfdpinn.plots import create_animation
 from cfdpinn.timing import function_timer
@@ -42,6 +43,7 @@ def main():
     
     #PINN inference
     data = predict_fluid(data,pinn,geom,args)
+    data = compute_residual(data)
 
     #Create animation from predicted fluid
     if args.prediction_animation:
