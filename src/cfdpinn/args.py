@@ -40,12 +40,21 @@ def parse_args():
         help="The last value of the OpenFOAM output timesteps",
         dest="end_time")
 
-    parser.add_argument("--dt",
+    parser.add_argument("--sim-dt",
         action="store",
         type=float,
         required=True,
-        help="The timestep value of the OpenFOAM case",
-        dest="dt")
+        help="The original timestep value of the OpenFOAM case",
+        dest="sim_dt")
+    
+    parser.add_argument("--load-dt",
+        action="store",
+        type=float,
+        required=False,
+        help="The desired timestep for the loaded OpenFOAM case. \
+            This allows the user to decimate the OpenFOAM simulation data. \
+            For example a simulation run at 0.01 can be loaded at 0.05 to reduce training time",
+        dest="load_dt")
     
     parser.add_argument("--numx",
         action="store",
