@@ -23,7 +23,8 @@ def preprocess(data,geom,args):
     #locations are obtained as this requires using 
     #pre-scaled spatio-temporal locations
     data["scaler"] = scaling_object(data)
-    dump(data["scaler"], open(args.scaler_path, "wb"))
+    if args.save_scaler_path != "":
+        dump(data["scaler"], open(args.save_scaler_path, "wb"))
 
     #Create training locations
     data = get_training_locations(data,args)

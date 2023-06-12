@@ -92,6 +92,12 @@ def parse_args():
         dest="initial_u_lid")
 
     #Data preprocessing for PINN training
+    parser.add_argument("--no-train",
+        action="store_true",
+        default=False,
+        help="Don't train a model, only inference",
+        dest="no_train")
+            
     parser.add_argument("--test-percent",
         action="store",
         type=float,
@@ -101,14 +107,23 @@ def parse_args():
             in the testing function of the PINN training process",
         dest="test_size")
     
-    parser.add_argument("--scaler-path",
+    parser.add_argument("--save-scaler-path",
         action="store",
         type=str,
-        required=True,
+        required=False,
         default="",
         help="The output path for the data scalar generated alongside a given input \
             dataset. Required for future use of the model on new data",
-        dest="scaler_path"
+        dest="save_scaler_path"
+        )
+    
+    parser.add_argument("--load-scaler-path",
+        action="store",
+        type=str,
+        required=False,
+        default="",
+        help="The path to load the data scalar for use with inference mode",
+        dest="load_scaler_path"
         )
     
     #MP4 animations
@@ -176,13 +191,43 @@ def parse_args():
 
     
     #PINN setup and variables
-    parser.add_argument("--model-path",
+    parser.add_argument("--save-model-path",
         action="store",
         type=str,
-        required=True,
+        required=False,
+        default="pinn_model.pt",
         help="Full path for the output of the trained PINN",
         dest="pinn_output_path")
     
+    parser.add_argument("--load-model-path",
+        action="store",
+        type=str,
+        help="Path to load a model in inference only mode",
+        dest="load_model_path")
+    
+    parser.add_argument("--profile",
+        action="store_true",
+        required=False,
+        default=False,
+        help="Run profiling on train and inference",
+        dest="profile")  
+
+    parser.add_argument("--trace-path",
+        action="store",
+        type=str,
+        required=False,
+        default="trace.json",
+        help="File path for profiling trace json file",
+        dest="trace_path")  
+
+    parser.add_argument("--stack-path",
+        action="store",
+        type=str,
+        required=False,
+        default="stack.txt",
+        help="File path for profiling call-graph file",
+        dest="stack_path")   
+
     parser.add_argument("--tensorboard",
         action="store_true",
         required=False,
@@ -193,7 +238,8 @@ def parse_args():
     parser.add_argument("--epochs",
         action="store",
         type=int,
-        required=True,
+        required=False,
+        default=1,
         help="The number of epochs to train the PINN",
         dest="epochs")      
     
@@ -223,6 +269,8 @@ def parse_args():
 
     args = parser.parse_args()
     
+    #Need logic for nonsensical combination of args
+
     return args
 
 def boiler_plate_welcome():

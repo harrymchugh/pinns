@@ -17,6 +17,9 @@ def load_simulation_data(args, geom):
         geom["numy"],
         geom["numx"])
     
+    if args.debug:
+        print(f"shape: {shape}\n")
+    
     #Create empty arrays to hold input data
     u = zeros(shape)
     v = zeros(shape)

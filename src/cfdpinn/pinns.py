@@ -7,6 +7,7 @@ from numpy import min,max,median,std
 from tqdm import tqdm
 from cfdpinn.timing import function_timer
 from time import time
+from torch.profiler import profile, record_function, ProfilerActivity
 
 #from torch.utils.tensorboard import SummaryWriter
 
@@ -100,7 +101,7 @@ class CfdPinn(torch.nn.Module):
                 y.reshape(-1,1),
                 t.reshape(-1,1)
             ],
-            axis=1).to(self.device)
+            axis=1)
         
         return self.linear_stack(inputs)
 
@@ -133,7 +134,7 @@ class CfdPinn(torch.nn.Module):
                     data[f"v_{data_label}_train_tensor"].reshape(-1,1), 
                     data[f"p_{data_label}_train_tensor"].reshape(-1,1)
                 ],axis=1
-            ).to(self.device)
+            )
 
         #Get loss for u,v and p on interior, PDE and boundary conditions
         data = self.lossfn(data,"train")
@@ -196,7 +197,7 @@ class CfdPinn(torch.nn.Module):
                     data[f"v_{data_label}_test_tensor"].reshape(-1,1), 
                     data[f"p_{data_label}_test_tensor"].reshape(-1,1)
                 ],axis=1
-            ).to(self.device)
+            )
                     
         #Get loss for u,v and p on interior, PDE and boundary conditions
         data = self.lossfn(data,"test")
@@ -257,87 +258,16 @@ def predict_fluid(data,pinn,geom,args):
     if args.debug:
         print("\tDEBUG: Scaler applied")
 
-    t = scaled_features[:,0]
-    y = scaled_features[:,1]
-    x = scaled_features[:,2]
+    t = torch.from_numpy(scaled_features[:,0]).float().to(pinn.device)
+    y = torch.from_numpy(scaled_features[:,1]).float().to(pinn.device)
+    x = torch.from_numpy(scaled_features[:,2]).float().to(pinn.device)
 
     if args.debug:
         print(f"\tDEBUG: len(x): {len(x)}")
         print(f"\tDEBUG: len(y): {len(y)}")
         print(f"\tDEBUG: len(t): {len(t)}")
 
-    # If we are timing inference data we must
-    # take into consideration the GPU initialization time
-    # which can skew results.
-
-    # To overcome this we will have two code paths. One for timing
-    # and the other for simple doing the inferece.
-
-    # In the timing code path, we will manually warm up the GPU
-    # before recording the inference time for a fixed number of 
-    # repetitions.
-
-    # A min,max,median and std.dev will then be reported for inference.
-    # The same approach can be used on the CPU even though it may be
-    # slightly over the top as it will still warm the cache.
-    
-    if args.inference_timing:
-        #Warm up GPU
-        for _ in range(5):
-            pinn(
-                torch.Tensor(x),
-                torch.Tensor(y),
-                torch.Tensor(t)
-                )
-        
-        #Record inference times
-        repetitions = 10
-        timings=zeros((repetitions,1))
-
-        if pinn.device == "cuda":
-            starter = torch.cuda.Event(enable_timing=True) 
-            ender = torch.cuda.Event(enable_timing=True)
-            
-            with torch.inference_mode():
-                #Get stats over 100 inferencing iterations
-                for repetition in range(repetitions):
-                    starter.record()
-                    _ = pinn(
-                        torch.Tensor(x),
-                        torch.Tensor(y),
-                        torch.Tensor(t))
-                    ender.record()
-                    torch.cuda.synchronize()
-                    curr_time = starter.elapsed_time(ender)
-                    timings[repetition] = curr_time
-
-        else:
-            
-            with torch.inference_mode():
-                #Get stats over 100 inferencing iterations
-                for repetition in range(repetitions):
-                    start = time()
-                    _ = pinn(
-                        torch.Tensor(x),
-                        torch.Tensor(y),
-                        torch.Tensor(t))
-                    end = time()
-                    curr_time = end - start
-                    timings[repetition] = curr_time
-        
-        print("\n** Inference Timings **\n")
-        print(f"DEVICE: {pinn.device}")
-        print(f"\tMedian: {median(timings)}")
-        print(f"\tMin: {min(timings)}")
-        print(f"\tMax: {max(timings)}")
-        print(f"\tStd.dev: {std(timings)}\n")
-
-    with torch.inference_mode():
-        prediction = pinn(
-            torch.Tensor(x),
-            torch.Tensor(y),
-            torch.Tensor(t))
-
+    prediction = inference(pinn,args,x,y,t)
     prediction = prediction.cpu().detach().numpy()
     
     #Get fluid dynamics components out of prediction
@@ -356,6 +286,90 @@ def predict_fluid(data,pinn,geom,args):
 
     return data
 
+@function_timer
+def inference(pinn,args,x,y,t):
+    """_summary_
+    """
+    # If we are timing inference data we must
+    # take into consideration the GPU initialization time
+    # which can skew results.
+
+    # To overcome this we will have two code paths. One for timing
+    # and the other for simple doing the inferece.
+
+    # In the timing code path, we will manually warm up the GPU
+    # before recording the inference time for a fixed number of 
+    # repetitions.
+
+    # A min,max,median and std.dev will then be reported for inference.
+    # The same approach can be used on the CPU even though it may be
+    # slightly over the top as it will still warm the cache.
+    
+    if args.inference_timing:
+        #Warm up GPU
+        for _ in range(5):
+            pinn(x,y,t)
+        
+        #Record inference times
+        repetitions = 10
+        timings=zeros((repetitions,1))
+
+        if pinn.device == "cuda":
+            starter = torch.cuda.Event(enable_timing=True) 
+            ender = torch.cuda.Event(enable_timing=True)
+            
+            with torch.inference_mode():
+                #Get stats over 100 inferencing iterations
+                for repetition in range(repetitions):
+                    starter.record()
+                    _ = pinn(x,y,t)
+                    ender.record()
+                    torch.cuda.synchronize()
+                    curr_time = starter.elapsed_time(ender)
+                    timings[repetition] = curr_time
+
+        else:           
+            with torch.inference_mode():
+                #Get stats over 100 inferencing iterations
+                for repetition in range(repetitions):
+                    start = time()
+                    _ = pinn(x,y,t)
+                    end = time()
+                    curr_time = end - start
+                    timings[repetition] = curr_time
+        
+        print("\n** Inference Timings **\n")
+        print(f"DEVICE: {pinn.device}")
+        print(f"\tMedian: {median(timings)}")
+        print(f"\tMin: {min(timings)}")
+        print(f"\tMax: {max(timings)}")
+        print(f"\tStd.dev: {std(timings)}\n")
+
+    if args.profile:
+            with profile(
+                activities=[ProfilerActivity.CPU],
+                profile_memory=True,
+                with_stack=True,
+                record_shapes=True) as prof:
+                with record_function("model_inference"):
+                    with torch.inference_mode():
+                        prediction = pinn(x,y,t)
+            
+            print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
+            print()
+            print(prof.key_averages().table(sort_by="cpu_memory_usage", row_limit=10))
+            print()
+            print(prof.key_averages(group_by_stack_n=5).table(sort_by="self_cpu_time_total", row_limit=2))
+            print()
+            prof.export_chrome_trace(args.trace_path)
+            prof.export_stacks(args.stack_path, "self_cpu_time_total")
+    
+    else:
+        with torch.inference_mode():
+            prediction = pinn(x,y,t)
+        
+    return prediction
+
 def compute_residual(data):
     """_summary_
     """
@@ -364,3 +378,12 @@ def compute_residual(data):
     data["p_residual"] = absolute(data["p"] - data["p_pred"])
 
     return data
+
+def load_pinn(args):
+    """_summary_
+
+    Args:
+        args (_type_): _description_
+    """
+    pinn = torch.load(args.load_model_path)
+    return pinn
