@@ -29,9 +29,6 @@ def load_simulation_data(args, geom):
         openfoam_outputs.remove("0_orig")
     openfoam_outputs.sort()
 
-    #There is an opportunity here to decimate the input simulation
-    #if % _desired_dt == 0
-
     spatial_grid_shape = (geom["numy"],geom["numx"])
 
     idx = 0

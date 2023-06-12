@@ -3,6 +3,8 @@
 from numpy import arange
 from numpy import meshgrid
 from numpy import linspace
+from math import isclose
+from decimal import Decimal
 
 def setup_geom(args):
     """
@@ -43,13 +45,7 @@ def setup_geom(args):
         msg = "The --sim-dt arg cannot be negative"
         Exception(msg)
     
-    geom["t_simdt"] = args.sim_dt
-    geom["simnumt"] = len(
-        arange(
-            geom["t_start"],
-            geom["t_end"] + geom["t_simdt"],
-            geom["t_simdt"])
-        )
+    geom["t_dt"] = args.sim_dt
     
     if args.load_dt:
         #Check the load_dt is suitable
@@ -61,12 +57,19 @@ def setup_geom(args):
             msg = "The --load-dt arg cannot be negative"
             Exception(msg)
         
-        geom["t_loaddt"] = args.load_dt
-        geom["loadnumt"] = len(
+        mod = Decimal(args.load_dt) % Decimal(args.sim_dt)
+        if isclose(mod,0,rel_tol=1e-6):
+            msg = "--load-dt is not divisible by --sim-dt. Decimation is not possible"
+            Exception(msg)
+        else:
+            geom["stride"] = Decimal(args.load_dt) / Decimal(args.sim_dt)
+            geom["t_dt"] = args.load_dt
+
+        geom["numt"] = len(
             arange(
                 geom["t_start"],
-                geom["t_end"] + geom["t_loaddt"],
-                geom["t_loaddt"])
+                geom["t_end"] + geom["t_dt"],
+                geom["t_dt"])
             )
     
     geom["grid2d_x"],geom["grid2d_y"] = meshgrid(
