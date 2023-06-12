@@ -250,11 +250,21 @@ def predict_fluid(data,pinn,geom,args):
     """
     """
     print("Prediction of fluid properties...")
+
+    if args.debug:
+        print("\tDEBUG: Applying scaler...")
     scaled_features = data["scaler"].transform(data["features"])
+    if args.debug:
+        print("\tDEBUG: Scaler applied")
 
     t = scaled_features[:,0]
     y = scaled_features[:,1]
     x = scaled_features[:,2]
+
+    if args.debug:
+        print(f"\tDEBUG: len(x): {len(x)}")
+        print(f"\tDEBUG: len(y): {len(y)}")
+        print(f"\tDEBUG: len(t): {len(t)}")
 
     # If we are timing inference data we must
     # take into consideration the GPU initialization time
