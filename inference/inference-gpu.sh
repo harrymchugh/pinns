@@ -1,11 +1,10 @@
 #!/bin/bash
-#SBATCH --partition=standard
-#SBATCH --qos=standard
-#SBATCH --time=01:00:00
+#SBATCH --partition=gpu
+#SBATCH --qos=short
+#SBATCH --gres=gpu:1
 #SBATCH --account=mdisspt-z2137380
-#SBATCH --job-name=inference-100x100
+#SBATCH --job-name=inference-100x100-gpu
 #SBATCH --output=%x.%j.out
-#SBATCH --exclusive
 
 module load python/3.10.8-gpu
 
