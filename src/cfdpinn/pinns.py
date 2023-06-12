@@ -361,6 +361,8 @@ def inference(pinn,args,x,y,t):
             print()
             print(prof.key_averages(group_by_stack_n=5).table(sort_by="self_cpu_time_total", row_limit=2))
             print()
+            print(prof.key_averages(group_by_input_shape=True).table(sort_by="self_cpu_time_total", row_limit=10))
+            print()
             prof.export_chrome_trace(args.trace_path)
             prof.export_stacks(args.stack_path, "self_cpu_time_total")
     
