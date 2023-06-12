@@ -342,10 +342,15 @@ def predict_fluid(data,pinn,geom,args):
     data["v_pred"] = prediction[:,1].reshape(shape)
     data["p_pred"] = prediction[:,2].reshape(shape)
 
+    print("\tFluid properties prediction complete\n")
+
+    return data
+
+def compute_residual(data):
+    """_summary_
+    """
     data["u_residual"] = absolute(data["u"] - data["u_pred"])
     data["v_residual"] = absolute(data["v"] - data["v_pred"])
     data["p_residual"] = absolute(data["p"] - data["p_pred"])
-
-    print("\tFluid properties prediction complete\n")
 
     return data
