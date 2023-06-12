@@ -86,6 +86,16 @@ def parse_args():
             in the testing function of the PINN training process",
         dest="test_size")
     
+    parser.add_argument("--scaler-path",
+        action="store",
+        type=str,
+        required=True,
+        default="",
+        help="The output path for the data scalar generated alongside a given input \
+            dataset. Required for future use of the model on new data",
+        dest="scaler_path"
+        )
+    
     #MP4 animations
     parser.add_argument("--num-frames",
         action="store",
