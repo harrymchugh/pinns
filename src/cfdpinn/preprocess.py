@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
+from pickle import dump
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from torch import from_numpy
@@ -22,6 +23,7 @@ def preprocess(data,geom,args):
     #locations are obtained as this requires using 
     #pre-scaled spatio-temporal locations
     data["scaler"] = scaling_object(data)
+    dump(data["scaler"], open(args.scaler_path, "wb"))
 
     #Create training locations
     data = get_training_locations(data,args)
