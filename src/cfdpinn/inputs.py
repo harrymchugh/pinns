@@ -29,6 +29,9 @@ def load_simulation_data(args, geom):
         openfoam_outputs.remove("0_orig")
     openfoam_outputs.sort()
 
+    if geom["stride"]:
+        openfoam_outputs = openfoam_outputs[::geom["stride"]]
+
     spatial_grid_shape = (geom["numy"],geom["numx"])
 
     idx = 0

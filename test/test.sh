@@ -11,7 +11,8 @@ cfdpinn \
     --case-dir $HOME/pinns/openfoam/cases/cavity/ \
     --start-time 0 \
     --end-time 5 \
-    --dt 0.001 \
+    --sim-dt 0.001 \
+    --load-dt 0.005 \
     --numx 20 \
     --numy 20 \
     --viscosity 0.01 \
