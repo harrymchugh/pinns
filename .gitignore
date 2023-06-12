@@ -8,5 +8,6 @@ openfoam/cases/cavity*/0.*
 openfoam/cases/cavity*/[1-9]*
 openfoam/cases/*/constant/polyMesh
 models/tmp*pt
+models/tmp*pkl
 animations/tmp*
 data/tmp-outputs
