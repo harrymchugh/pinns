@@ -6,6 +6,8 @@ cd $CFDPINN_ROOT
 
 cfdpinn \
     --debug \
+    --tensorboard \
+    --tensorboard-path $CFDPINN_ROOT/tboard/ \
     --case-type cavity \
     --case-dir $CFDPINN_ROOT/openfoam/cases/cavity_nu0.01_U1/ \
     --start-time 0 \
