@@ -11,3 +11,4 @@ models/tmp*pt
 models/tmp*pkl
 animations/tmp*
 data/tmp-outputs
+tboard/*
