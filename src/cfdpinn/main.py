@@ -89,7 +89,7 @@ def main():
         else:
             pinn.train(data)
     
-    #PINN inference
+    #Inference only mode
     if args.no_train:
         data = dict()
         data["scaler"] = load(open(args.load_scaler_path,"rb"))

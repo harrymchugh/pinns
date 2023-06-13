@@ -20,15 +20,15 @@ def parse_args():
     parser.add_argument("--case-type",
         action="store",
         type=str,
-        required=True,
-        choices=["cavity","channel"],
-        help="CFDPINN currently only supports OpenFOAM simulations for lid-driven cavity and channel flow",
+        required=False,
+        choices=["cavity"],
+        help="CFDPINN currently only supports OpenFOAM simulations for lid-driven cavity flow",
         dest="case_type")
 
     parser.add_argument("--case-dir",
         action="store",
         type=str,
-        required=True,
+        required=False,
         help="The direcotry of the OpenFOAM case used for PINN training",
         dest="case_dir")
 
