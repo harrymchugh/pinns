@@ -59,36 +59,7 @@ def main():
 
     #PINN training and testing loop
     if not args.no_train:
-        if args.profile:
-            with profile(
-                activities=[ProfilerActivity.CPU,ProfilerActivity.CUDA],
-                profile_memory=True,
-                with_stack=True,
-                record_shapes=True) as prof:
-                with record_function("model_training"):
-                    pinn.train(data)
-            
-            print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
-            print()
-            print(prof.key_averages().table(sort_by="cpu_memory_usage", row_limit=10))
-            print()
-            print(prof.key_averages(group_by_stack_n=5).table(sort_by="self_cpu_time_total", row_limit=10))
-            print()
-
-            print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
-            print()
-            print(prof.key_averages().table(sort_by="cuda_memory_usage", row_limit=10))
-            print()
-            print(prof.key_averages(group_by_stack_n=5).table(sort_by="self_cuda_time_total", row_limit=10))
-            print()
-
-
-            prof.export_chrome_trace(args.trace_path)
-            prof.export_stacks(f"cpu_{args.stack_path}", "self_cpu_time_total")
-            prof.export_stacks(f"gpu_{args.stack_path}", "self_cuda_time_total")
-        
-        else:
-            pinn.train(data)
+            pinn.train(data,args)
     
     #Inference only mode
     if args.no_train:

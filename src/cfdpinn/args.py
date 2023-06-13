@@ -210,7 +210,15 @@ def parse_args():
         required=False,
         default=False,
         help="Run profiling on train and inference",
-        dest="profile")  
+        dest="profile")
+
+    parser.add_argument("--profile-path",
+        action="store",
+        type=str,
+        required=False,
+        default="",
+        help="The path to save Tensorboard profiling outputs",
+        dest="profile_path") 
 
     parser.add_argument("--trace-path",
         action="store",
@@ -241,7 +249,7 @@ def parse_args():
         required=False,
         default="",
         help="The path to save Tensorboard outputs",
-        dest="tensorboard_path") 
+        dest="tensorboard_path")
     
     parser.add_argument("--epochs",
         action="store",

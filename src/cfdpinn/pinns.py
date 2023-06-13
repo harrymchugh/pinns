@@ -109,13 +109,33 @@ class CfdPinn(torch.nn.Module):
         return self.linear_stack(inputs)
 
     @function_timer
-    def train(self,data):
+    def train(self,data,args):
         """
         """
-        for epoch in tqdm(range(1,self.epochs + 1), desc="CFD PINN training progress"):
-            self.train_loop(data,epoch)
-            self.test_loop(data,epoch)
+        if args.profile:
+            prof = torch.profiler.profile(
+                schedule=torch.profiler.schedule(wait=1, warmup=1, active=10, repeat=1),
+                on_trace_ready=torch.profiler.tensorboard_trace_handler(args.profile_path),
+                record_shapes=True,
+                with_stack=True,
+                profile_memory=True,
+                with_flops=True)
+            
+            prof.start()
         
+        for epoch in tqdm(range(1,self.epochs + 1), desc="CFD PINN training progress"):
+            
+            if args.profile:
+                self.train_loop(data,epoch)
+                prof.step()
+
+            else:
+                self.train_loop(data,epoch)
+                self.test_loop(data,epoch)
+
+        if args.profile:
+            prof.stop()
+
         if self.writer:
             self.writer.close()
 
@@ -352,26 +372,19 @@ def inference(pinn,args,x,y,t):
         print(f"\tStd.dev: {std(timings)}\n")
 
     if args.profile:
-            with profile(
-                activities=[ProfilerActivity.CPU],
-                profile_memory=True,
-                with_stack=True,
-                record_shapes=True) as prof:
-                with record_function("model_inference"):
-                    with torch.inference_mode():
-                        prediction = pinn(x,y,t)
+        prof = torch.profiler.profile(
+            schedule=torch.profiler.schedule(wait=0,warmup=0,active=1),
+            on_trace_ready=torch.profiler.tensorboard_trace_handler(args.profile_path),
+            record_shapes=True,
+            with_stack=True,
+            profile_memory=True,
+            with_flops=True)
+        
+        prof.start()
+        with torch.inference_mode():
+            prediction = pinn(x,y,t)
+        prof.stop()
             
-            print(prof.key_averages().table(sort_by="cpu_time_total", row_limit=10))
-            print()
-            print(prof.key_averages().table(sort_by="cpu_memory_usage", row_limit=10))
-            print()
-            print(prof.key_averages(group_by_stack_n=5).table(sort_by="self_cpu_time_total", row_limit=2))
-            print()
-            print(prof.key_averages(group_by_input_shape=True).table(sort_by="self_cpu_time_total", row_limit=10))
-            print()
-            prof.export_chrome_trace(args.trace_path)
-            prof.export_stacks(args.stack_path, "self_cpu_time_total")
-    
     else:
         with torch.inference_mode():
             prediction = pinn(x,y,t)
