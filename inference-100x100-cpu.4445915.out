@@ -1,0 +1,162 @@
+Loading python/3.10.8-gpu
+  Loading requirement: gcc/8.2.0 nvidia/nvhpc-nompi/22.2 openmpi/4.1.4-cuda-11.6
+Matplotlib created a temporary config/cache directory at /dev/shm/z2137380_4445915/matplotlib-u336zk64 because the default path (/home/mdisspt/mdisspt/z2137380/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+#################
+##  CFD PINN   ##
+#################
+
+Setting up geometry...
+Geometry summary:
+	geom[x_start]: 0
+	geom[x_end]: 1
+	geom[numx]: 100
+	geom[y_start]: 0
+	geom[y_end]: 1
+	geom[numy]: 100
+	geom[t_start]: 0.0
+	geom[t_end]: 5.0
+	geom[t_dt]: 0.001
+	geom[numt]: 5001
+	geom[stride]: 1
+	Geometry setup completed
+
+DEBUG: PINN device: cpu
+
+Prediction of fluid properties...
+	DEBUG: Applying scaler...
+	DEBUG: Scaler applied
+	DEBUG: len(x): 50010000
+	DEBUG: len(y): 50010000
+	DEBUG: len(t): 50010000
+'inference' wall-time (seconds): 57.541
+
+	Fluid properties prediction complete
+
+Matplotlib created a temporary config/cache directory at /dev/shm/z2137380_4445915/matplotlib-wjxjh4bg because the default path (/home/mdisspt/mdisspt/z2137380/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+#################
+##  CFD PINN   ##
+#################
+
+Setting up geometry...
+Geometry summary:
+	geom[x_start]: 0
+	geom[x_end]: 1
+	geom[numx]: 100
+	geom[y_start]: 0
+	geom[y_end]: 1
+	geom[numy]: 100
+	geom[t_start]: 0.0
+	geom[t_end]: 5.0
+	geom[t_dt]: 0.001
+	geom[numt]: 5001
+	geom[stride]: 1
+	Geometry setup completed
+
+DEBUG: PINN device: cpu
+
+Prediction of fluid properties...
+	DEBUG: Applying scaler...
+	DEBUG: Scaler applied
+	DEBUG: len(x): 50010000
+	DEBUG: len(y): 50010000
+	DEBUG: len(t): 50010000
+'inference' wall-time (seconds): 57.177
+
+	Fluid properties prediction complete
+
+Matplotlib created a temporary config/cache directory at /dev/shm/z2137380_4445915/matplotlib-9u_se5z9 because the default path (/home/mdisspt/mdisspt/z2137380/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+#################
+##  CFD PINN   ##
+#################
+
+Setting up geometry...
+Geometry summary:
+	geom[x_start]: 0
+	geom[x_end]: 1
+	geom[numx]: 100
+	geom[y_start]: 0
+	geom[y_end]: 1
+	geom[numy]: 100
+	geom[t_start]: 0.0
+	geom[t_end]: 5.0
+	geom[t_dt]: 0.001
+	geom[numt]: 5001
+	geom[stride]: 1
+	Geometry setup completed
+
+DEBUG: PINN device: cpu
+
+Prediction of fluid properties...
+	DEBUG: Applying scaler...
+	DEBUG: Scaler applied
+	DEBUG: len(x): 50010000
+	DEBUG: len(y): 50010000
+	DEBUG: len(t): 50010000
+'inference' wall-time (seconds): 56.437
+
+	Fluid properties prediction complete
+
+Matplotlib created a temporary config/cache directory at /dev/shm/z2137380_4445915/matplotlib-is2a4zbr because the default path (/home/mdisspt/mdisspt/z2137380/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+#################
+##  CFD PINN   ##
+#################
+
+Setting up geometry...
+Geometry summary:
+	geom[x_start]: 0
+	geom[x_end]: 1
+	geom[numx]: 100
+	geom[y_start]: 0
+	geom[y_end]: 1
+	geom[numy]: 100
+	geom[t_start]: 0.0
+	geom[t_end]: 5.0
+	geom[t_dt]: 0.001
+	geom[numt]: 5001
+	geom[stride]: 1
+	Geometry setup completed
+
+DEBUG: PINN device: cpu
+
+Prediction of fluid properties...
+	DEBUG: Applying scaler...
+	DEBUG: Scaler applied
+	DEBUG: len(x): 50010000
+	DEBUG: len(y): 50010000
+	DEBUG: len(t): 50010000
+'inference' wall-time (seconds): 57.724
+
+	Fluid properties prediction complete
+
+Matplotlib created a temporary config/cache directory at /dev/shm/z2137380_4445915/matplotlib-l_hxua0_ because the default path (/home/mdisspt/mdisspt/z2137380/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+#################
+##  CFD PINN   ##
+#################
+
+Setting up geometry...
+Geometry summary:
+	geom[x_start]: 0
+	geom[x_end]: 1
+	geom[numx]: 100
+	geom[y_start]: 0
+	geom[y_end]: 1
+	geom[numy]: 100
+	geom[t_start]: 0.0
+	geom[t_end]: 5.0
+	geom[t_dt]: 0.001
+	geom[numt]: 5001
+	geom[stride]: 1
+	Geometry setup completed
+
+DEBUG: PINN device: cpu
+
+Prediction of fluid properties...
+	DEBUG: Applying scaler...
+	DEBUG: Scaler applied
+	DEBUG: len(x): 50010000
+	DEBUG: len(y): 50010000
+	DEBUG: len(t): 50010000
+'inference' wall-time (seconds): 56.640
+
+	Fluid properties prediction complete
+

@@ -20,6 +20,7 @@ from pickle import load
 
 from torch.profiler import profile, record_function, ProfilerActivity
 from torch.cuda import is_available
+from torch import get_num_threads
 
 def main():
     """
@@ -44,6 +45,7 @@ def main():
         pinn.to(pinn.device)
         if args.debug:
             print(f"DEBUG: PINN device: {pinn.device}\n")
+            print(f"DEBUG: threads: {get_num_threads()}")
 
     #Preprocess data for PINN training
     if not args.no_train:
