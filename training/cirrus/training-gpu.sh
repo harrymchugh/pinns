@@ -1,9 +1,10 @@
 #!/bin/bash
-#SBATCH --partition=standard
-#SBATCH --qos=standard
-#SBATCH --time=01:00:00
+#SBATCH --partition=gpu
+#SBATCH --qos=short
+#SBATCH --gres=gpu:1
 #SBATCH --account=mdisspt-z2137380
-#SBATCH --job-name=train-1000epoch-20x20_0_5_0.005
+#SBATCH --time=00:20:00
+#SBATCH --job-name=train-gpu-1000epoch-20x20_0_5_0.005
 #SBATCH --output=%x.%j.out
 
 module load python/3.10.8-gpu
