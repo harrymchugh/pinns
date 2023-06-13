@@ -9,7 +9,7 @@ from cfdpinn.timing import function_timer
 from time import time
 from torch.profiler import profile, record_function, ProfilerActivity
 
-#from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 
 class CfdPinn(torch.nn.Module):
     def __init__(self,args):
@@ -36,10 +36,10 @@ class CfdPinn(torch.nn.Module):
         self.optimizer = torch.optim.Adam(self.parameters(), lr=args.learning_rate)
         self.criterion = torch.nn.MSELoss()
         self.viscosity = args.viscosity
-        self.tensorboard_dir_name = "weighting"
+        self.tensorboard_path = args.tensorboard_path
         
-        #if args.tensorboard:
-            #self.writer = SummaryWriter("runs/" + self.tensorboard_dir_name)
+        if args.tensorboard:
+            self.writer = SummaryWriter(self.tensorboard_path)
         
         self.epochs = args.epochs
 
@@ -115,6 +115,9 @@ class CfdPinn(torch.nn.Module):
         for epoch in tqdm(range(1,self.epochs + 1), desc="CFD PINN training progress"):
             self.train_loop(data,epoch)
             self.test_loop(data,epoch)
+        
+        if self.writer:
+            self.writer.close()
 
     def train_loop(self,data,epoch):
         """
@@ -175,8 +178,8 @@ class CfdPinn(torch.nn.Module):
             (data["train_boundary_loss_weight"] * data["train_boundary_loss"])
 
         #Write QC data to Tensorboard
-        #if self.writer:
-            #self.tensorboard_outputs(self,data,epoch,"train")
+        if self.writer:
+            self.tensorboard_outputs(data,epoch,"train")
             
         #Update weights according to weighted loss function    
         data["train_weighted_total_loss"].backward()
@@ -210,8 +213,8 @@ class CfdPinn(torch.nn.Module):
             data["test_data_loss"] + data["test_pde_loss"] + data["test_boundary_loss"]
         
         #Write QC data to Tensorboard if enabled
-        #if self.writer:
-            #self.tensorboard_outputs(self,data,epoch,"test")
+        if self.writer:
+            self.tensorboard_outputs(data,epoch,"test")
     
     def tensorboard_outputs(self,data,epoch,train_or_test):
         """
@@ -226,7 +229,7 @@ class CfdPinn(torch.nn.Module):
             self.writer.add_scalar('train_weighted_boundary_loss',data["train_boundary_loss"] * data["train_boundary_loss_weight"],epoch)
             self.writer.add_scalar('train_weighted_pde_loss',data["train_pde_loss"] * data["train_pde_loss_weight"],epoch)
             self.writer.add_scalar('train_weighted_data_loss',data["train_data_loss"] * data["train_data_loss_weight"],epoch)
-            self.writer.add_scalar('train_weighted_total_loss'.data["train_weighted_total_loss"],epoch)
+            self.writer.add_scalar('train_weighted_total_loss',data["train_weighted_total_loss"],epoch)
             
             #Adaptive loss weights
             self.writer.add_scalar('train_boundary_loss_weight',data["train_boundary_loss_weight"],epoch)
@@ -236,7 +239,7 @@ class CfdPinn(torch.nn.Module):
             #Gradients
             self.writer.add_scalar('train_data_mean_grad', torch.mean(torch.abs(data["data_grads"])))
             self.writer.add_scalar('train_pde_mean_grad', torch.mean(torch.abs(data["pde_grads"])))
-            self.writer.add_scalar('train_bound_mean_grad', torch.mean(torch.abs(data["bound_grads"])))
+            self.writer.add_scalar('train_boundary_mean_grad', torch.mean(torch.abs(data["boundary_grads"])))
         
         elif train_or_test == "test":
             #Raw losses
@@ -245,10 +248,10 @@ class CfdPinn(torch.nn.Module):
             self.writer.add_scalar('test_data_loss',data["test_data_loss"],epoch)
             self.writer.add_scalar('test_total_loss',data["test_total_loss"],epoch)
 
-    def save_model(self):
-        print(f"Saving CFDPINN model to {self.model_output_path}...")
-        torch.save(self.to("cpu"), self.model_output_path)
-        print(f"\tModel {self.model_output_path} saved\n")
+def save_model(pinn):
+    print(f"Saving CFDPINN model to {pinn.model_output_path}...")
+    torch.save(pinn.to("cpu"), pinn.model_output_path)
+    print(f"\tModel {pinn.model_output_path} saved\n")
 
 def predict_fluid(data,pinn,geom,args):
     """

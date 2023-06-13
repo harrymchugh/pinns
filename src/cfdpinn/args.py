@@ -235,6 +235,14 @@ def parse_args():
         help="Log training metrics with Tensorboard functionality",
         dest="tensorboard")
     
+    parser.add_argument("--tensorboard-path",
+        action="store",
+        type=str,
+        required=False,
+        default="",
+        help="The path to save Tensorboard outputs",
+        dest="tensorboard_path") 
+    
     parser.add_argument("--epochs",
         action="store",
         type=int,

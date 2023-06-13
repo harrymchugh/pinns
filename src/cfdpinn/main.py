@@ -10,6 +10,7 @@ from cfdpinn.pinns import CfdPinn
 from cfdpinn.pinns import predict_fluid
 from cfdpinn.pinns import compute_residual
 from cfdpinn.pinns import load_pinn
+from cfdpinn.pinns import save_model
 from cfdpinn.plots import static_plots
 from cfdpinn.plots import create_animation
 from cfdpinn.timing import function_timer
@@ -108,7 +109,7 @@ def main():
 
     #Save model and if requested training and predicted fields
     if not args.no_train:
-        pinn.save_model()
+        save_model(pinn)
         
     if args.output_train_data:
         save_training_data(data,args)
