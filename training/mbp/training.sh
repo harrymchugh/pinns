@@ -22,7 +22,7 @@ cfdpinn \
     --initial_u 1 \
     --test-percent 0.7 \
     --lr 0.001 \
-    --epochs 50 \
+    --epochs 500 \
     --save-scaler-path $CFDPINN_ROOT/models/tmp.pkl \
     --save-model-path $CFDPINN_ROOT/models/tmp.pt
-    
+
