@@ -33,8 +33,11 @@ def main():
     #Setup the time-space grids
     geom = setup_geom(args)
     
-    #Read in simulation data
+    #Read in simulation data for training or when 
+    #explicitly requested (e.g for generating plots)
     if not args.no_train:
+        data = load_simulation_data(args,geom)
+    elif args.load_sim:
         data = load_simulation_data(args,geom)
 
     #PINN setup

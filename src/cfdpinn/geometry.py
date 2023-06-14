@@ -14,16 +14,16 @@ def setup_geom(args):
     print("Setting up geometry...")
 
     geom = dict()
-    geom["x_start"] = 0
-    geom["x_end"] = 1
+    geom["x_start"] = args.startx
+    geom["x_end"] = args.endx
 
     if args.numx < 0:
         msg = "The --numx arg value must be positive"
         raise Exception(msg)
     geom["numx"] = args.numx
     
-    geom["y_start"] = 0
-    geom["y_end"] = 1
+    geom["y_start"] = args.starty
+    geom["y_end"] = args.endy
 
     if args.numy < 0:
         msg = "The --numy arg value must be positive"

@@ -62,6 +62,38 @@ def parse_args():
             For example a simulation run at 0.01 can be loaded at 0.05 to reduce training time",
         dest="load_dt")
     
+    parser.add_argument("--startx",
+        action="store",
+        type=float,
+        required=False,
+        default=0,
+        help="The x value of the first cell",
+        dest="startx")
+    
+    parser.add_argument("--starty",
+        action="store",
+        type=float,
+        required=False,
+        default=0,
+        help="The y value of the first cell",
+        dest="starty")
+    
+    parser.add_argument("--endx",
+        action="store",
+        type=float,
+        required=False,
+        default=1,
+        help="The x value of the last cell",
+        dest="endx")
+    
+    parser.add_argument("--endy",
+        action="store",
+        type=float,
+        required=False,
+        default=1,
+        help="The y value of the last cell",
+        dest="endy")
+
     parser.add_argument("--numx",
         action="store",
         type=int,
@@ -79,7 +111,7 @@ def parse_args():
     parser.add_argument("--viscosity",
         action="store",
         type=float,
-        required=True,
+        required=False,
         help="The viscosity of the fluid used in the OpenFOAM case",
         dest="viscosity")
 
@@ -90,6 +122,12 @@ def parse_args():
         default=1,
         help="The u (x) velocity of the fluid flowing over the cavity top wall",
         dest="initial_u_lid")
+
+    parser.add_argument("--load-simulation",
+        action="store_true",
+        required=False,
+        help="Load simulation data regardless of training or inference",
+        dest="load_sim")  
 
     #Data preprocessing for PINN training
     parser.add_argument("--no-train",
