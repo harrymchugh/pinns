@@ -12,3 +12,6 @@ models/tmp*pkl
 animations/tmp*
 data/tmp-outputs
 tboard/*
+profiles/tboard/*
+profiles/*.json
+profiles/*.txt

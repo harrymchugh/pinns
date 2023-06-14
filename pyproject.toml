@@ -18,6 +18,7 @@ dependencies = [
     "torchvision",
     "torchaudio",
     "tensorboard",
+    "torch_tb_profiler",
     "matplotlib",
     "scikit-learn",
     "tdqm"
