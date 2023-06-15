@@ -227,7 +227,6 @@ def parse_args():
         help="Output raw training data NumPY arrays for U,V,P",
         dest="output_data_path")   
 
-    
     #PINN setup and variables
     parser.add_argument("--save-model-path",
         action="store",
@@ -236,6 +235,15 @@ def parse_args():
         default="pinn_model.pt",
         help="Full path for the output of the trained PINN",
         dest="pinn_output_path")
+    
+    parser.add_argument("--optimizer",
+        action="store",
+        type=str,
+        choices=["adam","sgd"],
+        required=False,
+        default="adam",
+        help="The type of optimizer used for model training",
+        dest="optimizer")
     
     parser.add_argument("--load-model-path",
         action="store",

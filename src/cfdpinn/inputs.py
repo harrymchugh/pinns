@@ -25,7 +25,10 @@ def load_simulation_data(args, geom):
     v = zeros(shape)
     p = zeros(shape)
 
-    openfoam_outputs = listdir(args.case_dir)
+    case_dir = args.case_dir
+    if case_dir[-1] != "/":
+        case_dir += "/"
+    openfoam_outputs = listdir(case_dir)
     openfoam_outputs.remove("constant")
     openfoam_outputs.remove("system")
     if "0_orig" in openfoam_outputs:
@@ -39,7 +42,7 @@ def load_simulation_data(args, geom):
 
     idx = 0
     for time in openfoam_outputs:
-        openfoam_timestep = args.case_dir + time
+        openfoam_timestep = case_dir + time
         
         if time == "0":
             u = set_initial_condition_u(u,args.initial_u_lid)

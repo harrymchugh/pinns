@@ -33,7 +33,14 @@ class CfdPinn(torch.nn.Module):
 
         self.to(self.device)
 
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=args.learning_rate)
+        if args.optimizer == "adam":
+            self.optimizer = torch.optim.Adam(self.parameters(), lr=args.learning_rate)
+        elif args.optimizer == "sgd":
+            self.optimizer = torch.optim.SGD(self.parameters(), lr=args.learning_rate)
+        else:
+            msg = f"Somehow you have managed to pass an --optimizer name that is not supported"
+            raise Exception(msg)
+        
         self.criterion = torch.nn.MSELoss()
         self.viscosity = args.viscosity
         self.tensorboard_path = args.tensorboard_path
