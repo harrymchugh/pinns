@@ -5,6 +5,7 @@
 #SBATCH --account=mdisspt-z2137380
 #SBATCH --job-name=train-500epoch-20x20_0_5_0.005_lr0.001_test0.7_adam
 #SBATCH --output=%x.%j.out
+#SBATCH --exclusive
 
 module load python/3.10.8-gpu
 source /mnt/lustre/indy2lfs/work/mdisspt/mdisspt/z2137380/venvs/cfdpinn-venv/bin/activate
