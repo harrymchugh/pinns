@@ -8,7 +8,7 @@ from tqdm import tqdm
 from cfdpinn.timing import function_timer
 from time import time
 from torch.profiler import profile, record_function, ProfilerActivity
-from torch.cuda.amp import GradScaler
+
 from torch.utils.tensorboard import SummaryWriter
 
 class CfdPinn(torch.nn.Module):
@@ -50,8 +50,6 @@ class CfdPinn(torch.nn.Module):
         
         self.epochs = args.epochs
 
-        self.scaler = GradScaler()
-
         self.model_output_path = args.pinn_output_path
 
     def lossfn(self,data,train_or_test):
@@ -81,14 +79,13 @@ class CfdPinn(torch.nn.Module):
         #according to derivates and constants
         pde_u = dudt + (u * dudx) + (v * dudy) - (self.viscosity * (d2udx2 + d2udy2)) + dpdx
         pde_v = dvdt + (u * dvdx) + (v * dvdy) - (self.viscosity * (d2vdx2 + d2vdy2)) + dpdy
-        pde_conserve_mass = dudx + dvdy
-        
+
         #Define loss criterion
         criterion = self.criterion
         
         #Both components of the PDE should minimize to zero so creating
         #a target array equal to zero
-        pde_total = torch.cat((pde_u,pde_v,pde_conserve_mass))
+        pde_total = torch.cat((pde_u,pde_v))
         pde_labels = torch.zeros_like(pde_total)
 
         data[f"{train_or_test}_pde_loss"] = criterion(pde_labels, pde_total)
@@ -155,39 +152,36 @@ class CfdPinn(torch.nn.Module):
         #Ensure gradients are set to zero
         self.optimizer.zero_grad()
 
-        with autocast(device_type='cuda', dtype=torch.float16):
-            #Get predictions and labels for fluid properties
-            data_labels = ["interior","boundary"]
-            for data_label in data_labels:
-                data[f"train_{data_label}_pred"] = self.forward(
-                    data[f"x_{data_label}_train_tensor"], 
-                    data[f"y_{data_label}_train_tensor"], 
-                    data[f"t_{data_label}_train_tensor"]
-                )
-                
-                data[f"train_{data_label}_labels"] = torch.cat(
-                    [
-                        data[f"u_{data_label}_train_tensor"].reshape(-1,1),
-                        data[f"v_{data_label}_train_tensor"].reshape(-1,1), 
-                        data[f"p_{data_label}_train_tensor"].reshape(-1,1)
-                    ],axis=1
-                )
-
-            #Get loss for u,v and p on interior, PDE and boundary conditions
-            data = self.lossfn(data,"train")
+        #Get predictions and labels for fluid properties
+        data_labels = ["interior","boundary"]
+        for data_label in data_labels:
+            data[f"train_{data_label}_pred"] = self.forward(
+                data[f"x_{data_label}_train_tensor"], 
+                data[f"y_{data_label}_train_tensor"], 
+                data[f"t_{data_label}_train_tensor"]
+            )
             
+            data[f"train_{data_label}_labels"] = torch.cat(
+                [
+                    data[f"u_{data_label}_train_tensor"].reshape(-1,1),
+                    data[f"v_{data_label}_train_tensor"].reshape(-1,1), 
+                    data[f"p_{data_label}_train_tensor"].reshape(-1,1)
+                ],axis=1
+            )
+
+        #Get loss for u,v and p on interior, PDE and boundary conditions
+        data = self.lossfn(data,"train")
+        
         #Calculate dBoundaryLoss/dTheta
         data_labels = ["boundary","pde","data"]
-
         for data_label in data_labels:
-            self.scaler.scale(data[f"train_{data_label}_loss"]).backward(retain_graph=True)
+            data[f"train_{data_label}_loss"].backward(retain_graph=True)
             data[f"{data_label}_grads"] = []
             for name, param in self.named_parameters():
                 if "weight" in name:
                     data[f"{data_label}_grads"].append(param.grad.view(-1))
             
             data[f"{data_label}_grads"] = torch.cat(data[f"{data_label}_grads"])
-            
             self.optimizer.zero_grad()
         
         #Compute adaptive weight for each component of total loss
@@ -214,11 +208,9 @@ class CfdPinn(torch.nn.Module):
         if self.writer:
             self.tensorboard_outputs(data,epoch,"train")
             
-        #Update weights according to weighted loss function   
-        self.scaler.scale(data["train_weighted_total_loss"]).backward()
-        
-        self.scaler.step(self.optimizer)
-        self.scaler.update()
+        #Update weights according to weighted loss function    
+        data["train_weighted_total_loss"].backward()
+        self.optimizer.step()
 
     def test_loop(self,data,epoch):
         """
