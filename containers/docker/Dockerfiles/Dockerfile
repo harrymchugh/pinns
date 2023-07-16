@@ -40,4 +40,6 @@ RUN chmod 600 /repo-key \
   && apt-get -y install git \
   && git clone git@github.com:harrymchugh/pinns.git \ 
   && cd pinns \
+  && pip install --upgrade pip \
+  && pip install setuptools --upgrade \
   && pip install .
