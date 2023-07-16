@@ -29,3 +29,15 @@ RUN apt-get update \
  && apt-get -y install python3 python3-pip \
  && pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 \
  && rm -rf /var/lib/apt/lists/*
+
+
+COPY repo-key /
+
+RUN chmod 600 /repo-key \  
+  && echo "IdentityFile /repo-key" >> /etc/ssh/ssh_config \  
+  && echo -e "StrictHostKeyChecking no" >> /etc/ssh/ssh_config \
+  && apt-get update \
+  && apt-get -y install git \
+  && git clone git@github.com:harrymchugh/pinns.git \ 
+  && cd pinns \
+  && pip install .
