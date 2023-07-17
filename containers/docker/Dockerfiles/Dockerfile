@@ -26,18 +26,15 @@ RUN apt-get update \
  && wget -q -O - https://dl.openfoam.com/add-debian-repo.sh | bash \
  && apt-get update \
  && apt-get -y install --no-install-recommends ${PACKAGE} \
- && apt-get -y install python3 python3-pip \
+ && apt-get -y install python3 python3-pip git \
  && pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 \
  && rm -rf /var/lib/apt/lists/*
-
 
 COPY repo-key /
 
 RUN chmod 600 /repo-key \  
   && echo "IdentityFile /repo-key" >> /etc/ssh/ssh_config \  
   && echo -e "StrictHostKeyChecking no" >> /etc/ssh/ssh_config \
-  && apt-get update \
-  && apt-get -y install git \
   && git clone git@github.com:harrymchugh/pinns.git \ 
   && cd pinns \
   && pip install --upgrade pip \
