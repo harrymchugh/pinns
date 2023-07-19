@@ -1,16 +1,16 @@
 #!/bin/bash
 #SBATCH --partition=gpu
-#SBATCH --qos=short
+#SBATCH --qos=gpu
 #SBATCH --gres=gpu:1
 #SBATCH --account=mdisspt-z2137380
-#SBATCH --time=00:20:00
+#SBATCH --time=01:00:00
 #SBATCH --job-name=sing-train-v100-500epoch-20x20_0_5_0.005_lr0.001_test0.7_adam
 #SBATCH --output=%x.%j.out
 
 module load nvidia/nvhpc/22.11
 module load singularity
 
-srun singularity run --nv -B /work/mdisspt/mdisspt/z2137380/pinns:/mnt \
+singularity run --nv -B /work/mdisspt/mdisspt/z2137380/pinns:/mnt \
 /work/mdisspt/mdisspt/z2137380/cfdpinn_latest.sif \
 cfdpinn \
     --debug \
@@ -30,7 +30,7 @@ cfdpinn \
     --initial_u 1 \
     --test-percent 0.7 \
     --lr 0.001 \
-    --epochs 500 \
-    --save-scaler-path /mnt/models/tmp-gpu.pkl \
-    --save-model-path /mnt/models/tmp-gpu.pt
+    --epochs 5000 \
+    --save-scaler-path /mnt/models/5000epoch-20x20_0_5_0.005_lr0.001_test0.7_adam.pkl \
+    --save-model-path /mnt/models/5000epoch-20x20_0_5_0.005_lr0.001_test0.7_adam.pt
     
