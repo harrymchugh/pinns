@@ -40,14 +40,14 @@ class CfdPinn(torch.nn.Module):
         else:
             msg = f"Somehow you have managed to pass an --optimizer name that is not supported"
             raise Exception(msg)
-        
+
         self.criterion = torch.nn.MSELoss()
         self.viscosity = args.viscosity
         self.tensorboard_path = args.tensorboard_path
-        
+
         if args.tensorboard:
             self.writer = SummaryWriter(self.tensorboard_path)
-        
+
         self.epochs = args.epochs
 
         self.model_output_path = args.pinn_output_path
@@ -74,32 +74,35 @@ class CfdPinn(torch.nn.Module):
         d2udy2 = torch.autograd.grad(dudx.sum(), data[f"y_interior_{train_or_test}_tensor"], retain_graph=True, create_graph=True)[0]
         d2vdx2 = torch.autograd.grad(dvdx.sum(), data[f"x_interior_{train_or_test}_tensor"], retain_graph=True, create_graph=True)[0]
         d2vdy2 = torch.autograd.grad(dvdx.sum(), data[f"y_interior_{train_or_test}_tensor"], retain_graph=True, create_graph=True)[0]
-                
+
         #Compute PDE value for all X,Y,T locations in training set
         #according to derivates and constants
         pde_u = dudt + (u * dudx) + (v * dudy) - (self.viscosity * (d2udx2 + d2udy2)) + dpdx
         pde_v = dvdt + (u * dvdx) + (v * dvdy) - (self.viscosity * (d2vdx2 + d2vdy2)) + dpdy
+        pde_conserve_mass = dudx + dvdy
 
         #Define loss criterion
         criterion = self.criterion
-        
+
         #Both components of the PDE should minimize to zero so creating
         #a target array equal to zero
-        pde_total = torch.cat((pde_u,pde_v))
-        pde_labels = torch.zeros_like(pde_total)
+        pde_loss_u = criterion(pde_u,torch.zeros_like(pde_u))
+        pde_loss_v = criterion(pde_v,torch.zeros_like(pde_v))
+        pde_loss_mass = criterion(pde_conserve_mass,torch.zeros_like(pde_conserve_mass))
+        pde_loss_total = pde_loss_u + pde_loss_v + pde_loss_mass
 
-        data[f"{train_or_test}_pde_loss"] = criterion(pde_labels, pde_total)
-        
+        data[f"{train_or_test}_pde_loss"] = pde_loss_total
+
         data[f"{train_or_test}_boundary_loss"] = \
             criterion(
-                data[f"{train_or_test}_boundary_labels"], 
+                data[f"{train_or_test}_boundary_labels"],
                 data[f"{train_or_test}_boundary_pred"])
-        
+
         data[f"{train_or_test}_data_loss"] = \
             criterion(
                 data[f"{train_or_test}_interior_labels"],
                 data[f"{train_or_test}_interior_pred"])
-        
+
         return data
 
     def forward(self, x, y, t):
@@ -112,7 +115,7 @@ class CfdPinn(torch.nn.Module):
                 t.reshape(-1,1)
             ],
             axis=1)
-        
+
         return self.linear_stack(inputs)
 
     @function_timer
@@ -127,11 +130,11 @@ class CfdPinn(torch.nn.Module):
                 with_stack=True,
                 profile_memory=True,
                 with_flops=True)
-            
+
             prof.start()
-        
+
         for epoch in tqdm(range(1,self.epochs + 1), desc="CFD PINN training progress"):
-            
+
             if args.profile:
                 self.train_loop(data,epoch)
                 prof.step()
@@ -156,22 +159,22 @@ class CfdPinn(torch.nn.Module):
         data_labels = ["interior","boundary"]
         for data_label in data_labels:
             data[f"train_{data_label}_pred"] = self.forward(
-                data[f"x_{data_label}_train_tensor"], 
-                data[f"y_{data_label}_train_tensor"], 
+                data[f"x_{data_label}_train_tensor"],
+                data[f"y_{data_label}_train_tensor"],
                 data[f"t_{data_label}_train_tensor"]
             )
-            
+
             data[f"train_{data_label}_labels"] = torch.cat(
                 [
                     data[f"u_{data_label}_train_tensor"].reshape(-1,1),
-                    data[f"v_{data_label}_train_tensor"].reshape(-1,1), 
+                    data[f"v_{data_label}_train_tensor"].reshape(-1,1),
                     data[f"p_{data_label}_train_tensor"].reshape(-1,1)
                 ],axis=1
             )
 
         #Get loss for u,v and p on interior, PDE and boundary conditions
         data = self.lossfn(data,"train")
-        
+
         #Calculate dBoundaryLoss/dTheta
         data_labels = ["boundary","pde","data"]
         for data_label in data_labels:
@@ -180,20 +183,20 @@ class CfdPinn(torch.nn.Module):
             for name, param in self.named_parameters():
                 if "weight" in name:
                     data[f"{data_label}_grads"].append(param.grad.view(-1))
-            
+
             data[f"{data_label}_grads"] = torch.cat(data[f"{data_label}_grads"])
             self.optimizer.zero_grad()
-        
+
         #Compute adaptive weight for each component of total loss
         #relative to the mean gradient of data_loss w.r.t layer weights
         data["train_boundary_loss_weight"] = \
             torch.max(torch.abs(data["data_grads"])) / \
             torch.mean(torch.abs(data["boundary_grads"]))
-        
+
         data["train_pde_loss_weight"] = \
             torch.max(torch.abs(data["data_grads"])) / \
             torch.mean(torch.abs(data["pde_grads"]))
-        
+
         data["train_data_loss_weight"] = \
             torch.max(torch.abs(data["data_grads"])) / \
             torch.mean(torch.abs(data["data_grads"]))
@@ -207,8 +210,8 @@ class CfdPinn(torch.nn.Module):
         #Write QC data to Tensorboard
         if self.writer:
             self.tensorboard_outputs(data,epoch,"train")
-            
-        #Update weights according to weighted loss function    
+
+        #Update weights according to weighted loss function
         data["train_weighted_total_loss"].backward()
         self.optimizer.step()
 
@@ -218,31 +221,31 @@ class CfdPinn(torch.nn.Module):
         data_labels = ["interior","boundary"]
         for data_label in data_labels:
             data[f"test_{data_label}_pred"] = self.forward(
-                data[f"x_{data_label}_test_tensor"], 
-                data[f"y_{data_label}_test_tensor"], 
+                data[f"x_{data_label}_test_tensor"],
+                data[f"y_{data_label}_test_tensor"],
                 data[f"t_{data_label}_test_tensor"]
             )
-            
+
             #Concatenate u,v,p into single tensor for loss calculation
             data[f"test_{data_label}_labels"] = torch.cat(
                 [
                     data[f"u_{data_label}_test_tensor"].reshape(-1,1),
-                    data[f"v_{data_label}_test_tensor"].reshape(-1,1), 
+                    data[f"v_{data_label}_test_tensor"].reshape(-1,1),
                     data[f"p_{data_label}_test_tensor"].reshape(-1,1)
                 ],axis=1
             )
-                    
+
         #Get loss for u,v and p on interior, PDE and boundary conditions
         data = self.lossfn(data,"test")
-        
+
         #Calculate a total loss
         data["test_total_loss"] = \
             data["test_data_loss"] + data["test_pde_loss"] + data["test_boundary_loss"]
-        
+
         #Write QC data to Tensorboard if enabled
         if self.writer:
             self.tensorboard_outputs(data,epoch,"test")
-    
+
     def tensorboard_outputs(self,data,epoch,train_or_test):
         """
         """
@@ -257,17 +260,17 @@ class CfdPinn(torch.nn.Module):
             self.writer.add_scalar('train_weighted_pde_loss',data["train_pde_loss"] * data["train_pde_loss_weight"],epoch)
             self.writer.add_scalar('train_weighted_data_loss',data["train_data_loss"] * data["train_data_loss_weight"],epoch)
             self.writer.add_scalar('train_weighted_total_loss',data["train_weighted_total_loss"],epoch)
-            
+
             #Adaptive loss weights
             self.writer.add_scalar('train_boundary_loss_weight',data["train_boundary_loss_weight"],epoch)
             self.writer.add_scalar('train_pde_loss_weight',data["train_pde_loss_weight"],epoch)
             self.writer.add_scalar('train_data_loss_weight',data["train_data_loss_weight"],epoch)
-            
+
             #Gradients
             self.writer.add_scalar('train_data_mean_grad', torch.mean(torch.abs(data["data_grads"])))
             self.writer.add_scalar('train_pde_mean_grad', torch.mean(torch.abs(data["pde_grads"])))
             self.writer.add_scalar('train_boundary_mean_grad', torch.mean(torch.abs(data["boundary_grads"])))
-        
+
         elif train_or_test == "test":
             #Raw losses
             self.writer.add_scalar('test_boundary_loss',data["test_boundary_loss"],epoch)
@@ -302,7 +305,7 @@ def predict_fluid(data,pinn,geom,args):
 
     prediction = inference(pinn,args,x,y,t)
     prediction = prediction.cpu().detach().numpy()
-    
+
     #Get fluid dynamics components out of prediction
     #and shape into same dimensions as the loaded simulation
     #from openfoam numpy array
@@ -310,7 +313,7 @@ def predict_fluid(data,pinn,geom,args):
         geom["numt"],
         geom["numy"],
         geom["numx"])
-    
+
     data["u_pred"] = prediction[:,0].reshape(shape)
     data["v_pred"] = prediction[:,1].reshape(shape)
     data["p_pred"] = prediction[:,2].reshape(shape)
@@ -331,26 +334,26 @@ def inference(pinn,args,x,y,t):
     # and the other for simple doing the inferece.
 
     # In the timing code path, we will manually warm up the GPU
-    # before recording the inference time for a fixed number of 
+    # before recording the inference time for a fixed number of
     # repetitions.
 
     # A min,max,median and std.dev will then be reported for inference.
     # The same approach can be used on the CPU even though it may be
     # slightly over the top as it will still warm the cache.
-    
+
     if args.inference_timing:
         #Warm up GPU
         for _ in range(5):
             pinn(x,y,t)
-        
+
         #Record inference times
         repetitions = 10
         timings=zeros((repetitions,1))
 
         if pinn.device == "cuda":
-            starter = torch.cuda.Event(enable_timing=True) 
+            starter = torch.cuda.Event(enable_timing=True)
             ender = torch.cuda.Event(enable_timing=True)
-            
+
             with torch.inference_mode():
                 #Get stats over 100 inferencing iterations
                 for repetition in range(repetitions):
@@ -361,7 +364,7 @@ def inference(pinn,args,x,y,t):
                     curr_time = starter.elapsed_time(ender)
                     timings[repetition] = curr_time
 
-        else:           
+        else:
             with torch.inference_mode():
                 #Get stats over 100 inferencing iterations
                 for repetition in range(repetitions):
@@ -370,7 +373,7 @@ def inference(pinn,args,x,y,t):
                     end = time()
                     curr_time = end - start
                     timings[repetition] = curr_time
-        
+
         print("\n** Inference Timings **\n")
         print(f"DEVICE: {pinn.device}")
         print(f"\tMedian: {median(timings)}")
@@ -386,16 +389,16 @@ def inference(pinn,args,x,y,t):
             with_stack=True,
             profile_memory=True,
             with_flops=True)
-        
+
         prof.start()
         with torch.inference_mode():
             prediction = pinn(x,y,t)
         prof.stop()
-            
+
     else:
         with torch.inference_mode():
             prediction = pinn(x,y,t)
-        
+
     return prediction
 
 def compute_residual(data):
