@@ -263,6 +263,11 @@ def static_plots(data,args,geom):
     timestep_index = int(np.floor(geom["numt"] / 2))
     quiver_stepx = int(np.floor(geom["numx"] / 20))
     quiver_stepy = int(np.floor(geom["numy"] / 20))
+    
+    if quiver_stepx == 0:
+        quiver_stepx = 1
+    if quiver_stepy == 0:
+        quiver_stepy = 1
 
     umin=data["u"][timestep_index,:,:].min()
     umax=data["u"][timestep_index,:,:].max()
