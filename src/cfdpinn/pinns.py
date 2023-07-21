@@ -218,7 +218,7 @@ class CfdPinn(torch.nn.Module):
             data = self.apply_lrannealing(data,epoch)
         
         elif self.adaption == "noadaption":
-            data = self.dummy_adaption(data)
+            data = self.dummy_adaption(data,epoch)
         
         else:
             msg = f"Somehow you have managed to pass an --adaption name that is not supported"
@@ -243,7 +243,8 @@ class CfdPinn(torch.nn.Module):
             adapt_weights = loss_weighted_softadapt_object.get_component_weights(
                 torch.tensor(data[f"train_data_losses"][epoch-5:epoch]),
                 torch.tensor(data[f"train_pde_losses"][epoch-5:epoch]),
-                torch.tensor(data[f"train_boundary_losses"][epoch-5:epoch]))
+                torch.tensor(data[f"train_boundary_losses"][epoch-5:epoch]),
+                verbose=False)
 
         #Create total loss to update all network parameters
         data["train_data_loss_weight"] = adapt_weights[0]
