@@ -177,7 +177,7 @@ class CfdPinn(torch.nn.Module):
         data = self.lossfn(data,"train")
 
         #Adapt weights
-        self.weight_adaption(data)
+        data = self.weight_adaption(data,epoch)
 
         #Create a weighted total loss to update all network parameters
         data["train_weighted_total_loss"] = \
