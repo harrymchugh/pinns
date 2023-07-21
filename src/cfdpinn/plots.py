@@ -258,4 +258,141 @@ def animate_subplot(i,ax,data,geom,label,num_frames):
 def static_plots(data,args,geom):
     """
     """
+    y_index = int(np.floor(geom["numy"] * 0.8))
+    y_value = geom["grid2d_y"][y_index][0]
+    timestep_index = int(np.floor(geom["numt"] / 2))
+    quiver_stepx = int(np.floor(geom["numx"] / 20))
+    quiver_stepy = int(np.floor(geom["numy"] / 20))
+
+    umin=data["u"][timestep_index,:,:].min()
+    umax=data["u"][timestep_index,:,:].max()
+    pmin=data["p"][timestep_index,:,:].min()
+    pmax=data["p"][timestep_index,:,:].max()
+    pmin=-1
+    pmax=1
+
+    fig, axs = plt.subplot_mosaic(
+        [['u_mag_quiv', 'p_quiv'], 
+        ['u_mag_quiv', 'p_quiv'],
+        ['u_mag_quiv_pred', 'p_quiv_pred'], 
+        ['u_mag_quiv_pred', 'p_quiv_pred'], 
+        ['u', 'u'],
+        ['v', 'v'],
+        ['p', 'p']
+        ],layout='tight')
+
+    fig.set_figwidth(16)
+    fig.set_figheight(16)
+
+    #U magnitude with quiver plot
+    data[f"u_mag"] = np.sqrt(
+            data[f"u"].astype(np.double)**2 + \
+            data[f"v"].astype(np.double)**2
+        ).astype(float)
+
+    data[f"u_mag_pred"] = np.sqrt(
+            data[f"u_pred"].astype(np.double)**2 + \
+            data[f"v_pred"].astype(np.double)**2
+        ).astype(float)
+
+    u_mag_quiv_pcol = axs["u_mag_quiv"].pcolormesh(
+            geom["grid2d_x"],geom["grid2d_y"],
+            data[f"u_mag"][timestep_index,:,:],
+            shading='gouraud',
+            vmin=umin, vmax=umax)
+
+    u_mag_quiv_quiv = axs["u_mag_quiv"].quiver(
+                geom["grid2d_x"][::quiver_stepx,::quiver_stepy],geom["grid2d_y"][::quiver_stepx,::quiver_stepy], 
+                data[f"u"][timestep_index,:,:][::quiver_stepx,::quiver_stepy],
+                data[f"v"][timestep_index,:,:][::quiver_stepx,::quiver_stepy])
+
+    plt.colorbar(u_mag_quiv_pcol, ax=axs["u_mag_quiv"])
+
+    #Show index used for extracting profile
+    axs["u_mag_quiv"].axhline(y = y_value, color = 'r', linestyle = "solid")
+
+    axs["u_mag_quiv"].set_ylabel("Y spatial index")
+    axs["u_mag_quiv"].set_title("Velocity magnitude with stream lines")
+    axs["u_mag_quiv"].text(0.05,0.05,f"Timestep: 2.5s",bbox={'facecolor':'w', 'alpha':0.5})
+
+    #Pressure with quiver plot
+    p_quiv_pcol = axs["p_quiv"].pcolormesh(
+            geom["grid2d_x"],geom["grid2d_y"],
+            data[f"p"][timestep_index,:,:],
+            shading='gouraud',
+            vmin=pmin, vmax=pmax)
+
+    p_quiv_quiv = axs["p_quiv"].quiver(
+                geom["grid2d_x"][::quiver_stepx,::quiver_stepy],geom["grid2d_y"][::quiver_stepx,::quiver_stepy], 
+                data[f"u"][timestep_index,:,:][::quiver_stepx,::quiver_stepy],
+                data[f"v"][timestep_index,:,:][::quiver_stepx,::quiver_stepy])
+
+    plt.colorbar(p_quiv_pcol, ax=axs["p_quiv"])
+    axs["p_quiv"].axhline(y = y_value, color = 'r', linestyle = "solid")
+    axs["p_quiv"].set_title("Pressure with velocity stream lines")
+
+    #PREDICTIONS
+    u_mag_quiv_pred_pcol = axs["u_mag_quiv_pred"].pcolormesh(
+            geom["grid2d_x"],geom["grid2d_y"],
+            data[f"u_mag_pred"][timestep_index,:,:],
+            shading='gouraud',
+            vmin=umin, vmax=umax)
+
+    u_mag_quiv_pred_quiv = axs["u_mag_quiv_pred"].quiver(
+                geom["grid2d_x"][::quiver_stepx,::quiver_stepy],geom["grid2d_y"][::quiver_stepx,::quiver_stepy], 
+                data[f"u_pred"][timestep_index,:,:][::quiver_stepx,::quiver_stepy],
+                data[f"v_pred"][timestep_index,:,:][::quiver_stepx,::quiver_stepy])
+
+    axs["u_mag_quiv_pred"].axhline(y = y_value, color = 'r', linestyle = "solid")
+
+    plt.colorbar(u_mag_quiv_pred_pcol, ax=axs["u_mag_quiv_pred"])
+
+    #Show index used for extracting profile
+
+    axs["u_mag_quiv_pred"].set_xlabel("X spatial index")
+    axs["u_mag_quiv_pred"].set_ylabel("Y spatial index")
+    axs["u_mag_quiv_pred"].set_title("Predicted velocity magnitude with stream lines")
+    axs["u_mag_quiv_pred"].text(0.05,0.05,
+        f"Meshsize: {geom['numx']}x{geom['numy']}",
+        bbox={'facecolor':'w', 'alpha':0.5})
+
+    #Pressure with quiver plot
+    p_quiv_pcol_pred = axs["p_quiv_pred"].pcolormesh(
+            geom["grid2d_x"],geom["grid2d_y"],
+            data[f"p_pred"][timestep_index,:,:],
+            shading='gouraud',
+            vmin=pmin, vmax=pmax)
+
+    p_quiv_quiv_pred = axs["p_quiv_pred"].quiver(
+                geom["grid2d_x"][::quiver_stepx,::quiver_stepy],geom["grid2d_y"][::quiver_stepx,::quiver_stepy], 
+                data[f"u_pred"][timestep_index,:,:][::quiver_stepx,::quiver_stepy],
+                data[f"v_pred"][timestep_index,:,:][::quiver_stepx,::quiver_stepy])
+
+    plt.colorbar(p_quiv_pcol_pred, ax=axs["p_quiv_pred"])
+
+    axs["p_quiv_pred"].axhline(y = y_value, color = 'r', linestyle = "solid")
+    axs["p_quiv_pred"].set_xlabel("X spatial index")
+    axs["p_quiv_pred"].set_title("Predicted pressure with velocity stream lines")
+
+    #U at x=0.8
+    axs["u"].plot(data["u"][timestep_index,y_index,:],linestyle="solid", linewidth=1.5, color='black', label='U')
+    axs["u"].plot(data["u_pred"][timestep_index,y_index,:],linestyle="dashed", linewidth=1.5, color='black', label='U pred')
+    axs["u"].legend(fontsize="small", loc="upper right")
+    axs["u"].set_ylabel("Velocity (u) m/s")
+    axs["u"].set_title(f"Profiles extracted from red-line Y={y_value:0.1f}")
+
+    axs["v"].plot(data["v"][timestep_index,y_index,:],linestyle="solid", linewidth=1.5, color='black', label='V')
+    axs["v"].plot(data["v_pred"][timestep_index,y_index,:],linestyle="dashed", linewidth=1.5, color='black', label='V pred')
+    axs["v"].legend(fontsize="small", loc="upper right")
+    axs["v"].set_ylabel("Velocity (v) m/s")
+
+    axs["p"].plot(data["p"][timestep_index,y_index,:],linestyle="solid", linewidth=1.5, color='black', label='P')
+    axs["p"].plot(data["p_pred"][timestep_index,y_index,:],linestyle="dashed", linewidth=1.5, color='black', label='P pred')
+    axs["p"].legend(fontsize="small", loc="upper right")
+    axs["p"].set_xlabel("Y index-value")
+    axs["p"].set_ylabel("Pressure (Pa)")
+
+    output_path = (f"./plots/static.png")
+    plt.savefig(output_path)
+    
     return 0

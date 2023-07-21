@@ -66,7 +66,6 @@ def main():
     
     #Inference only mode
     if args.no_train:
-        data = dict()
         data["scaler"] = load(open(args.load_scaler_path,"rb"))
         data = merge_features(data,geom)
     

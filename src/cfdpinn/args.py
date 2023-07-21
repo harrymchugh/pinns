@@ -198,11 +198,11 @@ def parse_args():
         dest="residual_animation")
     
     #Static plots
-    parser.add_argument("--no-static-plots",
-        action="store_false",
+    parser.add_argument("--static-plots",
+        action="store_true",
         required=False,
-        default=True,
-        help="Stop output of pre-defined static plots for analysis",
+        default=False,
+        help="Produce static plots for analysis",
         dest="static_plots")
     
     #Output raw training and prediction data
