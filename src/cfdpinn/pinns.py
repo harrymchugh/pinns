@@ -71,14 +71,14 @@ class CfdPinn(torch.nn.Module):
         dpdy = torch.autograd.grad(p.sum(), data[f"y_interior_{train_or_test}_tensor"], retain_graph=True, create_graph=True)[0]
 
         d2udx2 = torch.autograd.grad(dudx.sum(), data[f"x_interior_{train_or_test}_tensor"], retain_graph=True, create_graph=True)[0]
-        d2udy2 = torch.autograd.grad(dudx.sum(), data[f"y_interior_{train_or_test}_tensor"], retain_graph=True, create_graph=True)[0]
+        d2udy2 = torch.autograd.grad(dudy.sum(), data[f"y_interior_{train_or_test}_tensor"], retain_graph=True, create_graph=True)[0]
         d2vdx2 = torch.autograd.grad(dvdx.sum(), data[f"x_interior_{train_or_test}_tensor"], retain_graph=True, create_graph=True)[0]
-        d2vdy2 = torch.autograd.grad(dvdx.sum(), data[f"y_interior_{train_or_test}_tensor"], retain_graph=True, create_graph=True)[0]
+        d2vdy2 = torch.autograd.grad(dvdy.sum(), data[f"y_interior_{train_or_test}_tensor"], retain_graph=True, create_graph=True)[0]
 
         #Compute PDE value for all X,Y,T locations in training set
         #according to derivates and constants
-        pde_u = dudt + (u * dudx) + (v * dudy) - (self.viscosity * (d2udx2 + d2udy2)) + dpdx
-        pde_v = dvdt + (u * dvdx) + (v * dvdy) - (self.viscosity * (d2vdx2 + d2vdy2)) + dpdy
+        pde_u = dudt + (u * dudx) + (v * dudy) - (d2udx2 + d2udy2) + dpdx
+        pde_v = dvdt + (u * dvdx) + (v * dvdy) - (d2vdx2 + d2vdy2) + dpdy
         pde_conserve_mass = dudx + dvdy
 
         #Define loss criterion
