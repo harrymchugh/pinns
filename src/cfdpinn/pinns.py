@@ -8,6 +8,7 @@ from tqdm import tqdm
 from cfdpinn.timing import function_timer
 from time import time
 from torch.profiler import profile, record_function, ProfilerActivity
+from softadapt import LossWeightedSoftAdapt
 
 from torch.utils.tensorboard import SummaryWriter
 
@@ -127,6 +128,11 @@ class CfdPinn(torch.nn.Module):
         data["train_data_loss_weight_prev"] = 0
         data["train_pde_loss_weight_prev"] = 0
         data["train_boundary_loss_weight_prev"] = 0
+
+        if args.adaption == "softadapt":
+            data[f"train_data_losses"] = []
+            data[f"train_pde_losses"] = []
+            data[f"train_boundary_losses"] = []
         
         if args.profile:
             prof = torch.profiler.profile(
@@ -226,6 +232,24 @@ class CfdPinn(torch.nn.Module):
         Returns:
             _type_: _description_
         """
+        adapt_weights = torch.tensor([1,1,1])
+        loss_weighted_softadapt_object  = LossWeightedSoftAdapt(beta=0.1)
+
+        data[f"train_data_losses"].append(data["train_data_loss"])
+        data[f"train_pde_losses"].append(data["train_pde_loss"])
+        data[f"train_boundary_losses"].append(data["train_boundary_loss"])
+
+        if epoch > 5:
+            adapt_weights = loss_weighted_softadapt_object.get_component_weights(
+                torch.tensor(data[f"train_data_losses"][epoch-5:epoch]),
+                torch.tensor(data[f"train_pde_losses"][epoch-5:epoch]),
+                torch.tensor(data[f"train_boundary_losses"][epoch-5:epoch]))
+
+        #Create total loss to update all network parameters
+        data["train_data_loss_weight"] = adapt_weights[0]
+        data["train_pde_loss_weight"] = adapt_weights[1]
+        data["train_boundary_loss_weight"] = adapt_weights[2]
+        
         return data
     
     def apply_lrannealing(self,data,epoch):

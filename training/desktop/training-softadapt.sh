@@ -7,7 +7,7 @@ cd $CFDPINN_ROOT
 cfdpinn \
     --debug \
     --tensorboard \
-    --tensorboard-path $CFDPINN_ROOT/tboard/withgradscaling/ \
+    --tensorboard-path $CFDPINN_ROOT/tboard/softadapt/ \
     --case-type cavity \
     --case-dir $CFDPINN_ROOT/openfoam/cases/cavity_nu0.01_U1/ \
     --start-time 0 \
@@ -20,7 +20,10 @@ cfdpinn \
     --initial_u 1 \
     --test-percent 0.7 \
     --lr 0.001 \
-    --epochs 200 \
+    --epochs 10 \
     --save-scaler-path $CFDPINN_ROOT/models/tmp.pkl \
     --save-model-path $CFDPINN_ROOT/models/tmp.pt \
+    --adaption softadapt \
     --prediction-animation
+
+mv $CFDPINN_ROOT/animations/tmp_pred.mp4 $CFDPINN_ROOT/animations/tmp_pred_softadapt.mp4
