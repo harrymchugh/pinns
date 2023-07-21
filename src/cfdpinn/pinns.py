@@ -234,27 +234,47 @@ class CfdPinn(torch.nn.Module):
         for data_label in data_labels:
             data[f"train_{data_label}_loss"].backward(retain_graph=True)
             data[f"{data_label}_grads"] = []
+            data[f"{data_label}_grads_mean"] = []
+            data[f"{data_label}_grads_max"] = []
+
             for name, param in self.named_parameters():
                 if "weight" in name:
-                    data[f"{data_label}_grads"].append(param.grad.view(-1))
+                    print(f"There are {len(param.grad.view(-1))} weights in layer {name}{param}")
+                    data[f"{data_label}_grads_mean"].append(torch.mean(torch.abs(param.grad.view(-1))))
+                    data[f"{data_label}_grads_max"].append(torch.max(torch.abs(param.grad.view(-1))))
 
-            data[f"{data_label}_grads"] = torch.cat(data[f"{data_label}_grads"])
+            #data[f"{data_label}_grads"] = torch.cat(data[f"{data_label}_grads"])
             self.optimizer.zero_grad()
+        
+        # a = data[f"pde_grads_mean"]
+        # a_max = data[f"pde_grads_max"]
+        # print(f"data[pde_grads_mean] has {len(a)} values")
+        # print(f"data[pde_grads_mean] values are {a}")
+        # print(f"data[pde_grads_max] values are {a_max}")
+
+        # b = data[f"boundary_grads_mean"]
+        # b_max = data[f"boundary_grads_max"]
+        # print(f"data[boundary_grads_mean] has {len(b)} values")
+        # print(f"data[boundary_grads_mean] values are {b}")
+        # print(f"data[boundary_grads_max] values are {b_max}")
+
+        # c = data[f"data_grads_mean"]
+        # c_max = data[f"data_grads_max"]
+        # print(f"data[data_grads_mean] has {len(c)} values")
+        # print(f"data[data_grads_mean] values are {c}")
+        # print(f"data[data_grads_max] values are {c_max}")
 
         #Compute adaptive weight for each component of total loss
         #relative to the mean gradient of data_loss w.r.t layer weights
         data["train_boundary_loss_weight"] = \
-            torch.max(torch.abs(data["data_grads"])) / \
-            torch.mean(torch.abs(data["boundary_grads"]))
+            torch.max(torch.tensor(data["data_grads_max"])) / \
+            torch.mean(torch.tensor(data["boundary_grads_mean"]))
 
         data["train_pde_loss_weight"] = \
-            torch.max(torch.abs(data["data_grads"])) / \
-            torch.mean(torch.abs(data["pde_grads"]))
-
-        data["train_data_loss_weight"] = \
-            torch.max(torch.abs(data["data_grads"])) / \
-            torch.mean(torch.abs(data["data_grads"]))
+            torch.max(torch.tensor(data["data_grads_max"])) / \
+            torch.mean(torch.tensor(data["pde_grads_mean"]))
         
+        data["train_data_loss_weight"] = 1
         #lambda_hat...
 
         return data
