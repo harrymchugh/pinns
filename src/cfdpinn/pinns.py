@@ -48,6 +48,7 @@ class CfdPinn(torch.nn.Module):
         if args.tensorboard:
             self.writer = SummaryWriter(self.tensorboard_path)
 
+        self.adaption = args.adaption
         self.epochs = args.epochs
 
         self.model_output_path = args.pinn_output_path
@@ -175,6 +176,59 @@ class CfdPinn(torch.nn.Module):
         #Get loss for u,v and p on interior, PDE and boundary conditions
         data = self.lossfn(data,"train")
 
+        #Adapt weights
+        self.weight_adaption(data)
+
+        #Create a weighted total loss to update all network parameters
+        data["train_weighted_total_loss"] = \
+            (data["train_data_loss"] * data["train_data_loss_weight"]) + \
+            (data["train_pde_loss_weight"] * data["train_pde_loss"]) + \
+            (data["train_boundary_loss_weight"] * data["train_boundary_loss"])
+
+        #Write QC data to Tensorboard
+        if self.writer:
+            self.tensorboard_outputs(data,epoch,"train")
+
+        #Update weights according to weighted loss function
+        data["train_weighted_total_loss"].backward()
+        self.optimizer.step()
+
+    def weight_adaption(self,data,epoch):
+        """_summary_
+
+        Args:
+            data (_type_): _description_
+            epoch (_type_): _description_
+        """
+        if self.adaption == "softadapt":
+            data = self.apply_softadapt(data,epoch)
+        
+        elif self.adaption == "lrannealing":
+            data = self.apply_lrannealing(data,epoch)
+        
+        elif self.adaption == "noadaption":
+            data = self.dummy_adaption(data)
+        
+        else:
+            msg = f"Somehow you have managed to pass an --adaption name that is not supported"
+            raise Exception(msg)
+
+        return data
+
+    def apply_softadapt(self,data,epoch):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
+        return data
+    
+    def apply_lrannealing(self,data,epoch):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         #Calculate dBoundaryLoss/dTheta
         data_labels = ["boundary","pde","data"]
         for data_label in data_labels:
@@ -200,20 +254,22 @@ class CfdPinn(torch.nn.Module):
         data["train_data_loss_weight"] = \
             torch.max(torch.abs(data["data_grads"])) / \
             torch.mean(torch.abs(data["data_grads"]))
+        
+        #lambda_hat...
 
-        #Create a weighted total loss to update all network parameters
-        data["train_weighted_total_loss"] = \
-            (data["train_data_loss"] * data["train_data_loss_weight"]) + \
-            (data["train_pde_loss_weight"] * data["train_pde_loss"]) + \
-            (data["train_boundary_loss_weight"] * data["train_boundary_loss"])
+        return data
+    
+    def dummy_adaption(self,data,epoch):
+        """_summary_
 
-        #Write QC data to Tensorboard
-        if self.writer:
-            self.tensorboard_outputs(data,epoch,"train")
-
-        #Update weights according to weighted loss function
-        data["train_weighted_total_loss"].backward()
-        self.optimizer.step()
+        Returns:
+            _type_: _description_
+        """
+        data["train_boundary_loss_weight"] = 1
+        data["train_pde_loss_weight"] = 1
+        data["train_data_loss_weight"] = 1
+        
+        return data
 
     def test_loop(self,data,epoch):
         """
@@ -265,11 +321,6 @@ class CfdPinn(torch.nn.Module):
             self.writer.add_scalar('train_boundary_loss_weight',data["train_boundary_loss_weight"],epoch)
             self.writer.add_scalar('train_pde_loss_weight',data["train_pde_loss_weight"],epoch)
             self.writer.add_scalar('train_data_loss_weight',data["train_data_loss_weight"],epoch)
-
-            #Gradients
-            self.writer.add_scalar('train_data_mean_grad', torch.mean(torch.abs(data["data_grads"])))
-            self.writer.add_scalar('train_pde_mean_grad', torch.mean(torch.abs(data["pde_grads"])))
-            self.writer.add_scalar('train_boundary_mean_grad', torch.mean(torch.abs(data["boundary_grads"])))
 
         elif train_or_test == "test":
             #Raw losses

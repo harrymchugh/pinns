@@ -328,10 +328,20 @@ def parse_args():
         default=False,
         help="Enable verbose logging",
         dest="verbose")
+    
+    parser.add_argument("--adaption",
+        action="store",
+        type=str,
+        choices=["lrannealing","softadapt","noadaption"],
+        required=False,
+        default="noadaption",
+        help="The type of loss function weighting to use",
+        dest="adaption")
 
     args = parser.parse_args()
     
-    #Need logic for nonsensical combination of args
+    if args.debug:
+        print(args)
 
     return args
 
