@@ -50,6 +50,7 @@ class CfdPinn(torch.nn.Module):
 
         self.adaption = args.adaption
         self.epochs = args.epochs
+        self.alpha = 0.9
 
         self.model_output_path = args.pinn_output_path
 
@@ -123,6 +124,10 @@ class CfdPinn(torch.nn.Module):
     def train(self,data,args):
         """
         """
+        data["train_data_loss_weight_prev"] = 0
+        data["train_pde_loss_weight_prev"] = 0
+        data["train_boundary_loss_weight_prev"] = 0
+        
         if args.profile:
             prof = torch.profiler.profile(
                 schedule=torch.profiler.schedule(wait=1, warmup=1, active=10, repeat=1),
@@ -239,7 +244,7 @@ class CfdPinn(torch.nn.Module):
 
             for name, param in self.named_parameters():
                 if "weight" in name:
-                    print(f"There are {len(param.grad.view(-1))} weights in layer {name}{param}")
+                    #print(f"There are {len(param.grad.view(-1))} weights in layer {name}{param}")
                     data[f"{data_label}_grads_mean"].append(torch.mean(torch.abs(param.grad.view(-1))))
                     data[f"{data_label}_grads_max"].append(torch.max(torch.abs(param.grad.view(-1))))
 
@@ -264,6 +269,8 @@ class CfdPinn(torch.nn.Module):
         # print(f"data[data_grads_mean] values are {c}")
         # print(f"data[data_grads_max] values are {c_max}")
 
+        # print(self.linear_stack[6].weight.grad)
+
         #Compute adaptive weight for each component of total loss
         #relative to the mean gradient of data_loss w.r.t layer weights
         data["train_boundary_loss_weight"] = \
@@ -274,8 +281,22 @@ class CfdPinn(torch.nn.Module):
             torch.max(torch.tensor(data["data_grads_max"])) / \
             torch.mean(torch.tensor(data["pde_grads_mean"]))
         
-        data["train_data_loss_weight"] = 1
-        #lambda_hat...
+        data["train_data_loss_weight"] = \
+            torch.max(torch.tensor(data["data_grads_max"])) / \
+            torch.mean(torch.tensor(data["data_grads_mean"]))
+
+        data["train_data_loss_weight"] = data["train_data_loss_weight"]*self.alpha + (1-self.alpha)*data["train_data_loss_weight_prev"]
+        data["train_data_loss_weight_prev"] = data["train_data_loss_weight"]
+
+        data["train_pde_loss_weight"] = data["train_pde_loss_weight"]*self.alpha + (1-self.alpha)*data["train_pde_loss_weight_prev"]
+        data["train_pde_loss_weight_prev"] = data["train_pde_loss_weight"]
+
+        data["train_boundary_loss_weight"] = data["train_boundary_loss_weight"]*self.alpha + (1-self.alpha)*data["train_boundary_loss_weight_prev"]
+        data["train_boundary_loss_weight_prev"] = data["train_boundary_loss_weight"]
+
+        # print(data["train_data_loss_weight"])
+        # print(data["train_pde_loss_weight"])
+        # print(data["train_boundary_loss_weight"])
 
         return data
     
