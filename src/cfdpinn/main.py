@@ -45,12 +45,7 @@ def main():
         pinn = CfdPinn(args)
     else: 
         pinn = load_pinn(args)
-        pinn.device = 'cuda' if is_available() else 'cpu'
-        pinn.to(pinn.device)
-        if args.debug:
-            print(f"DEBUG: PINN device: {pinn.device}\n")
-            print(f"DEBUG: threads: {get_num_threads()}")
-
+        
     #Preprocess data for PINN training
     if not args.no_train:
         data = preprocess(data,geom,args)

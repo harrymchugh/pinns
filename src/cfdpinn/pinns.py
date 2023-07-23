@@ -28,11 +28,6 @@ class CfdPinn(torch.nn.Module):
             torch.nn.ReLU(),
             torch.nn.Linear(64, 3)
         )
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        if args.debug:
-            print(f"DEBUG: PINN device {self.device}")
-
-        self.to(self.device)
 
         if args.optimizer == "adam":
             self.optimizer = torch.optim.Adam(self.parameters(), lr=args.learning_rate)
@@ -54,6 +49,23 @@ class CfdPinn(torch.nn.Module):
         self.alpha = 0.9
 
         self.model_output_path = args.pinn_output_path
+        self.choose_model_device(args)
+
+    def choose_model_device(self,args):
+        """_summary_
+
+        Args:
+            args (_type_): _description_
+        """
+        if args.device:
+            self.device = args.device
+        else:
+            self.device = 'cuda' if is_available() else 'cpu'
+
+        self.to(self.device)
+        
+        if args.debug:
+            print(f"DEBUG: PINN device: {self.device}\n")
 
     def lossfn(self,data,train_or_test):
         """
@@ -319,9 +331,9 @@ class CfdPinn(torch.nn.Module):
         data["train_boundary_loss_weight"] = data["train_boundary_loss_weight"]*self.alpha + (1-self.alpha)*data["train_boundary_loss_weight_prev"]
         data["train_boundary_loss_weight_prev"] = data["train_boundary_loss_weight"]
 
-        # print(data["train_data_loss_weight"])
-        # print(data["train_pde_loss_weight"])
-        # print(data["train_boundary_loss_weight"])
+        print(data["train_data_loss_weight"])
+        print(data["train_pde_loss_weight"])
+        print(data["train_boundary_loss_weight"])
 
         return data
     
@@ -478,7 +490,7 @@ def inference(pinn,args,x,y,t):
                     _ = pinn(x,y,t)
                     ender.record()
                     torch.cuda.synchronize()
-                    curr_time = starter.elapsed_time(ender)
+                    curr_time = starter.elapsed_time(ender) * 0.001
                     timings[repetition] = curr_time
 
         else:
@@ -534,4 +546,5 @@ def load_pinn(args):
         args (_type_): _description_
     """
     pinn = torch.load(args.load_model_path)
+    pinn.choose_model_device(args)
     return pinn
