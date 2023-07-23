@@ -1,0 +1,70 @@
+#################
+##  CFD PINN   ##
+#################
+
+Namespace(debug=True, case_type='cavity', case_dir='/home/harry/pinns//openfoam/cases/cavity_nu0.01_U1_100x100/', start_time=0.0, end_time=5.0, sim_dt=0.001, load_dt=0.005, startx=0, starty=0, endx=1, endy=1, numx=100, numy=100, viscosity=0.01, initial_u_lid=1.0, load_sim=True, no_train=True, test_size=0.7, save_scaler_path='', load_scaler_path='/home/harry/pinns//models/scaler_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pkl', num_frames=20, training_animation=False, prediction_animation=False, residual_animation=False, static_plots=True, output_pred_data=False, output_train_data=False, output_data_path=None, device='cuda', pinn_output_path='pinn_model.pt', optimizer='adam', load_model_path='/home/harry/pinns//models/model_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pt', profile=False, profile_path='', trace_path='trace.json', stack_path='stack.txt', tensorboard=False, tensorboard_path='', epochs=1, learning_rate=0.001, inference_timing=True, verbose=False, adaption='noadaption')
+Setting up geometry...
+Geometry summary:
+	geom[x_start]: 0
+	geom[x_end]: 1
+	geom[numx]: 100
+	geom[y_start]: 0
+	geom[y_end]: 1
+	geom[numy]: 100
+	geom[t_start]: 0.0
+	geom[t_end]: 5.0
+	geom[t_dt]: 0.005
+	geom[numt]: 1001
+	geom[stride]: 5
+	Geometry setup completed
+
+Loading simulation data...
+shape: (1001, 100, 100)
+
+	Simulation data loaded
+
+DEBUG: PINN device: cuda
+
+Prediction of fluid properties...
+	DEBUG: Applying scaler...
+	DEBUG: Scaler applied
+	DEBUG: len(x): 10010000
+	DEBUG: len(y): 10010000
+	DEBUG: len(t): 10010000
+Traceback (most recent call last):
+  File "/home/harry/pytorch-venv/bin/cfdpinn", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/harry/pinns/src/cfdpinn/main.py", line 67, in main
+    data = predict_fluid(data,pinn,geom,args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/harry/pinns/src/cfdpinn/pinns.py", line 435, in predict_fluid
+    prediction = inference(pinn,args,x,y,t)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/harry/pinns/src/cfdpinn/timing.py", line 10, in wrap_func
+    function_output = function_to_time(*args, **kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/harry/pinns/src/cfdpinn/pinns.py", line 476, in inference
+    pinn(x,y,t)
+  File "/home/harry/pytorch-venv/lib64/python3.11/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/harry/pinns/src/cfdpinn/pinns.py", line 134, in forward
+    return self.linear_stack(inputs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/harry/pytorch-venv/lib64/python3.11/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/harry/pytorch-venv/lib64/python3.11/site-packages/torch/nn/modules/container.py", line 217, in forward
+    input = module(input)
+            ^^^^^^^^^^^^^
+  File "/home/harry/pytorch-venv/lib64/python3.11/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/harry/pytorch-venv/lib64/python3.11/site-packages/torch/nn/modules/activation.py", line 103, in forward
+    return F.relu(input, inplace=self.inplace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/harry/pytorch-venv/lib64/python3.11/site-packages/torch/nn/functional.py", line 1457, in relu
+    result = torch.relu(input)
+             ^^^^^^^^^^^^^^^^^
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.39 GiB (GPU 0; 11.76 GiB total capacity; 9.78 GiB already allocated; 565.81 MiB free; 9.80 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

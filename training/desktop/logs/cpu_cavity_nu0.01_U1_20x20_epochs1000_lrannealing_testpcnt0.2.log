@@ -1,0 +1,28 @@
+#################
+##  CFD PINN   ##
+#################
+
+Namespace(debug=True, case_type='cavity', case_dir='/home/harry/pinns/openfoam/cases/cavity_nu0.01_U1/', start_time=0.0, end_time=5.0, sim_dt=0.001, load_dt=0.005, startx=0, starty=0, endx=1, endy=1, numx=20, numy=20, viscosity=0.01, initial_u_lid=1.0, load_sim=False, no_train=False, test_size=0.2, save_scaler_path='/home/harry/pinns/models/cpu_scaler_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.2.pkl', load_scaler_path='', num_frames=20, training_animation=False, prediction_animation=True, residual_animation=True, static_plots=True, output_pred_data=False, output_train_data=False, output_data_path=None, device='cpu', pinn_output_path='/home/harry/pinns/models/cpu_model_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.2.pt', optimizer='adam', load_model_path=None, profile=False, profile_path='', trace_path='trace.json', stack_path='stack.txt', tensorboard=True, tensorboard_path='/home/harry/pinns/tboard/cpu_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.2/', epochs=1000, learning_rate=0.001, inference_timing=False, verbose=False, adaption='lrannealing')
+Setting up geometry...
+Geometry summary:
+	geom[x_start]: 0
+	geom[x_end]: 1
+	geom[numx]: 20
+	geom[y_start]: 0
+	geom[y_end]: 1
+	geom[numy]: 20
+	geom[t_start]: 0.0
+	geom[t_end]: 5.0
+	geom[t_dt]: 0.005
+	geom[numt]: 1001
+	geom[stride]: 5
+	Geometry setup completed
+
+Loading simulation data...
+shape: (1001, 20, 20)
+
+	Simulation data loaded
+
+DEBUG: PINN device: cpu
+
+CFD PINN training progress:   0%|          | 0/1000 [00:00<?, ?it/s]CFD PINN training progress:   0%|          | 1/1000 [00:13<3:38:02, 13.10s/it]

@@ -1,0 +1,3048 @@
+#################
+##  CFD PINN   ##
+#################
+
+Namespace(debug=True, case_type='cavity', case_dir='/home/harry/pinns/openfoam/cases/cavity_nu0.01_U1/', start_time=0.0, end_time=5.0, sim_dt=0.001, load_dt=0.005, startx=0, starty=0, endx=1, endy=1, numx=20, numy=20, viscosity=0.01, initial_u_lid=1.0, load_sim=False, no_train=False, test_size=0.8, save_scaler_path='/home/harry/pinns/models/scaler_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pkl', load_scaler_path='', num_frames=20, training_animation=False, prediction_animation=True, residual_animation=True, static_plots=False, output_pred_data=False, output_train_data=False, output_data_path=None, pinn_output_path='/home/harry/pinns/models/model_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pt', optimizer='adam', load_model_path=None, profile=False, profile_path='', trace_path='trace.json', stack_path='stack.txt', tensorboard=True, tensorboard_path='/home/harry/pinns/tboard/cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8/', epochs=1000, learning_rate=0.001, inference_timing=False, verbose=False, adaption='lrannealing')
+Setting up geometry...
+Geometry summary:
+	geom[x_start]: 0
+	geom[x_end]: 1
+	geom[numx]: 20
+	geom[y_start]: 0
+	geom[y_end]: 1
+	geom[numy]: 20
+	geom[t_start]: 0.0
+	geom[t_end]: 5.0
+	geom[t_dt]: 0.005
+	geom[numt]: 1001
+	geom[stride]: 5
+	Geometry setup completed
+
+Loading simulation data...
+shape: (1001, 20, 20)
+
+	Simulation data loaded
+
+DEBUG: PINN device cuda
+CFD PINN training progress:   0%|          | 0/1000 [00:00<?, ?it/s]CFD PINN training progress:   0%|          | 1/1000 [00:00<06:54,  2.41it/s]CFD PINN training progress:   0%|          | 2/1000 [00:00<04:29,  3.70it/s]CFD PINN training progress:   0%|          | 3/1000 [00:00<03:43,  4.45it/s]CFD PINN training progress:   0%|          | 4/1000 [00:00<03:22,  4.92it/s]CFD PINN training progress:   0%|          | 5/1000 [00:01<03:10,  5.23it/s]CFD PINN training progress:   1%|          | 6/1000 [00:01<03:02,  5.44it/s]CFD PINN training progress:   1%|          | 7/1000 [00:01<02:58,  5.57it/s]CFD PINN training progress:   1%|          | 8/1000 [00:01<02:56,  5.63it/s]CFD PINN training progress:   1%|          | 9/1000 [00:01<02:53,  5.72it/s]CFD PINN training progress:   1%|          | 10/1000 [00:01<02:51,  5.77it/s]CFD PINN training progress:   1%|          | 11/1000 [00:02<02:49,  5.82it/s]CFD PINN training progress:   1%|          | 12/1000 [00:02<02:48,  5.85it/s]CFD PINN training progress:   1%|▏         | 13/1000 [00:02<02:48,  5.87it/s]CFD PINN training progress:   1%|▏         | 14/1000 [00:02<02:47,  5.87it/s]CFD PINN training progress:   2%|▏         | 15/1000 [00:02<02:47,  5.89it/s]CFD PINN training progress:   2%|▏         | 16/1000 [00:02<02:46,  5.90it/s]CFD PINN training progress:   2%|▏         | 17/1000 [00:03<02:46,  5.90it/s]CFD PINN training progress:   2%|▏         | 18/1000 [00:03<02:46,  5.91it/s]CFD PINN training progress:   2%|▏         | 19/1000 [00:03<02:45,  5.91it/s]CFD PINN training progress:   2%|▏         | 20/1000 [00:03<02:46,  5.88it/s]CFD PINN training progress:   2%|▏         | 21/1000 [00:03<02:46,  5.89it/s]CFD PINN training progress:   2%|▏         | 22/1000 [00:03<02:45,  5.90it/s]CFD PINN training progress:   2%|▏         | 23/1000 [00:04<02:45,  5.90it/s]CFD PINN training progress:   2%|▏         | 24/1000 [00:04<02:45,  5.91it/s]CFD PINN training progress:   2%|▎         | 25/1000 [00:04<02:44,  5.91it/s]CFD PINN training progress:   3%|▎         | 26/1000 [00:04<02:44,  5.91it/s]CFD PINN training progress:   3%|▎         | 27/1000 [00:04<02:44,  5.92it/s]CFD PINN training progress:   3%|▎         | 28/1000 [00:04<02:44,  5.92it/s]CFD PINN training progress:   3%|▎         | 29/1000 [00:05<02:44,  5.92it/s]CFD PINN training progress:   3%|▎         | 30/1000 [00:05<02:44,  5.91it/s]CFD PINN training progress:   3%|▎         | 31/1000 [00:05<02:43,  5.92it/s]CFD PINN training progress:   3%|▎         | 32/1000 [00:05<02:43,  5.91it/s]CFD PINN training progress:   3%|▎         | 33/1000 [00:05<02:43,  5.91it/s]CFD PINN training progress:   3%|▎         | 34/1000 [00:06<02:43,  5.92it/s]CFD PINN training progress:   4%|▎         | 35/1000 [00:06<02:43,  5.91it/s]CFD PINN training progress:   4%|▎         | 36/1000 [00:06<02:43,  5.91it/s]CFD PINN training progress:   4%|▎         | 37/1000 [00:06<02:42,  5.91it/s]CFD PINN training progress:   4%|▍         | 38/1000 [00:06<02:42,  5.91it/s]CFD PINN training progress:   4%|▍         | 39/1000 [00:06<02:42,  5.91it/s]CFD PINN training progress:   4%|▍         | 40/1000 [00:07<02:42,  5.91it/s]CFD PINN training progress:   4%|▍         | 41/1000 [00:07<02:42,  5.90it/s]CFD PINN training progress:   4%|▍         | 42/1000 [00:07<02:42,  5.90it/s]CFD PINN training progress:   4%|▍         | 43/1000 [00:07<02:42,  5.91it/s]CFD PINN training progress:   4%|▍         | 44/1000 [00:07<02:42,  5.90it/s]CFD PINN training progress:   4%|▍         | 45/1000 [00:07<02:42,  5.89it/s]CFD PINN training progress:   5%|▍         | 46/1000 [00:08<02:42,  5.89it/s]CFD PINN training progress:   5%|▍         | 47/1000 [00:08<02:41,  5.89it/s]CFD PINN training progress:   5%|▍         | 48/1000 [00:08<02:41,  5.88it/s]CFD PINN training progress:   5%|▍         | 49/1000 [00:08<02:41,  5.89it/s]CFD PINN training progress:   5%|▌         | 50/1000 [00:08<02:41,  5.89it/s]CFD PINN training progress:   5%|▌         | 51/1000 [00:08<02:40,  5.90it/s]CFD PINN training progress:   5%|▌         | 52/1000 [00:09<02:40,  5.90it/s]CFD PINN training progress:   5%|▌         | 53/1000 [00:09<02:40,  5.89it/s]CFD PINN training progress:   5%|▌         | 54/1000 [00:09<02:40,  5.89it/s]CFD PINN training progress:   6%|▌         | 55/1000 [00:09<02:40,  5.89it/s]CFD PINN training progress:   6%|▌         | 56/1000 [00:09<02:40,  5.89it/s]CFD PINN training progress:   6%|▌         | 57/1000 [00:09<02:40,  5.89it/s]CFD PINN training progress:   6%|▌         | 58/1000 [00:10<02:40,  5.88it/s]CFD PINN training progress:   6%|▌         | 59/1000 [00:10<02:39,  5.89it/s]CFD PINN training progress:   6%|▌         | 60/1000 [00:10<02:39,  5.89it/s]CFD PINN training progress:   6%|▌         | 61/1000 [00:10<02:39,  5.90it/s]CFD PINN training progress:   6%|▌         | 62/1000 [00:10<02:38,  5.90it/s]CFD PINN training progress:   6%|▋         | 63/1000 [00:10<02:38,  5.90it/s]CFD PINN training progress:   6%|▋         | 64/1000 [00:11<02:38,  5.91it/s]CFD PINN training progress:   6%|▋         | 65/1000 [00:11<02:37,  5.92it/s]CFD PINN training progress:   7%|▋         | 66/1000 [00:11<02:37,  5.92it/s]CFD PINN training progress:   7%|▋         | 67/1000 [00:11<02:37,  5.91it/s]CFD PINN training progress:   7%|▋         | 68/1000 [00:11<02:37,  5.91it/s]CFD PINN training progress:   7%|▋         | 69/1000 [00:11<02:37,  5.91it/s]CFD PINN training progress:   7%|▋         | 70/1000 [00:12<02:37,  5.91it/s]CFD PINN training progress:   7%|▋         | 71/1000 [00:12<02:37,  5.92it/s]CFD PINN training progress:   7%|▋         | 72/1000 [00:12<02:36,  5.92it/s]CFD PINN training progress:   7%|▋         | 73/1000 [00:12<02:36,  5.91it/s]CFD PINN training progress:   7%|▋         | 74/1000 [00:12<02:36,  5.91it/s]CFD PINN training progress:   8%|▊         | 75/1000 [00:12<02:36,  5.92it/s]CFD PINN training progress:   8%|▊         | 76/1000 [00:13<02:36,  5.92it/s]CFD PINN training progress:   8%|▊         | 77/1000 [00:13<02:35,  5.93it/s]CFD PINN training progress:   8%|▊         | 78/1000 [00:13<02:35,  5.93it/s]CFD PINN training progress:   8%|▊         | 79/1000 [00:13<02:35,  5.92it/s]CFD PINN training progress:   8%|▊         | 80/1000 [00:13<02:35,  5.91it/s]CFD PINN training progress:   8%|▊         | 81/1000 [00:13<02:35,  5.91it/s]CFD PINN training progress:   8%|▊         | 82/1000 [00:14<02:35,  5.91it/s]CFD PINN training progress:   8%|▊         | 83/1000 [00:14<02:35,  5.90it/s]CFD PINN training progress:   8%|▊         | 84/1000 [00:14<02:35,  5.90it/s]CFD PINN training progress:   8%|▊         | 85/1000 [00:14<02:35,  5.90it/s]CFD PINN training progress:   9%|▊         | 86/1000 [00:14<02:34,  5.90it/s]CFD PINN training progress:   9%|▊         | 87/1000 [00:14<02:34,  5.90it/s]CFD PINN training progress:   9%|▉         | 88/1000 [00:15<02:34,  5.90it/s]CFD PINN training progress:   9%|▉         | 89/1000 [00:15<02:34,  5.90it/s]CFD PINN training progress:   9%|▉         | 90/1000 [00:15<02:34,  5.91it/s]CFD PINN training progress:   9%|▉         | 91/1000 [00:15<02:33,  5.91it/s]CFD PINN training progress:   9%|▉         | 92/1000 [00:15<02:33,  5.91it/s]CFD PINN training progress:   9%|▉         | 93/1000 [00:15<02:33,  5.90it/s]CFD PINN training progress:   9%|▉         | 94/1000 [00:16<02:33,  5.91it/s]CFD PINN training progress:  10%|▉         | 95/1000 [00:16<02:32,  5.92it/s]CFD PINN training progress:  10%|▉         | 96/1000 [00:16<02:33,  5.91it/s]CFD PINN training progress:  10%|▉         | 97/1000 [00:16<02:32,  5.92it/s]CFD PINN training progress:  10%|▉         | 98/1000 [00:16<02:32,  5.92it/s]CFD PINN training progress:  10%|▉         | 99/1000 [00:17<02:33,  5.87it/s]CFD PINN training progress:  10%|█         | 100/1000 [00:17<02:33,  5.88it/s]CFD PINN training progress:  10%|█         | 101/1000 [00:17<02:32,  5.89it/s]CFD PINN training progress:  10%|█         | 102/1000 [00:17<02:32,  5.89it/s]CFD PINN training progress:  10%|█         | 103/1000 [00:17<02:32,  5.89it/s]CFD PINN training progress:  10%|█         | 104/1000 [00:17<02:32,  5.88it/s]CFD PINN training progress:  10%|█         | 105/1000 [00:18<02:32,  5.88it/s]CFD PINN training progress:  11%|█         | 106/1000 [00:18<02:31,  5.88it/s]CFD PINN training progress:  11%|█         | 107/1000 [00:18<02:31,  5.88it/s]CFD PINN training progress:  11%|█         | 108/1000 [00:18<02:31,  5.89it/s]CFD PINN training progress:  11%|█         | 109/1000 [00:18<02:31,  5.89it/s]CFD PINN training progress:  11%|█         | 110/1000 [00:18<02:31,  5.89it/s]CFD PINN training progress:  11%|█         | 111/1000 [00:19<02:31,  5.88it/s]CFD PINN training progress:  11%|█         | 112/1000 [00:19<02:31,  5.86it/s]CFD PINN training progress:  11%|█▏        | 113/1000 [00:19<02:30,  5.87it/s]CFD PINN training progress:  11%|█▏        | 114/1000 [00:19<02:30,  5.89it/s]CFD PINN training progress:  12%|█▏        | 115/1000 [00:19<02:30,  5.90it/s]CFD PINN training progress:  12%|█▏        | 116/1000 [00:19<02:30,  5.89it/s]CFD PINN training progress:  12%|█▏        | 117/1000 [00:20<02:29,  5.90it/s]CFD PINN training progress:  12%|█▏        | 118/1000 [00:20<02:29,  5.91it/s]CFD PINN training progress:  12%|█▏        | 119/1000 [00:20<02:29,  5.91it/s]CFD PINN training progress:  12%|█▏        | 120/1000 [00:20<02:29,  5.90it/s]CFD PINN training progress:  12%|█▏        | 121/1000 [00:20<02:28,  5.91it/s]CFD PINN training progress:  12%|█▏        | 122/1000 [00:20<02:28,  5.90it/s]CFD PINN training progress:  12%|█▏        | 123/1000 [00:21<02:28,  5.89it/s]CFD PINN training progress:  12%|█▏        | 124/1000 [00:21<02:28,  5.89it/s]CFD PINN training progress:  12%|█▎        | 125/1000 [00:21<02:28,  5.90it/s]CFD PINN training progress:  13%|█▎        | 126/1000 [00:21<02:28,  5.90it/s]CFD PINN training progress:  13%|█▎        | 127/1000 [00:21<02:27,  5.90it/s]CFD PINN training progress:  13%|█▎        | 128/1000 [00:21<02:27,  5.90it/s]CFD PINN training progress:  13%|█▎        | 129/1000 [00:22<02:27,  5.90it/s]CFD PINN training progress:  13%|█▎        | 130/1000 [00:22<02:27,  5.89it/s]CFD PINN training progress:  13%|█▎        | 131/1000 [00:22<02:27,  5.89it/s]CFD PINN training progress:  13%|█▎        | 132/1000 [00:22<02:27,  5.89it/s]CFD PINN training progress:  13%|█▎        | 133/1000 [00:22<02:27,  5.90it/s]CFD PINN training progress:  13%|█▎        | 134/1000 [00:22<02:26,  5.89it/s]CFD PINN training progress:  14%|█▎        | 135/1000 [00:23<02:26,  5.89it/s]CFD PINN training progress:  14%|█▎        | 136/1000 [00:23<02:26,  5.89it/s]CFD PINN training progress:  14%|█▎        | 137/1000 [00:23<02:26,  5.89it/s]CFD PINN training progress:  14%|█▍        | 138/1000 [00:23<02:26,  5.89it/s]CFD PINN training progress:  14%|█▍        | 139/1000 [00:23<02:26,  5.90it/s]CFD PINN training progress:  14%|█▍        | 140/1000 [00:23<02:25,  5.89it/s]CFD PINN training progress:  14%|█▍        | 141/1000 [00:24<02:25,  5.90it/s]CFD PINN training progress:  14%|█▍        | 142/1000 [00:24<02:25,  5.91it/s]CFD PINN training progress:  14%|█▍        | 143/1000 [00:24<02:24,  5.92it/s]CFD PINN training progress:  14%|█▍        | 144/1000 [00:24<02:24,  5.92it/s]CFD PINN training progress:  14%|█▍        | 145/1000 [00:24<02:24,  5.92it/s]CFD PINN training progress:  15%|█▍        | 146/1000 [00:24<02:24,  5.92it/s]CFD PINN training progress:  15%|█▍        | 147/1000 [00:25<02:24,  5.91it/s]CFD PINN training progress:  15%|█▍        | 148/1000 [00:25<02:24,  5.91it/s]CFD PINN training progress:  15%|█▍        | 149/1000 [00:25<02:23,  5.91it/s]CFD PINN training progress:  15%|█▌        | 150/1000 [00:25<02:23,  5.91it/s]CFD PINN training progress:  15%|█▌        | 151/1000 [00:25<02:23,  5.91it/s]CFD PINN training progress:  15%|█▌        | 152/1000 [00:26<02:23,  5.92it/s]CFD PINN training progress:  15%|█▌        | 153/1000 [00:26<02:23,  5.92it/s]CFD PINN training progress:  15%|█▌        | 154/1000 [00:26<02:23,  5.90it/s]CFD PINN training progress:  16%|█▌        | 155/1000 [00:26<02:23,  5.90it/s]CFD PINN training progress:  16%|█▌        | 156/1000 [00:26<02:23,  5.89it/s]CFD PINN training progress:  16%|█▌        | 157/1000 [00:26<02:23,  5.89it/s]CFD PINN training progress:  16%|█▌        | 158/1000 [00:27<02:22,  5.89it/s]CFD PINN training progress:  16%|█▌        | 159/1000 [00:27<02:22,  5.89it/s]CFD PINN training progress:  16%|█▌        | 160/1000 [00:27<02:22,  5.90it/s]CFD PINN training progress:  16%|█▌        | 161/1000 [00:27<02:22,  5.91it/s]CFD PINN training progress:  16%|█▌        | 162/1000 [00:27<02:22,  5.90it/s]CFD PINN training progress:  16%|█▋        | 163/1000 [00:27<02:22,  5.89it/s]CFD PINN training progress:  16%|█▋        | 164/1000 [00:28<02:21,  5.89it/s]CFD PINN training progress:  16%|█▋        | 165/1000 [00:28<02:21,  5.88it/s]CFD PINN training progress:  17%|█▋        | 166/1000 [00:28<02:21,  5.88it/s]CFD PINN training progress:  17%|█▋        | 167/1000 [00:28<02:21,  5.88it/s]CFD PINN training progress:  17%|█▋        | 168/1000 [00:28<02:21,  5.89it/s]CFD PINN training progress:  17%|█▋        | 169/1000 [00:28<02:21,  5.89it/s]CFD PINN training progress:  17%|█▋        | 170/1000 [00:29<02:20,  5.89it/s]CFD PINN training progress:  17%|█▋        | 171/1000 [00:29<02:20,  5.90it/s]CFD PINN training progress:  17%|█▋        | 172/1000 [00:29<02:20,  5.90it/s]CFD PINN training progress:  17%|█▋        | 173/1000 [00:29<02:20,  5.90it/s]CFD PINN training progress:  17%|█▋        | 174/1000 [00:29<02:19,  5.90it/s]CFD PINN training progress:  18%|█▊        | 175/1000 [00:29<02:19,  5.90it/s]CFD PINN training progress:  18%|█▊        | 176/1000 [00:30<02:19,  5.90it/s]tensor(20.4690)
+tensor(381.3286)
+tensor(21.0982)
+tensor(22.9578)
+tensor(557.7355)
+tensor(24.8579)
+tensor(23.7072)
+tensor(472.3953)
+tensor(26.8671)
+tensor(24.0511)
+tensor(374.3945)
+tensor(28.2769)
+tensor(24.0136)
+tensor(306.1176)
+tensor(28.4782)
+tensor(23.5376)
+tensor(252.2210)
+tensor(27.8632)
+tensor(22.6631)
+tensor(202.5834)
+tensor(26.5424)
+tensor(23.7418)
+tensor(173.3728)
+tensor(25.8941)
+tensor(26.1796)
+tensor(152.5095)
+tensor(24.6618)
+tensor(28.7081)
+tensor(131.8755)
+tensor(22.6073)
+tensor(30.8572)
+tensor(112.7716)
+tensor(20.5763)
+tensor(32.4291)
+tensor(97.7519)
+tensor(18.7902)
+tensor(33.5211)
+tensor(85.8934)
+tensor(17.4597)
+tensor(34.3156)
+tensor(76.2160)
+tensor(16.5958)
+tensor(34.8633)
+tensor(68.0947)
+tensor(16.2855)
+tensor(35.1372)
+tensor(61.4102)
+tensor(16.4375)
+tensor(35.2408)
+tensor(55.2374)
+tensor(16.6568)
+tensor(35.2612)
+tensor(49.5392)
+tensor(16.8999)
+tensor(35.2617)
+tensor(44.2292)
+tensor(17.1903)
+tensor(35.1832)
+tensor(39.0496)
+tensor(17.2544)
+tensor(34.7869)
+tensor(34.0423)
+tensor(17.2480)
+tensor(34.0938)
+tensor(29.2602)
+tensor(17.1468)
+tensor(33.0697)
+tensor(24.7727)
+tensor(16.9511)
+tensor(31.7870)
+tensor(20.6676)
+tensor(16.5724)
+tensor(30.5159)
+tensor(17.0682)
+tensor(15.9832)
+tensor(29.3084)
+tensor(14.0434)
+tensor(15.2879)
+tensor(28.3183)
+tensor(11.5686)
+tensor(14.4784)
+tensor(27.5272)
+tensor(9.5673)
+tensor(13.6360)
+tensor(26.9023)
+tensor(7.9671)
+tensor(12.7250)
+tensor(26.4484)
+tensor(6.6603)
+tensor(11.7057)
+tensor(25.8448)
+tensor(5.5368)
+tensor(10.7710)
+tensor(24.9990)
+tensor(4.5494)
+tensor(9.7207)
+tensor(23.6887)
+tensor(3.6540)
+tensor(8.5500)
+tensor(21.8127)
+tensor(2.8643)
+tensor(7.2899)
+tensor(19.3674)
+tensor(2.1872)
+tensor(6.0589)
+tensor(16.6975)
+tensor(1.6546)
+tensor(4.9686)
+tensor(14.3332)
+tensor(1.2827)
+tensor(4.1329)
+tensor(12.8475)
+tensor(1.0692)
+tensor(3.6681)
+tensor(12.4788)
+tensor(0.9892)
+tensor(3.5765)
+tensor(13.0762)
+tensor(0.9988)
+tensor(3.7650)
+tensor(14.2182)
+tensor(1.0543)
+tensor(4.1100)
+tensor(15.3949)
+tensor(1.1092)
+tensor(4.4325)
+tensor(16.1890)
+tensor(1.1181)
+tensor(4.5513)
+tensor(16.1929)
+tensor(1.0416)
+tensor(4.3099)
+tensor(16.1148)
+tensor(0.9366)
+tensor(3.9385)
+tensor(15.8053)
+tensor(0.8180)
+tensor(3.5161)
+tensor(15.3096)
+tensor(0.7087)
+tensor(3.1323)
+tensor(15.2798)
+tensor(0.6362)
+tensor(2.9077)
+tensor(15.9852)
+tensor(0.6053)
+tensor(2.8822)
+tensor(16.6172)
+tensor(0.6051)
+tensor(3.0071)
+tensor(16.6131)
+tensor(0.6180)
+tensor(3.1929)
+tensor(16.8445)
+tensor(0.6297)
+tensor(3.3589)
+tensor(17.8511)
+tensor(0.6310)
+tensor(3.4334)
+tensor(19.7383)
+tensor(0.6176)
+tensor(3.3976)
+tensor(22.0623)
+tensor(0.5913)
+tensor(3.2631)
+tensor(23.2326)
+tensor(0.5570)
+tensor(3.0574)
+tensor(22.3786)
+tensor(0.5227)
+tensor(2.8504)
+tensor(20.5057)
+tensor(0.4951)
+tensor(2.7011)
+tensor(18.4298)
+tensor(0.4715)
+tensor(2.5745)
+tensor(16.8491)
+tensor(0.4461)
+tensor(2.4350)
+tensor(16.0802)
+tensor(0.4176)
+tensor(2.2751)
+tensor(16.0983)
+tensor(0.3869)
+tensor(2.1162)
+tensor(16.0714)
+tensor(0.3464)
+tensor(1.9065)
+tensor(15.0327)
+tensor(0.2959)
+tensor(1.6413)
+tensor(13.8893)
+tensor(0.2540)
+tensor(1.4198)
+tensor(13.2903)
+tensor(0.2283)
+tensor(1.2838)
+tensor(12.5694)
+tensor(0.2114)
+tensor(1.1924)
+tensor(12.7397)
+tensor(0.2152)
+tensor(1.2134)
+tensor(12.5795)
+tensor(0.2047)
+tensor(1.1493)
+tensor(11.5551)
+tensor(0.1689)
+tensor(0.9446)
+tensor(11.7980)
+tensor(0.1523)
+tensor(0.8482)
+tensor(11.4048)
+tensor(0.1411)
+tensor(0.7823)
+tensor(10.7147)
+tensor(0.1327)
+tensor(0.7333)
+tensor(11.5657)
+tensor(0.1419)
+tensor(0.7824)
+tensor(13.0277)
+tensor(0.1567)
+tensor(0.8620)
+tensor(14.3673)
+tensor(0.1677)
+tensor(0.9243)
+tensor(15.3563)
+tensor(0.1682)
+tensor(0.9355)
+tensor(15.6564)
+tensor(0.1583)
+tensor(0.8935)
+tensor(14.9075)
+tensor(0.1446)
+tensor(0.8307)
+tensor(14.3416)
+tensor(0.1359)
+tensor(0.7922)
+tensor(14.6279)
+tensor(0.1335)
+tensor(0.7837)
+tensor(15.0851)
+tensor(0.1324)
+tensor(0.7808)
+tensor(14.9307)
+tensor(0.1257)
+tensor(0.7444)
+tensor(14.1193)
+tensor(0.1132)
+tensor(0.6763)
+tensor(12.8643)
+tensor(0.1020)
+tensor(0.6160)
+tensor(12.3058)
+tensor(0.0972)
+tensor(0.5933)
+tensor(13.0490)
+tensor(0.0995)
+tensor(0.6130)
+tensor(14.5248)
+tensor(0.1058)
+tensor(0.6552)
+tensor(15.7759)
+tensor(0.1105)
+tensor(0.6882)
+tensor(16.0744)
+tensor(0.1100)
+tensor(0.6870)
+tensor(16.1259)
+tensor(0.1077)
+tensor(0.6743)
+tensor(15.9377)
+tensor(0.1054)
+tensor(0.6612)
+tensor(15.7662)
+tensor(0.1052)
+tensor(0.6599)
+tensor(16.1210)
+tensor(0.1063)
+tensor(0.6671)
+tensor(16.7736)
+tensor(0.1072)
+tensor(0.6756)
+tensor(16.9255)
+tensor(0.1076)
+tensor(0.6830)
+tensor(17.1648)
+tensor(0.1084)
+tensor(0.6942)
+tensor(17.3962)
+tensor(0.1072)
+tensor(0.6893)
+tensor(16.8851)
+tensor(0.0997)
+tensor(0.6422)
+tensor(15.4750)
+tensor(0.0852)
+tensor(0.5491)
+tensor(13.6532)
+tensor(0.0717)
+tensor(0.4628)
+tensor(12.4893)
+tensor(0.0633)
+tensor(0.4090)
+tensor(12.1895)
+tensor(0.0598)
+tensor(0.3870)
+tensor(12.4759)
+tensor(0.0592)
+tensor(0.3833)
+tensor(12.9330)
+tensor(0.0604)
+tensor(0.3918)
+tensor(13.3988)
+tensor(0.0631)
+tensor(0.4109)
+tensor(14.2055)
+tensor(0.0677)
+tensor(0.4412)
+tensor(14.3261)
+tensor(0.0689)
+tensor(0.4494)
+tensor(13.5359)
+tensor(0.0648)
+tensor(0.4228)
+tensor(13.9665)
+tensor(0.0646)
+tensor(0.4216)
+tensor(14.7908)
+tensor(0.0639)
+tensor(0.4177)
+tensor(15.1192)
+tensor(0.0630)
+tensor(0.4133)
+tensor(14.8450)
+tensor(0.0628)
+tensor(0.4137)
+tensor(14.5316)
+tensor(0.0631)
+tensor(0.4176)
+tensor(15.4945)
+tensor(0.0666)
+tensor(0.4417)
+tensor(16.1209)
+tensor(0.0669)
+tensor(0.4445)
+tensor(15.6940)
+tensor(0.0633)
+tensor(0.4224)
+tensor(16.0732)
+tensor(0.0631)
+tensor(0.4219)
+tensor(16.6210)
+tensor(0.0636)
+tensor(0.4256)
+tensor(16.8482)
+tensor(0.0645)
+tensor(0.4327)
+tensor(17.0674)
+tensor(0.0654)
+tensor(0.4405)
+tensor(17.8808)
+tensor(0.0661)
+tensor(0.4468)
+tensor(18.6709)
+tensor(0.0673)
+tensor(0.4558)
+tensor(18.8827)
+tensor(0.0687)
+tensor(0.4665)
+tensor(18.9581)
+tensor(0.0696)
+tensor(0.4743)
+tensor(19.2029)
+tensor(0.0704)
+tensor(0.4814)
+tensor(19.8981)
+tensor(0.0712)
+tensor(0.4894)
+tensor(21.1087)
+tensor(0.0720)
+tensor(0.4962)
+tensor(21.5022)
+tensor(0.0729)
+tensor(0.5040)
+tensor(21.5430)
+tensor(0.0734)
+tensor(0.5097)
+tensor(21.8773)
+tensor(0.0732)
+tensor(0.5100)
+tensor(21.9294)
+tensor(0.0731)
+tensor(0.5124)
+tensor(22.5526)
+tensor(0.0735)
+tensor(0.5171)
+tensor(22.2642)
+tensor(0.0742)
+tensor(0.5249)
+tensor(22.8911)
+tensor(0.0744)
+tensor(0.5270)
+tensor(22.5990)
+tensor(0.0748)
+tensor(0.5317)
+tensor(23.0756)
+tensor(0.0746)
+tensor(0.5313)
+tensor(21.7358)
+tensor(0.0751)
+tensor(0.5394)
+tensor(20.8314)
+tensor(0.0746)
+tensor(0.5349)
+tensor(19.9422)
+tensor(0.0747)
+tensor(0.5433)
+tensor(20.9687)
+tensor(0.0732)
+tensor(0.5321)
+tensor(21.2349)
+tensor(0.0729)
+tensor(0.5344)
+tensor(21.8920)
+tensor(0.0724)
+tensor(0.5327)
+tensor(22.0151)
+tensor(0.0718)
+tensor(0.5285)
+tensor(19.7595)
+tensor(0.0722)
+tensor(0.5371)
+tensor(19.9425)
+tensor(0.0706)
+tensor(0.5251)
+tensor(20.6128)
+tensor(0.0699)
+tensor(0.5258)
+tensor(22.2634)
+tensor(0.0686)
+tensor(0.5177)
+tensor(22.7596)
+tensor(0.0679)
+tensor(0.5130)
+tensor(19.9403)
+tensor(0.0686)
+tensor(0.5230)
+tensor(19.5628)
+tensor(0.0672)
+tensor(0.5118)
+tensor(19.6848)
+tensor(0.0673)
+tensor(0.5197)
+tensor(21.6262)
+tensor(0.0660)
+tensor(0.5104)
+tensor(22.0743)
+tensor(0.0653)
+tensor(0.5051)
+tensor(20.3959)
+tensor(0.0651)
+tensor(0.5079)
+tensor(18.6144)
+tensor(0.0633)
+tensor(0.4933)
+tensor(18.4091)
+tensor(0.0636)
+tensor(0.5030)
+tensor(20.4885)
+tensor(0.0622)
+tensor(0.4944)
+tensor(20.9970)
+tensor(0.0611)
+tensor(0.4855)
+tensor(18.0596)
+tensor(0.0617)
+tensor(0.4927)
+tensor(17.7537)
+tensor(0.0607)
+tensor(0.4850)
+tensor(18.6448)
+tensor(0.0593)
+tensor(0.4791)
+tensor(19.1089)
+tensor(0.0586)
+tensor(0.4777)
+tensor(19.0240)
+tensor(0.0577)
+tensor(0.4691)
+tensor(17.4591)
+tensor(0.0583)
+tensor(0.4761)
+tensor(19.3470)
+tensor(0.0562)
+tensor(0.4591)
+tensor(21.4557)
+tensor(0.0557)
+tensor(0.4579)
+tensor(20.3778)
+tensor(0.0545)
+tensor(0.4525)
+tensor(18.7535)
+tensor(0.0525)
+tensor(0.4393)
+tensor(17.4077)
+tensor(0.0514)
+tensor(0.4345)
+tensor(18.5998)
+tensor(0.0496)
+tensor(0.4219)
+tensor(19.2346)
+tensor(0.0512)
+tensor(0.4364)
+tensor(20.0414)
+tensor(0.0500)
+tensor(0.4281)
+tensor(18.9714)
+tensor(0.0499)
+tensor(0.4289)
+tensor(16.5975)
+tensor(0.0474)
+tensor(0.4107)
+tensor(16.0669)
+tensor(0.0477)
+tensor(0.4171)
+tensor(17.6692)
+CFD PINN training progress:  18%|█▊        | 177/1000 [00:30<02:19,  5.88it/s]CFD PINN training progress:  18%|█▊        | 178/1000 [00:30<02:19,  5.89it/s]CFD PINN training progress:  18%|█▊        | 179/1000 [00:30<02:19,  5.89it/s]CFD PINN training progress:  18%|█▊        | 180/1000 [00:30<02:19,  5.88it/s]CFD PINN training progress:  18%|█▊        | 181/1000 [00:30<02:19,  5.88it/s]CFD PINN training progress:  18%|█▊        | 182/1000 [00:31<02:19,  5.88it/s]CFD PINN training progress:  18%|█▊        | 183/1000 [00:31<02:18,  5.89it/s]CFD PINN training progress:  18%|█▊        | 184/1000 [00:31<02:18,  5.89it/s]CFD PINN training progress:  18%|█▊        | 185/1000 [00:31<02:18,  5.89it/s]CFD PINN training progress:  19%|█▊        | 186/1000 [00:31<02:18,  5.90it/s]CFD PINN training progress:  19%|█▊        | 187/1000 [00:31<02:17,  5.90it/s]CFD PINN training progress:  19%|█▉        | 188/1000 [00:32<02:17,  5.91it/s]CFD PINN training progress:  19%|█▉        | 189/1000 [00:32<02:17,  5.90it/s]CFD PINN training progress:  19%|█▉        | 190/1000 [00:32<02:17,  5.90it/s]CFD PINN training progress:  19%|█▉        | 191/1000 [00:32<02:17,  5.90it/s]CFD PINN training progress:  19%|█▉        | 192/1000 [00:32<02:16,  5.90it/s]CFD PINN training progress:  19%|█▉        | 193/1000 [00:32<02:16,  5.90it/s]CFD PINN training progress:  19%|█▉        | 194/1000 [00:33<02:16,  5.90it/s]CFD PINN training progress:  20%|█▉        | 195/1000 [00:33<02:16,  5.89it/s]CFD PINN training progress:  20%|█▉        | 196/1000 [00:33<02:16,  5.89it/s]CFD PINN training progress:  20%|█▉        | 197/1000 [00:33<02:16,  5.89it/s]CFD PINN training progress:  20%|█▉        | 198/1000 [00:33<02:16,  5.89it/s]CFD PINN training progress:  20%|█▉        | 199/1000 [00:33<02:16,  5.89it/s]CFD PINN training progress:  20%|██        | 200/1000 [00:34<02:15,  5.89it/s]CFD PINN training progress:  20%|██        | 201/1000 [00:34<02:15,  5.89it/s]CFD PINN training progress:  20%|██        | 202/1000 [00:34<02:15,  5.89it/s]CFD PINN training progress:  20%|██        | 203/1000 [00:34<02:15,  5.89it/s]CFD PINN training progress:  20%|██        | 204/1000 [00:34<02:15,  5.89it/s]CFD PINN training progress:  20%|██        | 205/1000 [00:34<02:14,  5.89it/s]CFD PINN training progress:  21%|██        | 206/1000 [00:35<02:14,  5.90it/s]CFD PINN training progress:  21%|██        | 207/1000 [00:35<02:14,  5.91it/s]CFD PINN training progress:  21%|██        | 208/1000 [00:35<02:13,  5.92it/s]CFD PINN training progress:  21%|██        | 209/1000 [00:35<02:14,  5.89it/s]CFD PINN training progress:  21%|██        | 210/1000 [00:35<02:14,  5.89it/s]CFD PINN training progress:  21%|██        | 211/1000 [00:36<02:14,  5.88it/s]CFD PINN training progress:  21%|██        | 212/1000 [00:36<02:14,  5.88it/s]CFD PINN training progress:  21%|██▏       | 213/1000 [00:36<02:13,  5.88it/s]CFD PINN training progress:  21%|██▏       | 214/1000 [00:36<02:13,  5.87it/s]CFD PINN training progress:  22%|██▏       | 215/1000 [00:36<02:13,  5.87it/s]CFD PINN training progress:  22%|██▏       | 216/1000 [00:36<02:13,  5.87it/s]CFD PINN training progress:  22%|██▏       | 217/1000 [00:37<02:13,  5.88it/s]CFD PINN training progress:  22%|██▏       | 218/1000 [00:37<02:13,  5.87it/s]CFD PINN training progress:  22%|██▏       | 219/1000 [00:37<02:12,  5.87it/s]CFD PINN training progress:  22%|██▏       | 220/1000 [00:37<02:12,  5.87it/s]CFD PINN training progress:  22%|██▏       | 221/1000 [00:37<02:12,  5.86it/s]CFD PINN training progress:  22%|██▏       | 222/1000 [00:37<02:12,  5.87it/s]CFD PINN training progress:  22%|██▏       | 223/1000 [00:38<02:12,  5.87it/s]CFD PINN training progress:  22%|██▏       | 224/1000 [00:38<02:12,  5.87it/s]CFD PINN training progress:  22%|██▎       | 225/1000 [00:38<02:11,  5.88it/s]CFD PINN training progress:  23%|██▎       | 226/1000 [00:38<02:11,  5.88it/s]CFD PINN training progress:  23%|██▎       | 227/1000 [00:38<02:11,  5.87it/s]CFD PINN training progress:  23%|██▎       | 228/1000 [00:38<02:11,  5.88it/s]CFD PINN training progress:  23%|██▎       | 229/1000 [00:39<02:11,  5.88it/s]CFD PINN training progress:  23%|██▎       | 230/1000 [00:39<02:10,  5.88it/s]CFD PINN training progress:  23%|██▎       | 231/1000 [00:39<02:10,  5.88it/s]CFD PINN training progress:  23%|██▎       | 232/1000 [00:39<02:10,  5.88it/s]CFD PINN training progress:  23%|██▎       | 233/1000 [00:39<02:10,  5.88it/s]CFD PINN training progress:  23%|██▎       | 234/1000 [00:39<02:10,  5.88it/s]CFD PINN training progress:  24%|██▎       | 235/1000 [00:40<02:10,  5.87it/s]CFD PINN training progress:  24%|██▎       | 236/1000 [00:40<02:10,  5.88it/s]CFD PINN training progress:  24%|██▎       | 237/1000 [00:40<02:09,  5.89it/s]CFD PINN training progress:  24%|██▍       | 238/1000 [00:40<02:09,  5.90it/s]CFD PINN training progress:  24%|██▍       | 239/1000 [00:40<02:08,  5.90it/s]CFD PINN training progress:  24%|██▍       | 240/1000 [00:40<02:08,  5.91it/s]CFD PINN training progress:  24%|██▍       | 241/1000 [00:41<02:08,  5.91it/s]CFD PINN training progress:  24%|██▍       | 242/1000 [00:41<02:08,  5.91it/s]CFD PINN training progress:  24%|██▍       | 243/1000 [00:41<02:08,  5.90it/s]CFD PINN training progress:  24%|██▍       | 244/1000 [00:41<02:09,  5.84it/s]CFD PINN training progress:  24%|██▍       | 245/1000 [00:41<02:08,  5.86it/s]CFD PINN training progress:  25%|██▍       | 246/1000 [00:41<02:08,  5.87it/s]CFD PINN training progress:  25%|██▍       | 247/1000 [00:42<02:08,  5.87it/s]CFD PINN training progress:  25%|██▍       | 248/1000 [00:42<02:07,  5.88it/s]CFD PINN training progress:  25%|██▍       | 249/1000 [00:42<02:07,  5.88it/s]CFD PINN training progress:  25%|██▌       | 250/1000 [00:42<02:07,  5.88it/s]CFD PINN training progress:  25%|██▌       | 251/1000 [00:42<02:07,  5.88it/s]CFD PINN training progress:  25%|██▌       | 252/1000 [00:42<02:07,  5.88it/s]CFD PINN training progress:  25%|██▌       | 253/1000 [00:43<02:07,  5.88it/s]CFD PINN training progress:  25%|██▌       | 254/1000 [00:43<02:06,  5.88it/s]CFD PINN training progress:  26%|██▌       | 255/1000 [00:43<02:06,  5.88it/s]CFD PINN training progress:  26%|██▌       | 256/1000 [00:43<02:06,  5.88it/s]CFD PINN training progress:  26%|██▌       | 257/1000 [00:43<02:06,  5.88it/s]CFD PINN training progress:  26%|██▌       | 258/1000 [00:44<02:06,  5.89it/s]CFD PINN training progress:  26%|██▌       | 259/1000 [00:44<02:06,  5.87it/s]CFD PINN training progress:  26%|██▌       | 260/1000 [00:44<02:05,  5.88it/s]CFD PINN training progress:  26%|██▌       | 261/1000 [00:44<02:05,  5.87it/s]CFD PINN training progress:  26%|██▌       | 262/1000 [00:44<02:05,  5.87it/s]CFD PINN training progress:  26%|██▋       | 263/1000 [00:44<02:05,  5.87it/s]CFD PINN training progress:  26%|██▋       | 264/1000 [00:45<02:05,  5.89it/s]CFD PINN training progress:  26%|██▋       | 265/1000 [00:45<02:04,  5.89it/s]CFD PINN training progress:  27%|██▋       | 266/1000 [00:45<02:04,  5.90it/s]CFD PINN training progress:  27%|██▋       | 267/1000 [00:45<02:04,  5.90it/s]CFD PINN training progress:  27%|██▋       | 268/1000 [00:45<02:04,  5.90it/s]CFD PINN training progress:  27%|██▋       | 269/1000 [00:45<02:04,  5.89it/s]CFD PINN training progress:  27%|██▋       | 270/1000 [00:46<02:03,  5.89it/s]CFD PINN training progress:  27%|██▋       | 271/1000 [00:46<02:03,  5.89it/s]CFD PINN training progress:  27%|██▋       | 272/1000 [00:46<02:03,  5.88it/s]CFD PINN training progress:  27%|██▋       | 273/1000 [00:46<02:03,  5.87it/s]CFD PINN training progress:  27%|██▋       | 274/1000 [00:46<02:03,  5.88it/s]CFD PINN training progress:  28%|██▊       | 275/1000 [00:46<02:03,  5.88it/s]CFD PINN training progress:  28%|██▊       | 276/1000 [00:47<02:03,  5.87it/s]CFD PINN training progress:  28%|██▊       | 277/1000 [00:47<02:03,  5.87it/s]CFD PINN training progress:  28%|██▊       | 278/1000 [00:47<02:03,  5.87it/s]CFD PINN training progress:  28%|██▊       | 279/1000 [00:47<02:02,  5.87it/s]CFD PINN training progress:  28%|██▊       | 280/1000 [00:47<02:02,  5.87it/s]CFD PINN training progress:  28%|██▊       | 281/1000 [00:47<02:02,  5.87it/s]CFD PINN training progress:  28%|██▊       | 282/1000 [00:48<02:02,  5.88it/s]CFD PINN training progress:  28%|██▊       | 283/1000 [00:48<02:01,  5.89it/s]CFD PINN training progress:  28%|██▊       | 284/1000 [00:48<02:01,  5.89it/s]CFD PINN training progress:  28%|██▊       | 285/1000 [00:48<02:01,  5.89it/s]CFD PINN training progress:  29%|██▊       | 286/1000 [00:48<02:01,  5.90it/s]CFD PINN training progress:  29%|██▊       | 287/1000 [00:48<02:01,  5.89it/s]CFD PINN training progress:  29%|██▉       | 288/1000 [00:49<02:01,  5.88it/s]CFD PINN training progress:  29%|██▉       | 289/1000 [00:49<02:00,  5.88it/s]CFD PINN training progress:  29%|██▉       | 290/1000 [00:49<02:00,  5.88it/s]CFD PINN training progress:  29%|██▉       | 291/1000 [00:49<02:00,  5.88it/s]CFD PINN training progress:  29%|██▉       | 292/1000 [00:49<02:00,  5.87it/s]CFD PINN training progress:  29%|██▉       | 293/1000 [00:49<02:00,  5.88it/s]CFD PINN training progress:  29%|██▉       | 294/1000 [00:50<02:00,  5.88it/s]CFD PINN training progress:  30%|██▉       | 295/1000 [00:50<01:59,  5.88it/s]CFD PINN training progress:  30%|██▉       | 296/1000 [00:50<01:59,  5.88it/s]CFD PINN training progress:  30%|██▉       | 297/1000 [00:50<01:59,  5.87it/s]CFD PINN training progress:  30%|██▉       | 298/1000 [00:50<01:59,  5.88it/s]CFD PINN training progress:  30%|██▉       | 299/1000 [00:50<01:58,  5.89it/s]CFD PINN training progress:  30%|███       | 300/1000 [00:51<01:58,  5.90it/s]CFD PINN training progress:  30%|███       | 301/1000 [00:51<01:58,  5.90it/s]CFD PINN training progress:  30%|███       | 302/1000 [00:51<01:58,  5.89it/s]CFD PINN training progress:  30%|███       | 303/1000 [00:51<01:58,  5.88it/s]CFD PINN training progress:  30%|███       | 304/1000 [00:51<01:58,  5.88it/s]CFD PINN training progress:  30%|███       | 305/1000 [00:52<01:58,  5.89it/s]CFD PINN training progress:  31%|███       | 306/1000 [00:52<01:57,  5.89it/s]CFD PINN training progress:  31%|███       | 307/1000 [00:52<01:57,  5.89it/s]CFD PINN training progress:  31%|███       | 308/1000 [00:52<01:57,  5.88it/s]CFD PINN training progress:  31%|███       | 309/1000 [00:52<01:57,  5.88it/s]CFD PINN training progress:  31%|███       | 310/1000 [00:52<01:57,  5.88it/s]CFD PINN training progress:  31%|███       | 311/1000 [00:53<01:57,  5.88it/s]CFD PINN training progress:  31%|███       | 312/1000 [00:53<01:56,  5.88it/s]CFD PINN training progress:  31%|███▏      | 313/1000 [00:53<01:56,  5.88it/s]CFD PINN training progress:  31%|███▏      | 314/1000 [00:53<01:56,  5.88it/s]CFD PINN training progress:  32%|███▏      | 315/1000 [00:53<01:56,  5.89it/s]CFD PINN training progress:  32%|███▏      | 316/1000 [00:53<01:56,  5.89it/s]CFD PINN training progress:  32%|███▏      | 317/1000 [00:54<01:55,  5.89it/s]CFD PINN training progress:  32%|███▏      | 318/1000 [00:54<01:55,  5.89it/s]CFD PINN training progress:  32%|███▏      | 319/1000 [00:54<01:55,  5.89it/s]CFD PINN training progress:  32%|███▏      | 320/1000 [00:54<01:55,  5.90it/s]CFD PINN training progress:  32%|███▏      | 321/1000 [00:54<01:55,  5.89it/s]CFD PINN training progress:  32%|███▏      | 322/1000 [00:54<01:54,  5.90it/s]CFD PINN training progress:  32%|███▏      | 323/1000 [00:55<01:54,  5.89it/s]CFD PINN training progress:  32%|███▏      | 324/1000 [00:55<01:54,  5.89it/s]CFD PINN training progress:  32%|███▎      | 325/1000 [00:55<01:54,  5.88it/s]CFD PINN training progress:  33%|███▎      | 326/1000 [00:55<01:54,  5.89it/s]CFD PINN training progress:  33%|███▎      | 327/1000 [00:55<01:54,  5.88it/s]CFD PINN training progress:  33%|███▎      | 328/1000 [00:55<01:54,  5.88it/s]CFD PINN training progress:  33%|███▎      | 329/1000 [00:56<01:54,  5.87it/s]CFD PINN training progress:  33%|███▎      | 330/1000 [00:56<01:54,  5.87it/s]CFD PINN training progress:  33%|███▎      | 331/1000 [00:56<01:53,  5.87it/s]CFD PINN training progress:  33%|███▎      | 332/1000 [00:56<01:53,  5.87it/s]CFD PINN training progress:  33%|███▎      | 333/1000 [00:56<01:53,  5.87it/s]CFD PINN training progress:  33%|███▎      | 334/1000 [00:56<01:53,  5.87it/s]CFD PINN training progress:  34%|███▎      | 335/1000 [00:57<01:53,  5.87it/s]CFD PINN training progress:  34%|███▎      | 336/1000 [00:57<01:53,  5.87it/s]CFD PINN training progress:  34%|███▎      | 337/1000 [00:57<01:52,  5.88it/s]CFD PINN training progress:  34%|███▍      | 338/1000 [00:57<01:52,  5.88it/s]CFD PINN training progress:  34%|███▍      | 339/1000 [00:57<01:52,  5.88it/s]CFD PINN training progress:  34%|███▍      | 340/1000 [00:57<01:52,  5.89it/s]CFD PINN training progress:  34%|███▍      | 341/1000 [00:58<01:51,  5.89it/s]CFD PINN training progress:  34%|███▍      | 342/1000 [00:58<01:51,  5.89it/s]CFD PINN training progress:  34%|███▍      | 343/1000 [00:58<01:51,  5.88it/s]CFD PINN training progress:  34%|███▍      | 344/1000 [00:58<01:51,  5.89it/s]CFD PINN training progress:  34%|███▍      | 345/1000 [00:58<01:51,  5.88it/s]CFD PINN training progress:  35%|███▍      | 346/1000 [00:58<01:51,  5.87it/s]CFD PINN training progress:  35%|███▍      | 347/1000 [00:59<01:51,  5.87it/s]CFD PINN training progress:  35%|███▍      | 348/1000 [00:59<01:51,  5.87it/s]CFD PINN training progress:  35%|███▍      | 349/1000 [00:59<01:50,  5.87it/s]CFD PINN training progress:  35%|███▌      | 350/1000 [00:59<01:50,  5.88it/s]CFD PINN training progress:  35%|███▌      | 351/1000 [00:59<01:50,  5.88it/s]CFD PINN training progress:  35%|███▌      | 352/1000 [00:59<01:50,  5.87it/s]CFD PINN training progress:  35%|███▌      | 353/1000 [01:00<01:50,  5.86it/s]CFD PINN training progress:  35%|███▌      | 354/1000 [01:00<01:49,  5.88it/s]tensor(0.0457)
+tensor(0.4039)
+tensor(19.5302)
+tensor(0.0451)
+tensor(0.4000)
+tensor(19.2910)
+tensor(0.0449)
+tensor(0.3987)
+tensor(18.2677)
+tensor(0.0442)
+tensor(0.3922)
+tensor(16.5629)
+tensor(0.0444)
+tensor(0.3976)
+tensor(13.4611)
+tensor(0.0409)
+tensor(0.3709)
+tensor(14.9070)
+tensor(0.0443)
+tensor(0.4066)
+tensor(16.6205)
+tensor(0.0456)
+tensor(0.4226)
+tensor(15.7262)
+tensor(0.0437)
+tensor(0.4038)
+tensor(12.5556)
+tensor(0.0397)
+tensor(0.3664)
+tensor(17.3570)
+tensor(0.0484)
+tensor(0.4496)
+tensor(17.4677)
+tensor(0.0481)
+tensor(0.4509)
+tensor(17.1805)
+tensor(0.0442)
+tensor(0.4164)
+tensor(15.7366)
+tensor(0.0372)
+tensor(0.3506)
+tensor(13.9286)
+tensor(0.0358)
+tensor(0.3362)
+tensor(13.3162)
+tensor(0.0330)
+tensor(0.3111)
+tensor(14.8105)
+tensor(0.0330)
+tensor(0.3140)
+tensor(15.1864)
+tensor(0.0322)
+tensor(0.3078)
+tensor(15.4620)
+tensor(0.0341)
+tensor(0.3262)
+tensor(13.6156)
+tensor(0.0330)
+tensor(0.3159)
+tensor(13.8373)
+tensor(0.0350)
+tensor(0.3356)
+tensor(14.5126)
+tensor(0.0357)
+tensor(0.3447)
+tensor(16.4244)
+tensor(0.0379)
+tensor(0.3698)
+tensor(14.5391)
+tensor(0.0352)
+tensor(0.3440)
+tensor(15.3278)
+tensor(0.0400)
+tensor(0.3910)
+tensor(12.5248)
+tensor(0.0367)
+tensor(0.3589)
+tensor(14.5569)
+tensor(0.0415)
+tensor(0.4094)
+tensor(14.4401)
+tensor(0.0400)
+tensor(0.3974)
+tensor(15.1861)
+tensor(0.0429)
+tensor(0.4283)
+tensor(13.4358)
+tensor(0.0402)
+tensor(0.4014)
+tensor(14.0155)
+tensor(0.0465)
+tensor(0.4653)
+tensor(12.2527)
+tensor(0.0438)
+tensor(0.4399)
+tensor(14.5440)
+tensor(0.0524)
+tensor(0.5329)
+tensor(13.9667)
+tensor(0.0510)
+tensor(0.5215)
+tensor(13.5587)
+tensor(0.0573)
+tensor(0.5897)
+tensor(11.9631)
+tensor(0.0540)
+tensor(0.5559)
+tensor(14.3653)
+tensor(0.0653)
+tensor(0.6793)
+tensor(12.8207)
+tensor(0.0598)
+tensor(0.6238)
+tensor(13.4065)
+tensor(0.0703)
+tensor(0.7390)
+tensor(12.8557)
+tensor(0.0695)
+tensor(0.7321)
+tensor(13.3295)
+tensor(0.0807)
+tensor(0.8600)
+tensor(12.1541)
+tensor(0.0752)
+tensor(0.8053)
+tensor(13.6537)
+tensor(0.0901)
+tensor(0.9749)
+tensor(12.8269)
+tensor(0.0859)
+tensor(0.9312)
+tensor(13.3003)
+tensor(0.0999)
+tensor(1.0857)
+tensor(12.6769)
+tensor(0.0990)
+tensor(1.0785)
+tensor(12.3050)
+tensor(0.1138)
+tensor(1.2572)
+tensor(12.6063)
+tensor(0.1124)
+tensor(1.2558)
+tensor(14.3227)
+tensor(0.1290)
+tensor(1.4641)
+tensor(12.7504)
+tensor(0.1181)
+tensor(1.3224)
+tensor(11.8039)
+tensor(0.1275)
+tensor(1.4201)
+tensor(13.1227)
+tensor(0.1234)
+tensor(1.3764)
+tensor(14.8955)
+tensor(0.1303)
+tensor(1.4699)
+tensor(13.6556)
+tensor(0.1106)
+tensor(1.2296)
+tensor(12.6213)
+tensor(0.1069)
+tensor(1.1624)
+tensor(12.7366)
+tensor(0.0869)
+tensor(0.9334)
+tensor(15.2085)
+tensor(0.0771)
+tensor(0.8208)
+tensor(15.7548)
+tensor(0.0587)
+tensor(0.6119)
+tensor(11.0473)
+tensor(0.0422)
+tensor(0.4281)
+tensor(10.7943)
+tensor(0.0385)
+tensor(0.3835)
+tensor(11.9666)
+tensor(0.0311)
+tensor(0.3096)
+tensor(12.9065)
+tensor(0.0435)
+tensor(0.4354)
+tensor(12.4811)
+tensor(0.0521)
+tensor(0.5272)
+tensor(12.7849)
+tensor(0.0441)
+tensor(0.4506)
+tensor(16.5486)
+tensor(0.0524)
+tensor(0.5341)
+tensor(12.1918)
+tensor(0.0547)
+tensor(0.5482)
+tensor(14.2826)
+tensor(0.0564)
+tensor(0.5612)
+tensor(16.1026)
+tensor(0.0700)
+tensor(0.7025)
+tensor(13.8663)
+tensor(0.0601)
+tensor(0.6130)
+tensor(13.8950)
+tensor(0.0580)
+tensor(0.5961)
+tensor(13.4633)
+tensor(0.0492)
+tensor(0.5017)
+tensor(15.9523)
+tensor(0.0474)
+tensor(0.4745)
+tensor(16.5748)
+tensor(0.0388)
+tensor(0.3813)
+tensor(14.9190)
+tensor(0.0325)
+tensor(0.3169)
+tensor(13.4501)
+tensor(0.0310)
+tensor(0.3044)
+tensor(11.6398)
+tensor(0.0278)
+tensor(0.2751)
+tensor(11.6179)
+tensor(0.0244)
+tensor(0.2427)
+tensor(13.1693)
+tensor(0.0232)
+tensor(0.2306)
+tensor(15.4166)
+tensor(0.0255)
+tensor(0.2500)
+tensor(13.6788)
+tensor(0.0296)
+tensor(0.2880)
+tensor(12.7442)
+tensor(0.0304)
+tensor(0.2993)
+tensor(13.5207)
+tensor(0.0371)
+tensor(0.3733)
+tensor(13.8740)
+tensor(0.0410)
+tensor(0.4210)
+tensor(16.3799)
+tensor(0.0434)
+tensor(0.4501)
+tensor(11.2510)
+tensor(0.0318)
+tensor(0.3276)
+tensor(13.0681)
+tensor(0.0344)
+tensor(0.3532)
+tensor(16.0819)
+tensor(0.0395)
+tensor(0.4072)
+tensor(14.4732)
+tensor(0.0416)
+tensor(0.4350)
+tensor(12.0394)
+tensor(0.0392)
+tensor(0.4133)
+tensor(11.9987)
+tensor(0.0417)
+tensor(0.4437)
+tensor(11.9746)
+tensor(0.0358)
+tensor(0.3842)
+tensor(15.3200)
+tensor(0.0372)
+tensor(0.3987)
+tensor(17.2891)
+tensor(0.0361)
+tensor(0.3826)
+tensor(14.1877)
+tensor(0.0297)
+tensor(0.3143)
+tensor(14.1918)
+tensor(0.0283)
+tensor(0.2988)
+tensor(11.8787)
+tensor(0.0229)
+tensor(0.2442)
+tensor(12.2873)
+tensor(0.0202)
+tensor(0.2174)
+tensor(12.0647)
+tensor(0.0181)
+tensor(0.1955)
+tensor(13.9782)
+tensor(0.0181)
+tensor(0.1932)
+tensor(16.8243)
+tensor(0.0194)
+tensor(0.2065)
+tensor(13.9590)
+tensor(0.0201)
+tensor(0.2139)
+tensor(12.2241)
+tensor(0.0247)
+tensor(0.2638)
+tensor(11.9446)
+tensor(0.0285)
+tensor(0.3079)
+tensor(12.0758)
+tensor(0.0315)
+tensor(0.3435)
+tensor(11.8694)
+tensor(0.0356)
+tensor(0.3892)
+tensor(12.1366)
+tensor(0.0403)
+tensor(0.4419)
+tensor(12.1435)
+tensor(0.0529)
+tensor(0.5839)
+tensor(12.7574)
+tensor(0.0691)
+tensor(0.7705)
+tensor(11.5227)
+tensor(0.1066)
+tensor(1.2178)
+tensor(14.7017)
+tensor(0.1823)
+tensor(2.1791)
+tensor(13.8874)
+tensor(0.4496)
+tensor(5.5363)
+tensor(16.2955)
+tensor(1.2698)
+tensor(11.4329)
+tensor(15.0850)
+tensor(2.6604)
+tensor(14.2529)
+tensor(12.6400)
+tensor(1.3866)
+tensor(9.8482)
+tensor(14.8032)
+tensor(3.2911)
+tensor(12.8283)
+tensor(17.5257)
+tensor(1.7552)
+tensor(8.5139)
+tensor(14.5575)
+tensor(3.4270)
+tensor(14.9409)
+tensor(11.8389)
+tensor(2.3086)
+tensor(12.5837)
+tensor(14.3455)
+tensor(1.4896)
+tensor(10.4417)
+tensor(15.7493)
+tensor(2.3425)
+tensor(12.9494)
+tensor(11.9056)
+tensor(1.3092)
+tensor(9.0147)
+tensor(10.6986)
+tensor(1.0565)
+tensor(8.7163)
+tensor(14.0868)
+tensor(1.9252)
+tensor(15.1015)
+tensor(12.2846)
+tensor(1.4751)
+tensor(12.1101)
+tensor(12.0978)
+tensor(0.7028)
+tensor(5.4488)
+tensor(15.9756)
+tensor(1.0537)
+tensor(6.5044)
+tensor(16.4732)
+tensor(1.2770)
+tensor(7.0286)
+tensor(11.1234)
+tensor(0.6806)
+tensor(3.7674)
+tensor(12.4838)
+tensor(0.8773)
+tensor(4.9690)
+tensor(12.8869)
+tensor(1.2889)
+tensor(7.7216)
+tensor(11.9939)
+tensor(1.2723)
+tensor(8.8990)
+tensor(11.3920)
+tensor(0.9017)
+tensor(7.3256)
+tensor(11.9598)
+tensor(0.5745)
+tensor(5.1564)
+tensor(17.3264)
+tensor(0.7781)
+tensor(7.1300)
+tensor(17.0263)
+tensor(0.7332)
+tensor(6.4242)
+tensor(17.2523)
+tensor(0.6220)
+tensor(5.4103)
+tensor(11.2063)
+tensor(0.5200)
+tensor(4.7747)
+tensor(11.6450)
+tensor(0.6837)
+tensor(6.4939)
+tensor(12.9887)
+tensor(0.7624)
+tensor(6.7342)
+tensor(14.7335)
+tensor(0.6777)
+tensor(5.7175)
+tensor(13.5350)
+tensor(0.4507)
+tensor(3.6462)
+tensor(18.3139)
+tensor(0.5622)
+tensor(4.2997)
+tensor(16.4593)
+tensor(0.5174)
+tensor(3.7668)
+tensor(13.6610)
+tensor(0.3551)
+tensor(2.5060)
+tensor(13.0708)
+tensor(0.3511)
+tensor(2.5019)
+tensor(11.3219)
+tensor(0.3998)
+tensor(2.9637)
+tensor(12.3529)
+tensor(0.5009)
+tensor(3.8411)
+tensor(14.7716)
+tensor(0.5796)
+tensor(4.4670)
+tensor(19.7493)
+tensor(0.5622)
+tensor(4.4305)
+tensor(15.3583)
+tensor(0.4068)
+tensor(3.3322)
+tensor(13.8947)
+tensor(0.4133)
+tensor(3.4544)
+tensor(12.9858)
+tensor(0.3692)
+tensor(3.1371)
+tensor(14.1083)
+tensor(0.3055)
+tensor(2.6740)
+tensor(14.9110)
+tensor(0.2675)
+tensor(2.4104)
+tensor(13.5315)
+tensor(0.3052)
+tensor(2.7819)
+tensor(13.1560)
+tensor(0.3363)
+tensor(3.0431)
+tensor(16.1934)
+tensor(0.3549)
+tensor(3.1765)
+tensor(16.4731)
+tensor(0.3153)
+tensor(2.7986)
+tensor(13.1451)
+tensor(0.2864)
+tensor(2.5024)
+tensor(13.9725)
+tensor(0.3237)
+tensor(2.7726)
+tensor(13.5020)
+tensor(0.2571)
+tensor(2.1736)
+tensor(10.7036)
+tensor(0.1358)
+tensor(1.1325)
+tensor(11.6852)
+tensor(0.1368)
+tensor(1.1172)
+tensor(9.7928)
+tensor(0.1589)
+tensor(1.2737)
+tensor(10.8374)
+tensor(0.1979)
+tensor(1.5680)
+tensor(11.5272)
+tensor(0.1864)
+tensor(1.4702)
+tensor(15.2657)
+tensor(0.1965)
+tensor(1.5524)
+tensor(15.1114)
+tensor(0.1897)
+tensor(1.5041)
+tensor(12.0655)
+tensor(0.1714)
+tensor(1.3647)
+tensor(12.9522)
+tensor(0.1835)
+tensor(1.4718)
+tensor(13.1582)
+tensor(0.1577)
+tensor(1.2824)
+tensor(15.1579)
+tensor(0.1536)
+tensor(1.2710)
+tensor(14.5581)
+tensor(0.1505)
+tensor(1.2656)
+tensor(12.3402)
+tensor(0.1428)
+tensor(1.2169)
+tensor(11.1894)
+tensor(0.1344)
+tensor(1.1542)
+tensor(11.1233)
+tensor(0.1273)
+tensor(1.0957)
+tensor(12.5495)
+tensor(0.1207)
+tensor(1.0339)
+tensor(12.6582)
+tensor(0.1107)
+tensor(0.9379)
+CFD PINN training progress:  36%|███▌      | 355/1000 [01:00<01:49,  5.87it/s]CFD PINN training progress:  36%|███▌      | 356/1000 [01:00<01:49,  5.86it/s]CFD PINN training progress:  36%|███▌      | 357/1000 [01:00<01:49,  5.87it/s]CFD PINN training progress:  36%|███▌      | 358/1000 [01:01<01:49,  5.87it/s]CFD PINN training progress:  36%|███▌      | 359/1000 [01:01<01:49,  5.87it/s]CFD PINN training progress:  36%|███▌      | 360/1000 [01:01<01:49,  5.87it/s]CFD PINN training progress:  36%|███▌      | 361/1000 [01:01<01:48,  5.88it/s]CFD PINN training progress:  36%|███▌      | 362/1000 [01:01<01:48,  5.88it/s]CFD PINN training progress:  36%|███▋      | 363/1000 [01:01<01:48,  5.87it/s]CFD PINN training progress:  36%|███▋      | 364/1000 [01:02<01:48,  5.87it/s]CFD PINN training progress:  36%|███▋      | 365/1000 [01:02<01:48,  5.87it/s]CFD PINN training progress:  37%|███▋      | 366/1000 [01:02<01:48,  5.87it/s]CFD PINN training progress:  37%|███▋      | 367/1000 [01:02<01:47,  5.86it/s]CFD PINN training progress:  37%|███▋      | 368/1000 [01:02<01:47,  5.87it/s]CFD PINN training progress:  37%|███▋      | 369/1000 [01:02<01:47,  5.88it/s]CFD PINN training progress:  37%|███▋      | 370/1000 [01:03<01:47,  5.87it/s]CFD PINN training progress:  37%|███▋      | 371/1000 [01:03<01:46,  5.88it/s]CFD PINN training progress:  37%|███▋      | 372/1000 [01:03<01:46,  5.89it/s]CFD PINN training progress:  37%|███▋      | 373/1000 [01:03<01:46,  5.89it/s]CFD PINN training progress:  37%|███▋      | 374/1000 [01:03<01:46,  5.89it/s]CFD PINN training progress:  38%|███▊      | 375/1000 [01:03<01:46,  5.88it/s]CFD PINN training progress:  38%|███▊      | 376/1000 [01:04<01:46,  5.88it/s]CFD PINN training progress:  38%|███▊      | 377/1000 [01:04<01:45,  5.89it/s]CFD PINN training progress:  38%|███▊      | 378/1000 [01:04<01:45,  5.89it/s]CFD PINN training progress:  38%|███▊      | 379/1000 [01:04<01:45,  5.90it/s]CFD PINN training progress:  38%|███▊      | 380/1000 [01:04<01:45,  5.90it/s]CFD PINN training progress:  38%|███▊      | 381/1000 [01:04<01:45,  5.89it/s]CFD PINN training progress:  38%|███▊      | 382/1000 [01:05<01:44,  5.89it/s]CFD PINN training progress:  38%|███▊      | 383/1000 [01:05<01:44,  5.88it/s]CFD PINN training progress:  38%|███▊      | 384/1000 [01:05<01:44,  5.90it/s]CFD PINN training progress:  38%|███▊      | 385/1000 [01:05<01:44,  5.89it/s]CFD PINN training progress:  39%|███▊      | 386/1000 [01:05<01:44,  5.89it/s]CFD PINN training progress:  39%|███▊      | 387/1000 [01:05<01:44,  5.88it/s]CFD PINN training progress:  39%|███▉      | 388/1000 [01:06<01:44,  5.88it/s]CFD PINN training progress:  39%|███▉      | 389/1000 [01:06<01:43,  5.89it/s]CFD PINN training progress:  39%|███▉      | 390/1000 [01:06<01:43,  5.89it/s]CFD PINN training progress:  39%|███▉      | 391/1000 [01:06<01:43,  5.89it/s]CFD PINN training progress:  39%|███▉      | 392/1000 [01:06<01:43,  5.88it/s]CFD PINN training progress:  39%|███▉      | 393/1000 [01:06<01:43,  5.88it/s]CFD PINN training progress:  39%|███▉      | 394/1000 [01:07<01:43,  5.88it/s]CFD PINN training progress:  40%|███▉      | 395/1000 [01:07<01:42,  5.88it/s]CFD PINN training progress:  40%|███▉      | 396/1000 [01:07<01:42,  5.88it/s]CFD PINN training progress:  40%|███▉      | 397/1000 [01:07<01:42,  5.88it/s]CFD PINN training progress:  40%|███▉      | 398/1000 [01:07<01:42,  5.87it/s]CFD PINN training progress:  40%|███▉      | 399/1000 [01:07<01:42,  5.88it/s]CFD PINN training progress:  40%|████      | 400/1000 [01:08<01:42,  5.88it/s]CFD PINN training progress:  40%|████      | 401/1000 [01:08<01:42,  5.87it/s]CFD PINN training progress:  40%|████      | 402/1000 [01:08<01:41,  5.87it/s]CFD PINN training progress:  40%|████      | 403/1000 [01:08<01:41,  5.86it/s]CFD PINN training progress:  40%|████      | 404/1000 [01:08<01:41,  5.86it/s]CFD PINN training progress:  40%|████      | 405/1000 [01:09<01:41,  5.86it/s]CFD PINN training progress:  41%|████      | 406/1000 [01:09<01:41,  5.86it/s]CFD PINN training progress:  41%|████      | 407/1000 [01:09<01:40,  5.87it/s]CFD PINN training progress:  41%|████      | 408/1000 [01:09<01:40,  5.88it/s]CFD PINN training progress:  41%|████      | 409/1000 [01:09<01:40,  5.88it/s]CFD PINN training progress:  41%|████      | 410/1000 [01:09<01:40,  5.89it/s]CFD PINN training progress:  41%|████      | 411/1000 [01:10<01:39,  5.90it/s]CFD PINN training progress:  41%|████      | 412/1000 [01:10<01:40,  5.87it/s]CFD PINN training progress:  41%|████▏     | 413/1000 [01:10<01:39,  5.88it/s]CFD PINN training progress:  41%|████▏     | 414/1000 [01:10<01:39,  5.88it/s]CFD PINN training progress:  42%|████▏     | 415/1000 [01:10<01:39,  5.89it/s]CFD PINN training progress:  42%|████▏     | 416/1000 [01:10<01:39,  5.89it/s]CFD PINN training progress:  42%|████▏     | 417/1000 [01:11<01:38,  5.89it/s]CFD PINN training progress:  42%|████▏     | 418/1000 [01:11<01:38,  5.90it/s]CFD PINN training progress:  42%|████▏     | 419/1000 [01:11<01:38,  5.90it/s]CFD PINN training progress:  42%|████▏     | 420/1000 [01:11<01:38,  5.91it/s]CFD PINN training progress:  42%|████▏     | 421/1000 [01:11<01:38,  5.91it/s]CFD PINN training progress:  42%|████▏     | 422/1000 [01:11<01:37,  5.90it/s]CFD PINN training progress:  42%|████▏     | 423/1000 [01:12<01:37,  5.89it/s]CFD PINN training progress:  42%|████▏     | 424/1000 [01:12<01:37,  5.89it/s]CFD PINN training progress:  42%|████▎     | 425/1000 [01:12<01:37,  5.90it/s]CFD PINN training progress:  43%|████▎     | 426/1000 [01:12<01:37,  5.90it/s]CFD PINN training progress:  43%|████▎     | 427/1000 [01:12<01:37,  5.90it/s]CFD PINN training progress:  43%|████▎     | 428/1000 [01:12<01:37,  5.90it/s]CFD PINN training progress:  43%|████▎     | 429/1000 [01:13<01:36,  5.89it/s]CFD PINN training progress:  43%|████▎     | 430/1000 [01:13<01:36,  5.89it/s]CFD PINN training progress:  43%|████▎     | 431/1000 [01:13<01:36,  5.90it/s]CFD PINN training progress:  43%|████▎     | 432/1000 [01:13<01:36,  5.91it/s]CFD PINN training progress:  43%|████▎     | 433/1000 [01:13<01:36,  5.91it/s]CFD PINN training progress:  43%|████▎     | 434/1000 [01:13<01:35,  5.90it/s]CFD PINN training progress:  44%|████▎     | 435/1000 [01:14<01:35,  5.90it/s]CFD PINN training progress:  44%|████▎     | 436/1000 [01:14<01:35,  5.90it/s]CFD PINN training progress:  44%|████▎     | 437/1000 [01:14<01:35,  5.89it/s]CFD PINN training progress:  44%|████▍     | 438/1000 [01:14<01:35,  5.90it/s]CFD PINN training progress:  44%|████▍     | 439/1000 [01:14<01:35,  5.90it/s]CFD PINN training progress:  44%|████▍     | 440/1000 [01:14<01:35,  5.89it/s]CFD PINN training progress:  44%|████▍     | 441/1000 [01:15<01:34,  5.89it/s]CFD PINN training progress:  44%|████▍     | 442/1000 [01:15<01:34,  5.89it/s]CFD PINN training progress:  44%|████▍     | 443/1000 [01:15<01:34,  5.89it/s]CFD PINN training progress:  44%|████▍     | 444/1000 [01:15<01:34,  5.90it/s]CFD PINN training progress:  44%|████▍     | 445/1000 [01:15<01:33,  5.90it/s]CFD PINN training progress:  45%|████▍     | 446/1000 [01:15<01:33,  5.91it/s]CFD PINN training progress:  45%|████▍     | 447/1000 [01:16<01:33,  5.91it/s]CFD PINN training progress:  45%|████▍     | 448/1000 [01:16<01:33,  5.91it/s]CFD PINN training progress:  45%|████▍     | 449/1000 [01:16<01:33,  5.91it/s]CFD PINN training progress:  45%|████▌     | 450/1000 [01:16<01:33,  5.90it/s]CFD PINN training progress:  45%|████▌     | 451/1000 [01:16<01:33,  5.90it/s]CFD PINN training progress:  45%|████▌     | 452/1000 [01:16<01:32,  5.90it/s]CFD PINN training progress:  45%|████▌     | 453/1000 [01:17<01:32,  5.89it/s]CFD PINN training progress:  45%|████▌     | 454/1000 [01:17<01:32,  5.89it/s]CFD PINN training progress:  46%|████▌     | 455/1000 [01:17<01:32,  5.89it/s]CFD PINN training progress:  46%|████▌     | 456/1000 [01:17<01:32,  5.89it/s]CFD PINN training progress:  46%|████▌     | 457/1000 [01:17<01:32,  5.90it/s]CFD PINN training progress:  46%|████▌     | 458/1000 [01:18<01:32,  5.88it/s]CFD PINN training progress:  46%|████▌     | 459/1000 [01:18<01:32,  5.87it/s]CFD PINN training progress:  46%|████▌     | 460/1000 [01:18<01:32,  5.86it/s]CFD PINN training progress:  46%|████▌     | 461/1000 [01:18<01:31,  5.87it/s]CFD PINN training progress:  46%|████▌     | 462/1000 [01:18<01:31,  5.88it/s]CFD PINN training progress:  46%|████▋     | 463/1000 [01:18<01:31,  5.88it/s]CFD PINN training progress:  46%|████▋     | 464/1000 [01:19<01:31,  5.88it/s]CFD PINN training progress:  46%|████▋     | 465/1000 [01:19<01:30,  5.89it/s]CFD PINN training progress:  47%|████▋     | 466/1000 [01:19<01:30,  5.89it/s]CFD PINN training progress:  47%|████▋     | 467/1000 [01:19<01:30,  5.89it/s]CFD PINN training progress:  47%|████▋     | 468/1000 [01:19<01:30,  5.89it/s]CFD PINN training progress:  47%|████▋     | 469/1000 [01:19<01:30,  5.89it/s]CFD PINN training progress:  47%|████▋     | 470/1000 [01:20<01:29,  5.89it/s]CFD PINN training progress:  47%|████▋     | 471/1000 [01:20<01:29,  5.90it/s]CFD PINN training progress:  47%|████▋     | 472/1000 [01:20<01:29,  5.90it/s]CFD PINN training progress:  47%|████▋     | 473/1000 [01:20<01:29,  5.89it/s]CFD PINN training progress:  47%|████▋     | 474/1000 [01:20<01:29,  5.90it/s]CFD PINN training progress:  48%|████▊     | 475/1000 [01:20<01:29,  5.90it/s]CFD PINN training progress:  48%|████▊     | 476/1000 [01:21<01:28,  5.90it/s]CFD PINN training progress:  48%|████▊     | 477/1000 [01:21<01:28,  5.89it/s]CFD PINN training progress:  48%|████▊     | 478/1000 [01:21<01:28,  5.89it/s]CFD PINN training progress:  48%|████▊     | 479/1000 [01:21<01:28,  5.88it/s]CFD PINN training progress:  48%|████▊     | 480/1000 [01:21<01:28,  5.88it/s]CFD PINN training progress:  48%|████▊     | 481/1000 [01:21<01:28,  5.88it/s]CFD PINN training progress:  48%|████▊     | 482/1000 [01:22<01:28,  5.88it/s]CFD PINN training progress:  48%|████▊     | 483/1000 [01:22<01:27,  5.88it/s]CFD PINN training progress:  48%|████▊     | 484/1000 [01:22<01:27,  5.89it/s]CFD PINN training progress:  48%|████▊     | 485/1000 [01:22<01:27,  5.88it/s]CFD PINN training progress:  49%|████▊     | 486/1000 [01:22<01:27,  5.88it/s]CFD PINN training progress:  49%|████▊     | 487/1000 [01:22<01:27,  5.88it/s]CFD PINN training progress:  49%|████▉     | 488/1000 [01:23<01:27,  5.84it/s]CFD PINN training progress:  49%|████▉     | 489/1000 [01:23<01:27,  5.85it/s]CFD PINN training progress:  49%|████▉     | 490/1000 [01:23<01:26,  5.87it/s]CFD PINN training progress:  49%|████▉     | 491/1000 [01:23<01:26,  5.87it/s]CFD PINN training progress:  49%|████▉     | 492/1000 [01:23<01:26,  5.88it/s]CFD PINN training progress:  49%|████▉     | 493/1000 [01:23<01:26,  5.89it/s]CFD PINN training progress:  49%|████▉     | 494/1000 [01:24<01:25,  5.89it/s]CFD PINN training progress:  50%|████▉     | 495/1000 [01:24<01:25,  5.89it/s]CFD PINN training progress:  50%|████▉     | 496/1000 [01:24<01:25,  5.89it/s]CFD PINN training progress:  50%|████▉     | 497/1000 [01:24<01:25,  5.89it/s]CFD PINN training progress:  50%|████▉     | 498/1000 [01:24<01:25,  5.88it/s]CFD PINN training progress:  50%|████▉     | 499/1000 [01:24<01:25,  5.89it/s]CFD PINN training progress:  50%|█████     | 500/1000 [01:25<01:24,  5.89it/s]CFD PINN training progress:  50%|█████     | 501/1000 [01:25<01:24,  5.89it/s]CFD PINN training progress:  50%|█████     | 502/1000 [01:25<01:24,  5.90it/s]CFD PINN training progress:  50%|█████     | 503/1000 [01:25<01:24,  5.91it/s]CFD PINN training progress:  50%|█████     | 504/1000 [01:25<01:23,  5.91it/s]CFD PINN training progress:  50%|█████     | 505/1000 [01:25<01:23,  5.91it/s]CFD PINN training progress:  51%|█████     | 506/1000 [01:26<01:23,  5.91it/s]CFD PINN training progress:  51%|█████     | 507/1000 [01:26<01:23,  5.90it/s]CFD PINN training progress:  51%|█████     | 508/1000 [01:26<01:23,  5.90it/s]CFD PINN training progress:  51%|█████     | 509/1000 [01:26<01:23,  5.90it/s]CFD PINN training progress:  51%|█████     | 510/1000 [01:26<01:23,  5.89it/s]CFD PINN training progress:  51%|█████     | 511/1000 [01:27<01:23,  5.89it/s]CFD PINN training progress:  51%|█████     | 512/1000 [01:27<01:22,  5.89it/s]CFD PINN training progress:  51%|█████▏    | 513/1000 [01:27<01:22,  5.89it/s]CFD PINN training progress:  51%|█████▏    | 514/1000 [01:27<01:22,  5.88it/s]CFD PINN training progress:  52%|█████▏    | 515/1000 [01:27<01:22,  5.88it/s]CFD PINN training progress:  52%|█████▏    | 516/1000 [01:27<01:22,  5.88it/s]CFD PINN training progress:  52%|█████▏    | 517/1000 [01:28<01:22,  5.87it/s]CFD PINN training progress:  52%|█████▏    | 518/1000 [01:28<01:22,  5.87it/s]CFD PINN training progress:  52%|█████▏    | 519/1000 [01:28<01:21,  5.88it/s]CFD PINN training progress:  52%|█████▏    | 520/1000 [01:28<01:21,  5.88it/s]CFD PINN training progress:  52%|█████▏    | 521/1000 [01:28<01:21,  5.88it/s]CFD PINN training progress:  52%|█████▏    | 522/1000 [01:28<01:21,  5.88it/s]CFD PINN training progress:  52%|█████▏    | 523/1000 [01:29<01:21,  5.88it/s]CFD PINN training progress:  52%|█████▏    | 524/1000 [01:29<01:20,  5.89it/s]CFD PINN training progress:  52%|█████▎    | 525/1000 [01:29<01:20,  5.89it/s]CFD PINN training progress:  53%|█████▎    | 526/1000 [01:29<01:20,  5.89it/s]CFD PINN training progress:  53%|█████▎    | 527/1000 [01:29<01:20,  5.90it/s]CFD PINN training progress:  53%|█████▎    | 528/1000 [01:29<01:20,  5.89it/s]CFD PINN training progress:  53%|█████▎    | 529/1000 [01:30<01:20,  5.88it/s]CFD PINN training progress:  53%|█████▎    | 530/1000 [01:30<01:19,  5.89it/s]CFD PINN training progress:  53%|█████▎    | 531/1000 [01:30<01:19,  5.89it/s]CFD PINN training progress:  53%|█████▎    | 532/1000 [01:30<01:19,  5.88it/s]tensor(11.9842)
+tensor(0.1022)
+tensor(0.8551)
+tensor(12.1575)
+tensor(0.1047)
+tensor(0.8670)
+tensor(13.0060)
+tensor(0.1096)
+tensor(0.9002)
+tensor(15.6231)
+tensor(0.1153)
+tensor(0.9436)
+tensor(15.3624)
+tensor(0.1111)
+tensor(0.9083)
+tensor(12.5787)
+tensor(0.0994)
+tensor(0.8136)
+tensor(10.6486)
+tensor(0.0903)
+tensor(0.7419)
+tensor(10.5541)
+tensor(0.0873)
+tensor(0.7217)
+tensor(12.3124)
+tensor(0.0883)
+tensor(0.7357)
+tensor(14.5269)
+tensor(0.0875)
+tensor(0.7326)
+tensor(13.5430)
+tensor(0.0815)
+tensor(0.6847)
+tensor(12.0004)
+tensor(0.0767)
+tensor(0.6466)
+tensor(12.4103)
+tensor(0.0772)
+tensor(0.6533)
+tensor(14.1294)
+tensor(0.0806)
+tensor(0.6861)
+tensor(14.9006)
+tensor(0.0787)
+tensor(0.6731)
+tensor(12.6131)
+tensor(0.0699)
+tensor(0.5985)
+tensor(11.1075)
+tensor(0.0646)
+tensor(0.5539)
+tensor(11.8743)
+tensor(0.0662)
+tensor(0.5693)
+tensor(13.9381)
+tensor(0.0680)
+tensor(0.5865)
+tensor(14.6159)
+tensor(0.0626)
+tensor(0.5402)
+tensor(13.8727)
+tensor(0.0587)
+tensor(0.5052)
+tensor(14.8150)
+tensor(0.0612)
+tensor(0.5268)
+tensor(15.4587)
+tensor(0.0631)
+tensor(0.5451)
+tensor(14.7769)
+tensor(0.0633)
+tensor(0.5484)
+tensor(14.3273)
+tensor(0.0619)
+tensor(0.5363)
+tensor(13.7017)
+tensor(0.0598)
+tensor(0.5193)
+tensor(13.4719)
+tensor(0.0584)
+tensor(0.5087)
+tensor(14.2664)
+tensor(0.0596)
+tensor(0.5224)
+tensor(14.6076)
+tensor(0.0583)
+tensor(0.5129)
+tensor(16.2733)
+tensor(0.0590)
+tensor(0.5206)
+tensor(18.7885)
+tensor(0.0604)
+tensor(0.5328)
+tensor(19.1741)
+tensor(0.0621)
+tensor(0.5492)
+tensor(16.8262)
+tensor(0.0627)
+tensor(0.5584)
+tensor(16.3646)
+tensor(0.0615)
+tensor(0.5501)
+tensor(16.4251)
+tensor(0.0589)
+tensor(0.5293)
+tensor(15.1118)
+tensor(0.0574)
+tensor(0.5186)
+tensor(15.5214)
+tensor(0.0572)
+tensor(0.5223)
+tensor(16.0464)
+tensor(0.0547)
+tensor(0.5019)
+tensor(16.9873)
+tensor(0.0549)
+tensor(0.5042)
+tensor(18.4397)
+tensor(0.0564)
+tensor(0.5190)
+tensor(18.9643)
+tensor(0.0579)
+tensor(0.5339)
+tensor(19.6820)
+tensor(0.0584)
+tensor(0.5378)
+tensor(18.4229)
+tensor(0.0581)
+tensor(0.5347)
+tensor(17.7400)
+tensor(0.0572)
+tensor(0.5309)
+tensor(17.7426)
+tensor(0.0556)
+tensor(0.5213)
+tensor(17.6310)
+tensor(0.0538)
+tensor(0.5059)
+tensor(17.5019)
+tensor(0.0525)
+tensor(0.4966)
+tensor(18.6762)
+tensor(0.0521)
+tensor(0.4966)
+tensor(19.7782)
+tensor(0.0521)
+tensor(0.4974)
+tensor(19.3389)
+tensor(0.0525)
+tensor(0.4995)
+tensor(18.9482)
+tensor(0.0528)
+tensor(0.5081)
+tensor(19.0118)
+tensor(0.0522)
+tensor(0.5032)
+tensor(18.5191)
+tensor(0.0505)
+tensor(0.4887)
+tensor(17.7742)
+tensor(0.0487)
+tensor(0.4769)
+tensor(17.5538)
+tensor(0.0469)
+tensor(0.4639)
+tensor(17.1650)
+tensor(0.0456)
+tensor(0.4510)
+tensor(17.7537)
+tensor(0.0454)
+tensor(0.4509)
+tensor(18.8183)
+tensor(0.0462)
+tensor(0.4614)
+tensor(19.4077)
+tensor(0.0472)
+tensor(0.4689)
+tensor(19.6635)
+tensor(0.0479)
+tensor(0.4758)
+tensor(19.1728)
+tensor(0.0479)
+tensor(0.4798)
+tensor(19.6632)
+tensor(0.0468)
+tensor(0.4698)
+tensor(18.7687)
+tensor(0.0453)
+tensor(0.4548)
+tensor(19.0840)
+tensor(0.0440)
+tensor(0.4466)
+tensor(19.1308)
+tensor(0.0431)
+tensor(0.4393)
+tensor(18.8097)
+tensor(0.0426)
+tensor(0.4333)
+tensor(19.5614)
+tensor(0.0427)
+tensor(0.4350)
+tensor(19.5281)
+tensor(0.0427)
+tensor(0.4364)
+tensor(19.6596)
+tensor(0.0423)
+tensor(0.4310)
+tensor(19.5287)
+tensor(0.0416)
+tensor(0.4263)
+tensor(19.0548)
+tensor(0.0410)
+tensor(0.4224)
+tensor(18.7430)
+tensor(0.0403)
+tensor(0.4153)
+tensor(18.4411)
+tensor(0.0399)
+tensor(0.4115)
+tensor(18.8131)
+tensor(0.0400)
+tensor(0.4140)
+tensor(19.3065)
+tensor(0.0404)
+tensor(0.4177)
+tensor(19.7893)
+tensor(0.0410)
+tensor(0.4220)
+tensor(20.6727)
+tensor(0.0416)
+tensor(0.4295)
+tensor(21.1060)
+tensor(0.0418)
+tensor(0.4315)
+tensor(21.0350)
+tensor(0.0415)
+tensor(0.4278)
+tensor(20.9559)
+tensor(0.0410)
+tensor(0.4250)
+tensor(20.4854)
+tensor(0.0404)
+tensor(0.4197)
+tensor(19.7827)
+tensor(0.0399)
+tensor(0.4148)
+tensor(20.1552)
+tensor(0.0398)
+tensor(0.4149)
+tensor(20.4713)
+tensor(0.0397)
+tensor(0.4152)
+tensor(20.6642)
+tensor(0.0396)
+tensor(0.4135)
+tensor(20.9863)
+tensor(0.0395)
+tensor(0.4136)
+tensor(20.9335)
+tensor(0.0391)
+tensor(0.4114)
+tensor(20.5537)
+tensor(0.0387)
+tensor(0.4072)
+tensor(20.5873)
+tensor(0.0383)
+tensor(0.4057)
+tensor(20.6082)
+tensor(0.0380)
+tensor(0.4035)
+tensor(20.6300)
+tensor(0.0378)
+tensor(0.4019)
+tensor(21.3080)
+tensor(0.0378)
+tensor(0.4035)
+tensor(22.3406)
+tensor(0.0381)
+tensor(0.4075)
+tensor(21.1408)
+tensor(0.0375)
+tensor(0.4017)
+tensor(19.6768)
+tensor(0.0368)
+tensor(0.3972)
+tensor(19.4131)
+tensor(0.0363)
+tensor(0.3910)
+tensor(19.2866)
+tensor(0.0356)
+tensor(0.3843)
+tensor(20.2041)
+tensor(0.0354)
+tensor(0.3847)
+tensor(21.2440)
+tensor(0.0358)
+tensor(0.3859)
+tensor(21.6190)
+tensor(0.0362)
+tensor(0.3921)
+tensor(20.5139)
+tensor(0.0361)
+tensor(0.3919)
+tensor(21.1656)
+tensor(0.0359)
+tensor(0.3899)
+tensor(21.1083)
+tensor(0.0354)
+tensor(0.3871)
+tensor(19.6204)
+tensor(0.0346)
+tensor(0.3779)
+tensor(22.5473)
+tensor(0.0345)
+tensor(0.3797)
+tensor(23.4152)
+tensor(0.0344)
+tensor(0.3778)
+tensor(22.1274)
+tensor(0.0341)
+tensor(0.3765)
+tensor(23.3061)
+tensor(0.0341)
+tensor(0.3778)
+tensor(22.1657)
+tensor(0.0335)
+tensor(0.3727)
+tensor(19.5257)
+tensor(0.0326)
+tensor(0.3647)
+tensor(20.6490)
+tensor(0.0323)
+tensor(0.3622)
+tensor(21.1895)
+tensor(0.0319)
+tensor(0.3600)
+tensor(20.2057)
+tensor(0.0315)
+tensor(0.3559)
+tensor(22.7051)
+tensor(0.0322)
+tensor(0.3644)
+tensor(22.7610)
+tensor(0.0324)
+tensor(0.3665)
+tensor(20.1739)
+tensor(0.0319)
+tensor(0.3629)
+tensor(20.1661)
+tensor(0.0313)
+tensor(0.3563)
+tensor(20.1630)
+tensor(0.0306)
+tensor(0.3506)
+tensor(19.1344)
+tensor(0.0296)
+tensor(0.3422)
+tensor(18.4842)
+tensor(0.0291)
+tensor(0.3368)
+tensor(20.3492)
+tensor(0.0294)
+tensor(0.3417)
+tensor(19.9302)
+tensor(0.0294)
+tensor(0.3429)
+tensor(19.5377)
+tensor(0.0295)
+tensor(0.3424)
+tensor(20.5567)
+tensor(0.0297)
+tensor(0.3468)
+tensor(20.5877)
+tensor(0.0293)
+tensor(0.3422)
+tensor(20.2805)
+tensor(0.0288)
+tensor(0.3376)
+tensor(21.7630)
+tensor(0.0288)
+tensor(0.3388)
+tensor(21.8206)
+tensor(0.0290)
+tensor(0.3379)
+tensor(21.7775)
+tensor(0.0290)
+tensor(0.3409)
+tensor(22.3192)
+tensor(0.0294)
+tensor(0.3416)
+tensor(21.5177)
+tensor(0.0292)
+tensor(0.3419)
+tensor(21.4192)
+tensor(0.0289)
+tensor(0.3371)
+tensor(22.1537)
+tensor(0.0287)
+tensor(0.3358)
+tensor(20.2323)
+tensor(0.0281)
+tensor(0.3294)
+tensor(22.8288)
+tensor(0.0284)
+tensor(0.3338)
+tensor(21.4085)
+tensor(0.0283)
+tensor(0.3302)
+tensor(20.6540)
+tensor(0.0285)
+tensor(0.3367)
+tensor(20.3414)
+tensor(0.0282)
+tensor(0.3299)
+tensor(19.3352)
+tensor(0.0275)
+tensor(0.3273)
+tensor(19.7482)
+tensor(0.0273)
+tensor(0.3231)
+tensor(18.7875)
+tensor(0.0269)
+tensor(0.3181)
+tensor(19.9130)
+tensor(0.0269)
+tensor(0.3227)
+tensor(18.3538)
+tensor(0.0268)
+tensor(0.3158)
+tensor(20.2967)
+tensor(0.0271)
+tensor(0.3226)
+tensor(19.8646)
+tensor(0.0269)
+tensor(0.3188)
+tensor(19.0807)
+tensor(0.0266)
+tensor(0.3136)
+tensor(20.0808)
+tensor(0.0265)
+tensor(0.3154)
+tensor(15.7340)
+tensor(0.0255)
+tensor(0.3011)
+tensor(20.9285)
+tensor(0.0259)
+tensor(0.3085)
+tensor(21.7333)
+tensor(0.0263)
+tensor(0.3119)
+tensor(14.6350)
+tensor(0.0251)
+tensor(0.2964)
+tensor(15.3960)
+tensor(0.0251)
+tensor(0.2987)
+tensor(18.6167)
+tensor(0.0261)
+tensor(0.3112)
+tensor(17.4079)
+tensor(0.0253)
+tensor(0.2998)
+tensor(15.0259)
+tensor(0.0249)
+tensor(0.2983)
+tensor(14.4686)
+tensor(0.0253)
+tensor(0.3058)
+tensor(15.4855)
+tensor(0.0243)
+tensor(0.2917)
+tensor(16.8327)
+tensor(0.0245)
+tensor(0.2944)
+tensor(16.7480)
+tensor(0.0265)
+tensor(0.3205)
+tensor(16.7613)
+tensor(0.0268)
+tensor(0.3220)
+tensor(18.5835)
+tensor(0.0246)
+tensor(0.2946)
+tensor(18.9259)
+tensor(0.0246)
+tensor(0.2969)
+tensor(14.9675)
+tensor(0.0234)
+tensor(0.2812)
+tensor(13.4229)
+tensor(0.0250)
+tensor(0.3003)
+tensor(14.9899)
+tensor(0.0229)
+tensor(0.2776)
+tensor(16.5085)
+tensor(0.0235)
+tensor(0.2843)
+tensor(18.0138)
+tensor(0.0234)
+tensor(0.2817)
+tensor(15.2848)
+tensor(0.0231)
+tensor(0.2779)
+tensor(15.0049)
+tensor(0.0240)
+tensor(0.2895)
+tensor(16.7871)
+tensor(0.0233)
+tensor(0.2801)
+tensor(16.5226)
+tensor(0.0234)
+tensor(0.2811)
+tensor(16.5648)
+tensor(0.0225)
+tensor(0.2718)
+tensor(14.7328)
+tensor(0.0219)
+tensor(0.2652)
+tensor(15.8940)
+tensor(0.0221)
+tensor(0.2667)
+tensor(19.0221)
+tensor(0.0226)
+tensor(0.2739)
+tensor(19.1110)
+tensor(0.0228)
+tensor(0.2751)
+tensor(17.1869)
+tensor(0.0225)
+tensor(0.2711)
+tensor(16.6572)
+tensor(0.0223)
+tensor(0.2690)
+CFD PINN training progress:  53%|█████▎    | 533/1000 [01:30<01:19,  5.86it/s]CFD PINN training progress:  53%|█████▎    | 534/1000 [01:30<01:19,  5.86it/s]CFD PINN training progress:  54%|█████▎    | 535/1000 [01:31<01:19,  5.87it/s]CFD PINN training progress:  54%|█████▎    | 536/1000 [01:31<01:18,  5.88it/s]CFD PINN training progress:  54%|█████▎    | 537/1000 [01:31<01:18,  5.87it/s]CFD PINN training progress:  54%|█████▍    | 538/1000 [01:31<01:18,  5.87it/s]CFD PINN training progress:  54%|█████▍    | 539/1000 [01:31<01:18,  5.87it/s]CFD PINN training progress:  54%|█████▍    | 540/1000 [01:31<01:18,  5.87it/s]CFD PINN training progress:  54%|█████▍    | 541/1000 [01:32<01:18,  5.88it/s]CFD PINN training progress:  54%|█████▍    | 542/1000 [01:32<01:17,  5.88it/s]CFD PINN training progress:  54%|█████▍    | 543/1000 [01:32<01:17,  5.87it/s]CFD PINN training progress:  54%|█████▍    | 544/1000 [01:32<01:17,  5.88it/s]CFD PINN training progress:  55%|█████▍    | 545/1000 [01:32<01:17,  5.88it/s]CFD PINN training progress:  55%|█████▍    | 546/1000 [01:32<01:17,  5.88it/s]CFD PINN training progress:  55%|█████▍    | 547/1000 [01:33<01:17,  5.88it/s]CFD PINN training progress:  55%|█████▍    | 548/1000 [01:33<01:16,  5.88it/s]CFD PINN training progress:  55%|█████▍    | 549/1000 [01:33<01:16,  5.89it/s]CFD PINN training progress:  55%|█████▌    | 550/1000 [01:33<01:16,  5.89it/s]CFD PINN training progress:  55%|█████▌    | 551/1000 [01:33<01:16,  5.90it/s]CFD PINN training progress:  55%|█████▌    | 552/1000 [01:33<01:15,  5.91it/s]CFD PINN training progress:  55%|█████▌    | 553/1000 [01:34<01:15,  5.90it/s]CFD PINN training progress:  55%|█████▌    | 554/1000 [01:34<01:15,  5.88it/s]CFD PINN training progress:  56%|█████▌    | 555/1000 [01:34<01:15,  5.88it/s]CFD PINN training progress:  56%|█████▌    | 556/1000 [01:34<01:15,  5.89it/s]CFD PINN training progress:  56%|█████▌    | 557/1000 [01:34<01:15,  5.89it/s]CFD PINN training progress:  56%|█████▌    | 558/1000 [01:34<01:15,  5.89it/s]CFD PINN training progress:  56%|█████▌    | 559/1000 [01:35<01:14,  5.89it/s]CFD PINN training progress:  56%|█████▌    | 560/1000 [01:35<01:14,  5.88it/s]CFD PINN training progress:  56%|█████▌    | 561/1000 [01:35<01:14,  5.89it/s]CFD PINN training progress:  56%|█████▌    | 562/1000 [01:35<01:14,  5.88it/s]CFD PINN training progress:  56%|█████▋    | 563/1000 [01:35<01:14,  5.90it/s]CFD PINN training progress:  56%|█████▋    | 564/1000 [01:36<01:14,  5.89it/s]CFD PINN training progress:  56%|█████▋    | 565/1000 [01:36<01:13,  5.89it/s]CFD PINN training progress:  57%|█████▋    | 566/1000 [01:36<01:13,  5.89it/s]CFD PINN training progress:  57%|█████▋    | 567/1000 [01:36<01:13,  5.89it/s]CFD PINN training progress:  57%|█████▋    | 568/1000 [01:36<01:13,  5.88it/s]CFD PINN training progress:  57%|█████▋    | 569/1000 [01:36<01:13,  5.89it/s]CFD PINN training progress:  57%|█████▋    | 570/1000 [01:37<01:12,  5.89it/s]CFD PINN training progress:  57%|█████▋    | 571/1000 [01:37<01:12,  5.89it/s]CFD PINN training progress:  57%|█████▋    | 572/1000 [01:37<01:12,  5.91it/s]CFD PINN training progress:  57%|█████▋    | 573/1000 [01:37<01:12,  5.91it/s]CFD PINN training progress:  57%|█████▋    | 574/1000 [01:37<01:12,  5.91it/s]CFD PINN training progress:  57%|█████▊    | 575/1000 [01:37<01:11,  5.91it/s]CFD PINN training progress:  58%|█████▊    | 576/1000 [01:38<01:11,  5.90it/s]CFD PINN training progress:  58%|█████▊    | 577/1000 [01:38<01:11,  5.90it/s]CFD PINN training progress:  58%|█████▊    | 578/1000 [01:38<01:11,  5.90it/s]CFD PINN training progress:  58%|█████▊    | 579/1000 [01:38<01:11,  5.91it/s]CFD PINN training progress:  58%|█████▊    | 580/1000 [01:38<01:11,  5.91it/s]CFD PINN training progress:  58%|█████▊    | 581/1000 [01:38<01:10,  5.91it/s]CFD PINN training progress:  58%|█████▊    | 582/1000 [01:39<01:10,  5.90it/s]CFD PINN training progress:  58%|█████▊    | 583/1000 [01:39<01:10,  5.90it/s]CFD PINN training progress:  58%|█████▊    | 584/1000 [01:39<01:10,  5.90it/s]CFD PINN training progress:  58%|█████▊    | 585/1000 [01:39<01:10,  5.90it/s]CFD PINN training progress:  59%|█████▊    | 586/1000 [01:39<01:10,  5.90it/s]CFD PINN training progress:  59%|█████▊    | 587/1000 [01:39<01:10,  5.90it/s]CFD PINN training progress:  59%|█████▉    | 588/1000 [01:40<01:09,  5.90it/s]CFD PINN training progress:  59%|█████▉    | 589/1000 [01:40<01:09,  5.90it/s]CFD PINN training progress:  59%|█████▉    | 590/1000 [01:40<01:09,  5.89it/s]CFD PINN training progress:  59%|█████▉    | 591/1000 [01:40<01:09,  5.89it/s]CFD PINN training progress:  59%|█████▉    | 592/1000 [01:40<01:09,  5.89it/s]CFD PINN training progress:  59%|█████▉    | 593/1000 [01:40<01:09,  5.89it/s]CFD PINN training progress:  59%|█████▉    | 594/1000 [01:41<01:08,  5.89it/s]CFD PINN training progress:  60%|█████▉    | 595/1000 [01:41<01:08,  5.88it/s]CFD PINN training progress:  60%|█████▉    | 596/1000 [01:41<01:08,  5.88it/s]CFD PINN training progress:  60%|█████▉    | 597/1000 [01:41<01:08,  5.89it/s]CFD PINN training progress:  60%|█████▉    | 598/1000 [01:41<01:08,  5.89it/s]CFD PINN training progress:  60%|█████▉    | 599/1000 [01:41<01:08,  5.89it/s]CFD PINN training progress:  60%|██████    | 600/1000 [01:42<01:08,  5.88it/s]CFD PINN training progress:  60%|██████    | 601/1000 [01:42<01:07,  5.88it/s]CFD PINN training progress:  60%|██████    | 602/1000 [01:42<01:07,  5.88it/s]CFD PINN training progress:  60%|██████    | 603/1000 [01:42<01:07,  5.88it/s]CFD PINN training progress:  60%|██████    | 604/1000 [01:42<01:07,  5.88it/s]CFD PINN training progress:  60%|██████    | 605/1000 [01:42<01:07,  5.89it/s]CFD PINN training progress:  61%|██████    | 606/1000 [01:43<01:06,  5.89it/s]CFD PINN training progress:  61%|██████    | 607/1000 [01:43<01:06,  5.89it/s]CFD PINN training progress:  61%|██████    | 608/1000 [01:43<01:06,  5.89it/s]CFD PINN training progress:  61%|██████    | 609/1000 [01:43<01:06,  5.89it/s]CFD PINN training progress:  61%|██████    | 610/1000 [01:43<01:06,  5.89it/s]CFD PINN training progress:  61%|██████    | 611/1000 [01:43<01:06,  5.89it/s]CFD PINN training progress:  61%|██████    | 612/1000 [01:44<01:05,  5.89it/s]CFD PINN training progress:  61%|██████▏   | 613/1000 [01:44<01:05,  5.89it/s]CFD PINN training progress:  61%|██████▏   | 614/1000 [01:44<01:05,  5.89it/s]CFD PINN training progress:  62%|██████▏   | 615/1000 [01:44<01:05,  5.88it/s]CFD PINN training progress:  62%|██████▏   | 616/1000 [01:44<01:05,  5.88it/s]CFD PINN training progress:  62%|██████▏   | 617/1000 [01:45<01:05,  5.88it/s]CFD PINN training progress:  62%|██████▏   | 618/1000 [01:45<01:04,  5.89it/s]CFD PINN training progress:  62%|██████▏   | 619/1000 [01:45<01:04,  5.87it/s]CFD PINN training progress:  62%|██████▏   | 620/1000 [01:45<01:04,  5.86it/s]CFD PINN training progress:  62%|██████▏   | 621/1000 [01:45<01:04,  5.87it/s]CFD PINN training progress:  62%|██████▏   | 622/1000 [01:45<01:04,  5.87it/s]CFD PINN training progress:  62%|██████▏   | 623/1000 [01:46<01:04,  5.87it/s]CFD PINN training progress:  62%|██████▏   | 624/1000 [01:46<01:04,  5.87it/s]CFD PINN training progress:  62%|██████▎   | 625/1000 [01:46<01:03,  5.88it/s]CFD PINN training progress:  63%|██████▎   | 626/1000 [01:46<01:03,  5.89it/s]CFD PINN training progress:  63%|██████▎   | 627/1000 [01:46<01:03,  5.89it/s]CFD PINN training progress:  63%|██████▎   | 628/1000 [01:46<01:03,  5.90it/s]CFD PINN training progress:  63%|██████▎   | 629/1000 [01:47<01:02,  5.90it/s]CFD PINN training progress:  63%|██████▎   | 630/1000 [01:47<01:02,  5.91it/s]CFD PINN training progress:  63%|██████▎   | 631/1000 [01:47<01:02,  5.91it/s]CFD PINN training progress:  63%|██████▎   | 632/1000 [01:47<01:02,  5.91it/s]CFD PINN training progress:  63%|██████▎   | 633/1000 [01:47<01:02,  5.90it/s]CFD PINN training progress:  63%|██████▎   | 634/1000 [01:47<01:02,  5.90it/s]CFD PINN training progress:  64%|██████▎   | 635/1000 [01:48<01:01,  5.90it/s]CFD PINN training progress:  64%|██████▎   | 636/1000 [01:48<01:01,  5.90it/s]CFD PINN training progress:  64%|██████▎   | 637/1000 [01:48<01:01,  5.90it/s]CFD PINN training progress:  64%|██████▍   | 638/1000 [01:48<01:01,  5.89it/s]CFD PINN training progress:  64%|██████▍   | 639/1000 [01:48<01:01,  5.88it/s]CFD PINN training progress:  64%|██████▍   | 640/1000 [01:48<01:01,  5.89it/s]CFD PINN training progress:  64%|██████▍   | 641/1000 [01:49<01:00,  5.90it/s]CFD PINN training progress:  64%|██████▍   | 642/1000 [01:49<01:00,  5.90it/s]CFD PINN training progress:  64%|██████▍   | 643/1000 [01:49<01:00,  5.90it/s]CFD PINN training progress:  64%|██████▍   | 644/1000 [01:49<01:00,  5.90it/s]CFD PINN training progress:  64%|██████▍   | 645/1000 [01:49<01:00,  5.89it/s]CFD PINN training progress:  65%|██████▍   | 646/1000 [01:49<01:00,  5.90it/s]CFD PINN training progress:  65%|██████▍   | 647/1000 [01:50<00:59,  5.88it/s]CFD PINN training progress:  65%|██████▍   | 648/1000 [01:50<00:59,  5.88it/s]CFD PINN training progress:  65%|██████▍   | 649/1000 [01:50<00:59,  5.88it/s]CFD PINN training progress:  65%|██████▌   | 650/1000 [01:50<00:59,  5.89it/s]CFD PINN training progress:  65%|██████▌   | 651/1000 [01:50<00:59,  5.89it/s]CFD PINN training progress:  65%|██████▌   | 652/1000 [01:50<00:59,  5.89it/s]CFD PINN training progress:  65%|██████▌   | 653/1000 [01:51<00:58,  5.89it/s]CFD PINN training progress:  65%|██████▌   | 654/1000 [01:51<00:58,  5.88it/s]CFD PINN training progress:  66%|██████▌   | 655/1000 [01:51<00:58,  5.88it/s]CFD PINN training progress:  66%|██████▌   | 656/1000 [01:51<00:58,  5.89it/s]CFD PINN training progress:  66%|██████▌   | 657/1000 [01:51<00:58,  5.89it/s]CFD PINN training progress:  66%|██████▌   | 658/1000 [01:51<00:58,  5.90it/s]CFD PINN training progress:  66%|██████▌   | 659/1000 [01:52<00:57,  5.90it/s]CFD PINN training progress:  66%|██████▌   | 660/1000 [01:52<00:57,  5.90it/s]CFD PINN training progress:  66%|██████▌   | 661/1000 [01:52<00:57,  5.91it/s]CFD PINN training progress:  66%|██████▌   | 662/1000 [01:52<00:57,  5.91it/s]CFD PINN training progress:  66%|██████▋   | 663/1000 [01:52<00:57,  5.91it/s]CFD PINN training progress:  66%|██████▋   | 664/1000 [01:52<00:56,  5.90it/s]CFD PINN training progress:  66%|██████▋   | 665/1000 [01:53<00:56,  5.89it/s]CFD PINN training progress:  67%|██████▋   | 666/1000 [01:53<00:56,  5.89it/s]CFD PINN training progress:  67%|██████▋   | 667/1000 [01:53<00:56,  5.90it/s]CFD PINN training progress:  67%|██████▋   | 668/1000 [01:53<00:56,  5.90it/s]CFD PINN training progress:  67%|██████▋   | 669/1000 [01:53<00:56,  5.89it/s]CFD PINN training progress:  67%|██████▋   | 670/1000 [01:54<00:55,  5.89it/s]CFD PINN training progress:  67%|██████▋   | 671/1000 [01:54<00:55,  5.89it/s]CFD PINN training progress:  67%|██████▋   | 672/1000 [01:54<00:55,  5.88it/s]CFD PINN training progress:  67%|██████▋   | 673/1000 [01:54<00:55,  5.89it/s]CFD PINN training progress:  67%|██████▋   | 674/1000 [01:54<00:55,  5.83it/s]CFD PINN training progress:  68%|██████▊   | 675/1000 [01:54<00:55,  5.85it/s]CFD PINN training progress:  68%|██████▊   | 676/1000 [01:55<00:55,  5.86it/s]CFD PINN training progress:  68%|██████▊   | 677/1000 [01:55<00:54,  5.87it/s]CFD PINN training progress:  68%|██████▊   | 678/1000 [01:55<00:54,  5.88it/s]CFD PINN training progress:  68%|██████▊   | 679/1000 [01:55<00:54,  5.88it/s]CFD PINN training progress:  68%|██████▊   | 680/1000 [01:55<00:54,  5.87it/s]CFD PINN training progress:  68%|██████▊   | 681/1000 [01:55<00:54,  5.88it/s]CFD PINN training progress:  68%|██████▊   | 682/1000 [01:56<00:54,  5.88it/s]CFD PINN training progress:  68%|██████▊   | 683/1000 [01:56<00:53,  5.89it/s]CFD PINN training progress:  68%|██████▊   | 684/1000 [01:56<00:53,  5.89it/s]CFD PINN training progress:  68%|██████▊   | 685/1000 [01:56<00:53,  5.89it/s]CFD PINN training progress:  69%|██████▊   | 686/1000 [01:56<00:53,  5.89it/s]CFD PINN training progress:  69%|██████▊   | 687/1000 [01:56<00:53,  5.90it/s]CFD PINN training progress:  69%|██████▉   | 688/1000 [01:57<00:52,  5.90it/s]CFD PINN training progress:  69%|██████▉   | 689/1000 [01:57<00:52,  5.89it/s]CFD PINN training progress:  69%|██████▉   | 690/1000 [01:57<00:52,  5.89it/s]CFD PINN training progress:  69%|██████▉   | 691/1000 [01:57<00:52,  5.88it/s]CFD PINN training progress:  69%|██████▉   | 692/1000 [01:57<00:52,  5.88it/s]CFD PINN training progress:  69%|██████▉   | 693/1000 [01:57<00:52,  5.88it/s]CFD PINN training progress:  69%|██████▉   | 694/1000 [01:58<00:52,  5.88it/s]CFD PINN training progress:  70%|██████▉   | 695/1000 [01:58<00:52,  5.86it/s]CFD PINN training progress:  70%|██████▉   | 696/1000 [01:58<00:51,  5.86it/s]CFD PINN training progress:  70%|██████▉   | 697/1000 [01:58<00:51,  5.87it/s]CFD PINN training progress:  70%|██████▉   | 698/1000 [01:58<00:51,  5.87it/s]CFD PINN training progress:  70%|██████▉   | 699/1000 [01:58<00:51,  5.87it/s]CFD PINN training progress:  70%|███████   | 700/1000 [01:59<00:50,  5.88it/s]CFD PINN training progress:  70%|███████   | 701/1000 [01:59<00:50,  5.89it/s]CFD PINN training progress:  70%|███████   | 702/1000 [01:59<00:50,  5.90it/s]CFD PINN training progress:  70%|███████   | 703/1000 [01:59<00:50,  5.91it/s]CFD PINN training progress:  70%|███████   | 704/1000 [01:59<00:50,  5.91it/s]CFD PINN training progress:  70%|███████   | 705/1000 [01:59<00:49,  5.91it/s]CFD PINN training progress:  71%|███████   | 706/1000 [02:00<00:49,  5.91it/s]CFD PINN training progress:  71%|███████   | 707/1000 [02:00<00:49,  5.90it/s]CFD PINN training progress:  71%|███████   | 708/1000 [02:00<00:49,  5.89it/s]CFD PINN training progress:  71%|███████   | 709/1000 [02:00<00:49,  5.89it/s]CFD PINN training progress:  71%|███████   | 710/1000 [02:00<00:49,  5.90it/s]tensor(19.1358)
+tensor(0.0225)
+tensor(0.2706)
+tensor(20.9344)
+tensor(0.0228)
+tensor(0.2735)
+tensor(17.6603)
+tensor(0.0222)
+tensor(0.2656)
+tensor(17.1734)
+tensor(0.0220)
+tensor(0.2643)
+tensor(20.5946)
+tensor(0.0225)
+tensor(0.2694)
+tensor(20.3444)
+tensor(0.0230)
+tensor(0.2758)
+tensor(16.5373)
+tensor(0.0219)
+tensor(0.2637)
+tensor(13.0913)
+tensor(0.0212)
+tensor(0.2553)
+tensor(15.4095)
+tensor(0.0211)
+tensor(0.2564)
+tensor(17.7076)
+tensor(0.0217)
+tensor(0.2636)
+tensor(18.0115)
+tensor(0.0214)
+tensor(0.2598)
+tensor(15.8160)
+tensor(0.0213)
+tensor(0.2587)
+tensor(15.3582)
+tensor(0.0214)
+tensor(0.2597)
+tensor(17.4006)
+tensor(0.0216)
+tensor(0.2611)
+tensor(18.4938)
+tensor(0.0217)
+tensor(0.2629)
+tensor(16.5406)
+tensor(0.0209)
+tensor(0.2537)
+tensor(15.5820)
+tensor(0.0206)
+tensor(0.2510)
+tensor(18.9044)
+tensor(0.0210)
+tensor(0.2561)
+tensor(20.4423)
+tensor(0.0217)
+tensor(0.2627)
+tensor(17.8389)
+tensor(0.0212)
+tensor(0.2571)
+tensor(15.8259)
+tensor(0.0208)
+tensor(0.2531)
+tensor(18.2365)
+tensor(0.0209)
+tensor(0.2532)
+tensor(19.7759)
+tensor(0.0213)
+tensor(0.2574)
+tensor(19.6937)
+tensor(0.0209)
+tensor(0.2535)
+tensor(16.9086)
+tensor(0.0207)
+tensor(0.2503)
+tensor(18.4226)
+tensor(0.0210)
+tensor(0.2540)
+tensor(19.2310)
+tensor(0.0212)
+tensor(0.2571)
+tensor(17.3687)
+tensor(0.0205)
+tensor(0.2480)
+tensor(16.7868)
+tensor(0.0201)
+tensor(0.2443)
+tensor(19.2493)
+tensor(0.0200)
+tensor(0.2440)
+tensor(20.2052)
+tensor(0.0202)
+tensor(0.2456)
+tensor(17.3187)
+tensor(0.0197)
+tensor(0.2401)
+tensor(15.8089)
+tensor(0.0194)
+tensor(0.2372)
+tensor(18.3169)
+tensor(0.0197)
+tensor(0.2402)
+tensor(19.1220)
+tensor(0.0201)
+tensor(0.2464)
+tensor(15.9636)
+tensor(0.0193)
+tensor(0.2357)
+tensor(13.6053)
+tensor(0.0188)
+tensor(0.2308)
+tensor(15.8168)
+tensor(0.0189)
+tensor(0.2328)
+tensor(17.5932)
+tensor(0.0194)
+tensor(0.2377)
+tensor(18.1418)
+tensor(0.0191)
+tensor(0.2351)
+tensor(16.2858)
+tensor(0.0190)
+tensor(0.2340)
+tensor(16.9988)
+tensor(0.0190)
+tensor(0.2329)
+tensor(18.8208)
+tensor(0.0192)
+tensor(0.2355)
+tensor(18.4324)
+tensor(0.0187)
+tensor(0.2305)
+tensor(16.8729)
+tensor(0.0183)
+tensor(0.2245)
+tensor(19.2738)
+tensor(0.0183)
+tensor(0.2258)
+tensor(19.6972)
+tensor(0.0185)
+tensor(0.2270)
+tensor(18.1679)
+tensor(0.0184)
+tensor(0.2254)
+tensor(18.3433)
+tensor(0.0185)
+tensor(0.2278)
+tensor(19.7122)
+tensor(0.0186)
+tensor(0.2281)
+tensor(19.1814)
+tensor(0.0182)
+tensor(0.2235)
+tensor(19.3491)
+tensor(0.0180)
+tensor(0.2218)
+tensor(20.0483)
+tensor(0.0181)
+tensor(0.2222)
+tensor(19.1785)
+tensor(0.0179)
+tensor(0.2202)
+tensor(19.9927)
+tensor(0.0180)
+tensor(0.2211)
+tensor(21.5001)
+tensor(0.0183)
+tensor(0.2235)
+tensor(19.5600)
+tensor(0.0178)
+tensor(0.2191)
+tensor(19.3396)
+tensor(0.0176)
+tensor(0.2174)
+tensor(20.2663)
+tensor(0.0178)
+tensor(0.2196)
+tensor(16.5224)
+tensor(0.0172)
+tensor(0.2130)
+tensor(17.3476)
+tensor(0.0172)
+tensor(0.2136)
+tensor(20.4055)
+tensor(0.0177)
+tensor(0.2182)
+tensor(19.0964)
+tensor(0.0173)
+tensor(0.2141)
+tensor(15.7634)
+tensor(0.0169)
+tensor(0.2096)
+tensor(17.8467)
+tensor(0.0169)
+tensor(0.2108)
+tensor(18.5346)
+tensor(0.0173)
+tensor(0.2138)
+tensor(16.2218)
+tensor(0.0166)
+tensor(0.2073)
+tensor(14.3760)
+tensor(0.0164)
+tensor(0.2056)
+tensor(16.7699)
+tensor(0.0166)
+tensor(0.2075)
+tensor(17.9102)
+tensor(0.0168)
+tensor(0.2092)
+tensor(16.7102)
+tensor(0.0164)
+tensor(0.2048)
+tensor(16.9979)
+tensor(0.0163)
+tensor(0.2031)
+tensor(19.1084)
+tensor(0.0165)
+tensor(0.2063)
+tensor(18.6300)
+tensor(0.0162)
+tensor(0.2030)
+tensor(18.8812)
+tensor(0.0162)
+tensor(0.2019)
+tensor(20.1425)
+tensor(0.0164)
+tensor(0.2050)
+tensor(17.2436)
+tensor(0.0160)
+tensor(0.1997)
+tensor(18.1122)
+tensor(0.0160)
+tensor(0.2008)
+tensor(19.7463)
+tensor(0.0164)
+tensor(0.2046)
+tensor(17.7282)
+tensor(0.0159)
+tensor(0.1997)
+tensor(15.8173)
+tensor(0.0161)
+tensor(0.2026)
+tensor(18.6823)
+tensor(0.0158)
+tensor(0.1982)
+tensor(18.9775)
+tensor(0.0158)
+tensor(0.1978)
+tensor(16.0058)
+tensor(0.0152)
+tensor(0.1922)
+tensor(15.8912)
+tensor(0.0151)
+tensor(0.1911)
+tensor(17.8716)
+tensor(0.0155)
+tensor(0.1949)
+tensor(17.4708)
+tensor(0.0153)
+tensor(0.1943)
+tensor(14.7089)
+tensor(0.0153)
+tensor(0.1929)
+tensor(16.2180)
+tensor(0.0152)
+tensor(0.1925)
+tensor(18.0623)
+tensor(0.0161)
+tensor(0.2051)
+tensor(14.6718)
+tensor(0.0151)
+tensor(0.1908)
+tensor(14.0234)
+tensor(0.0157)
+tensor(0.2001)
+tensor(15.9662)
+tensor(0.0150)
+tensor(0.1910)
+tensor(16.4080)
+tensor(0.0149)
+tensor(0.1886)
+tensor(16.6821)
+tensor(0.0147)
+tensor(0.1865)
+tensor(16.3998)
+tensor(0.0146)
+tensor(0.1863)
+tensor(16.8016)
+tensor(0.0148)
+tensor(0.1874)
+tensor(16.9690)
+tensor(0.0147)
+tensor(0.1873)
+tensor(17.1388)
+tensor(0.0145)
+tensor(0.1857)
+tensor(18.1365)
+tensor(0.0146)
+tensor(0.1860)
+tensor(18.4062)
+tensor(0.0146)
+tensor(0.1866)
+tensor(16.7986)
+tensor(0.0144)
+tensor(0.1836)
+tensor(18.9250)
+tensor(0.0147)
+tensor(0.1870)
+tensor(19.8580)
+tensor(0.0146)
+tensor(0.1863)
+tensor(19.1559)
+tensor(0.0144)
+tensor(0.1835)
+tensor(19.3474)
+tensor(0.0144)
+tensor(0.1842)
+tensor(15.9871)
+tensor(0.0141)
+tensor(0.1797)
+tensor(17.7938)
+tensor(0.0143)
+tensor(0.1829)
+tensor(18.5111)
+tensor(0.0143)
+tensor(0.1827)
+tensor(18.1581)
+tensor(0.0142)
+tensor(0.1815)
+tensor(18.3166)
+tensor(0.0143)
+tensor(0.1827)
+tensor(16.7013)
+tensor(0.0140)
+tensor(0.1786)
+tensor(17.8079)
+tensor(0.0141)
+tensor(0.1809)
+tensor(15.9043)
+tensor(0.0138)
+tensor(0.1762)
+tensor(17.8728)
+tensor(0.0139)
+tensor(0.1783)
+tensor(18.3417)
+tensor(0.0140)
+tensor(0.1802)
+tensor(16.2940)
+tensor(0.0137)
+tensor(0.1763)
+tensor(17.5868)
+tensor(0.0138)
+tensor(0.1783)
+tensor(17.8481)
+tensor(0.0137)
+tensor(0.1764)
+tensor(16.3591)
+tensor(0.0134)
+tensor(0.1728)
+tensor(17.7830)
+tensor(0.0135)
+tensor(0.1754)
+tensor(16.8828)
+tensor(0.0134)
+tensor(0.1727)
+tensor(17.9170)
+tensor(0.0135)
+tensor(0.1742)
+tensor(18.0742)
+tensor(0.0135)
+tensor(0.1748)
+tensor(16.2431)
+tensor(0.0133)
+tensor(0.1708)
+tensor(17.6736)
+tensor(0.0134)
+tensor(0.1745)
+tensor(16.1205)
+tensor(0.0131)
+tensor(0.1690)
+tensor(17.1777)
+tensor(0.0131)
+tensor(0.1697)
+tensor(17.6750)
+tensor(0.0131)
+tensor(0.1705)
+tensor(16.4967)
+tensor(0.0130)
+tensor(0.1677)
+tensor(18.0026)
+tensor(0.0131)
+tensor(0.1706)
+tensor(16.4928)
+tensor(0.0128)
+tensor(0.1662)
+tensor(17.7617)
+tensor(0.0129)
+tensor(0.1677)
+tensor(17.8616)
+tensor(0.0128)
+tensor(0.1667)
+tensor(17.6786)
+tensor(0.0128)
+tensor(0.1662)
+tensor(18.2708)
+tensor(0.0129)
+tensor(0.1683)
+tensor(15.9405)
+tensor(0.0126)
+tensor(0.1636)
+tensor(18.0937)
+tensor(0.0128)
+tensor(0.1668)
+tensor(17.8986)
+tensor(0.0127)
+tensor(0.1643)
+tensor(16.0720)
+tensor(0.0124)
+tensor(0.1617)
+tensor(17.1620)
+tensor(0.0126)
+tensor(0.1649)
+tensor(15.2739)
+tensor(0.0123)
+tensor(0.1601)
+tensor(16.5480)
+tensor(0.0123)
+tensor(0.1607)
+tensor(16.6596)
+tensor(0.0122)
+tensor(0.1611)
+tensor(13.7527)
+tensor(0.0120)
+tensor(0.1562)
+tensor(16.0222)
+tensor(0.0121)
+tensor(0.1590)
+tensor(15.7956)
+tensor(0.0120)
+tensor(0.1579)
+tensor(15.2170)
+tensor(0.0119)
+tensor(0.1554)
+tensor(16.8310)
+tensor(0.0120)
+tensor(0.1573)
+tensor(15.7769)
+tensor(0.0118)
+tensor(0.1554)
+tensor(16.4724)
+tensor(0.0119)
+tensor(0.1559)
+tensor(16.8972)
+tensor(0.0118)
+tensor(0.1550)
+tensor(17.5234)
+tensor(0.0119)
+tensor(0.1568)
+tensor(16.0434)
+tensor(0.0118)
+tensor(0.1540)
+tensor(17.0676)
+tensor(0.0118)
+tensor(0.1554)
+tensor(17.2913)
+tensor(0.0118)
+tensor(0.1549)
+tensor(16.3651)
+tensor(0.0117)
+tensor(0.1531)
+tensor(17.2072)
+tensor(0.0117)
+tensor(0.1538)
+tensor(17.5244)
+tensor(0.0116)
+tensor(0.1522)
+tensor(17.7494)
+tensor(0.0116)
+tensor(0.1523)
+tensor(17.1476)
+tensor(0.0115)
+tensor(0.1521)
+tensor(17.9515)
+tensor(0.0116)
+tensor(0.1529)
+tensor(16.2534)
+tensor(0.0114)
+tensor(0.1496)
+tensor(17.1569)
+tensor(0.0115)
+tensor(0.1526)
+tensor(15.0375)
+tensor(0.0112)
+tensor(0.1476)
+tensor(16.2378)
+tensor(0.0113)
+tensor(0.1491)
+tensor(15.6920)
+tensor(0.0112)
+tensor(0.1482)
+tensor(16.6187)
+tensor(0.0113)
+tensor(0.1490)
+tensor(16.7575)
+tensor(0.0112)
+tensor(0.1481)
+tensor(17.1045)
+tensor(0.0113)
+tensor(0.1490)
+tensor(16.3675)
+tensor(0.0111)
+tensor(0.1462)
+tensor(18.8004)
+tensor(0.0113)
+tensor(0.1493)
+tensor(16.4336)
+tensor(0.0111)
+tensor(0.1461)
+tensor(17.5407)
+tensor(0.0113)
+tensor(0.1491)
+tensor(15.4106)
+tensor(0.0110)
+tensor(0.1455)
+tensor(15.6679)
+tensor(0.0110)
+tensor(0.1450)
+tensor(17.7111)
+tensor(0.0112)
+tensor(0.1479)
+tensor(13.5595)
+tensor(0.0108)
+tensor(0.1422)
+CFD PINN training progress:  71%|███████   | 711/1000 [02:00<00:49,  5.87it/s]CFD PINN training progress:  71%|███████   | 712/1000 [02:01<00:49,  5.88it/s]CFD PINN training progress:  71%|███████▏  | 713/1000 [02:01<00:48,  5.88it/s]CFD PINN training progress:  71%|███████▏  | 714/1000 [02:01<00:48,  5.88it/s]CFD PINN training progress:  72%|███████▏  | 715/1000 [02:01<00:48,  5.88it/s]CFD PINN training progress:  72%|███████▏  | 716/1000 [02:01<00:48,  5.88it/s]CFD PINN training progress:  72%|███████▏  | 717/1000 [02:01<00:48,  5.88it/s]CFD PINN training progress:  72%|███████▏  | 718/1000 [02:02<00:47,  5.88it/s]CFD PINN training progress:  72%|███████▏  | 719/1000 [02:02<00:47,  5.88it/s]CFD PINN training progress:  72%|███████▏  | 720/1000 [02:02<00:47,  5.89it/s]CFD PINN training progress:  72%|███████▏  | 721/1000 [02:02<00:47,  5.88it/s]CFD PINN training progress:  72%|███████▏  | 722/1000 [02:02<00:47,  5.87it/s]CFD PINN training progress:  72%|███████▏  | 723/1000 [02:03<00:47,  5.88it/s]CFD PINN training progress:  72%|███████▏  | 724/1000 [02:03<00:46,  5.88it/s]CFD PINN training progress:  72%|███████▎  | 725/1000 [02:03<00:46,  5.88it/s]CFD PINN training progress:  73%|███████▎  | 726/1000 [02:03<00:46,  5.88it/s]CFD PINN training progress:  73%|███████▎  | 727/1000 [02:03<00:46,  5.89it/s]CFD PINN training progress:  73%|███████▎  | 728/1000 [02:03<00:46,  5.88it/s]CFD PINN training progress:  73%|███████▎  | 729/1000 [02:04<00:46,  5.88it/s]CFD PINN training progress:  73%|███████▎  | 730/1000 [02:04<00:45,  5.88it/s]CFD PINN training progress:  73%|███████▎  | 731/1000 [02:04<00:45,  5.88it/s]CFD PINN training progress:  73%|███████▎  | 732/1000 [02:04<00:45,  5.87it/s]CFD PINN training progress:  73%|███████▎  | 733/1000 [02:04<00:45,  5.87it/s]CFD PINN training progress:  73%|███████▎  | 734/1000 [02:04<00:45,  5.86it/s]CFD PINN training progress:  74%|███████▎  | 735/1000 [02:05<00:45,  5.86it/s]CFD PINN training progress:  74%|███████▎  | 736/1000 [02:05<00:44,  5.87it/s]CFD PINN training progress:  74%|███████▎  | 737/1000 [02:05<00:44,  5.87it/s]CFD PINN training progress:  74%|███████▍  | 738/1000 [02:05<00:44,  5.87it/s]CFD PINN training progress:  74%|███████▍  | 739/1000 [02:05<00:44,  5.87it/s]CFD PINN training progress:  74%|███████▍  | 740/1000 [02:05<00:44,  5.86it/s]CFD PINN training progress:  74%|███████▍  | 741/1000 [02:06<00:44,  5.87it/s]CFD PINN training progress:  74%|███████▍  | 742/1000 [02:06<00:43,  5.87it/s]CFD PINN training progress:  74%|███████▍  | 743/1000 [02:06<00:43,  5.87it/s]CFD PINN training progress:  74%|███████▍  | 744/1000 [02:06<00:43,  5.87it/s]CFD PINN training progress:  74%|███████▍  | 745/1000 [02:06<00:43,  5.87it/s]CFD PINN training progress:  75%|███████▍  | 746/1000 [02:06<00:43,  5.88it/s]CFD PINN training progress:  75%|███████▍  | 747/1000 [02:07<00:43,  5.88it/s]CFD PINN training progress:  75%|███████▍  | 748/1000 [02:07<00:42,  5.88it/s]CFD PINN training progress:  75%|███████▍  | 749/1000 [02:07<00:42,  5.89it/s]CFD PINN training progress:  75%|███████▌  | 750/1000 [02:07<00:42,  5.89it/s]CFD PINN training progress:  75%|███████▌  | 751/1000 [02:07<00:42,  5.89it/s]CFD PINN training progress:  75%|███████▌  | 752/1000 [02:07<00:42,  5.88it/s]CFD PINN training progress:  75%|███████▌  | 753/1000 [02:08<00:41,  5.89it/s]CFD PINN training progress:  75%|███████▌  | 754/1000 [02:08<00:41,  5.90it/s]CFD PINN training progress:  76%|███████▌  | 755/1000 [02:08<00:41,  5.90it/s]CFD PINN training progress:  76%|███████▌  | 756/1000 [02:08<00:41,  5.90it/s]CFD PINN training progress:  76%|███████▌  | 757/1000 [02:08<00:41,  5.90it/s]CFD PINN training progress:  76%|███████▌  | 758/1000 [02:08<00:41,  5.89it/s]CFD PINN training progress:  76%|███████▌  | 759/1000 [02:09<00:40,  5.90it/s]CFD PINN training progress:  76%|███████▌  | 760/1000 [02:09<00:40,  5.90it/s]CFD PINN training progress:  76%|███████▌  | 761/1000 [02:09<00:40,  5.90it/s]CFD PINN training progress:  76%|███████▌  | 762/1000 [02:09<00:40,  5.89it/s]CFD PINN training progress:  76%|███████▋  | 763/1000 [02:09<00:40,  5.89it/s]CFD PINN training progress:  76%|███████▋  | 764/1000 [02:09<00:40,  5.88it/s]CFD PINN training progress:  76%|███████▋  | 765/1000 [02:10<00:39,  5.89it/s]CFD PINN training progress:  77%|███████▋  | 766/1000 [02:10<00:39,  5.89it/s]CFD PINN training progress:  77%|███████▋  | 767/1000 [02:10<00:39,  5.88it/s]CFD PINN training progress:  77%|███████▋  | 768/1000 [02:10<00:39,  5.87it/s]CFD PINN training progress:  77%|███████▋  | 769/1000 [02:10<00:39,  5.87it/s]CFD PINN training progress:  77%|███████▋  | 770/1000 [02:11<00:39,  5.87it/s]CFD PINN training progress:  77%|███████▋  | 771/1000 [02:11<00:38,  5.88it/s]CFD PINN training progress:  77%|███████▋  | 772/1000 [02:11<00:38,  5.87it/s]CFD PINN training progress:  77%|███████▋  | 773/1000 [02:11<00:38,  5.87it/s]CFD PINN training progress:  77%|███████▋  | 774/1000 [02:11<00:38,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 775/1000 [02:11<00:38,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 776/1000 [02:12<00:38,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 777/1000 [02:12<00:37,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 778/1000 [02:12<00:37,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 779/1000 [02:12<00:37,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 780/1000 [02:12<00:37,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 781/1000 [02:12<00:37,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 782/1000 [02:13<00:37,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 783/1000 [02:13<00:36,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 784/1000 [02:13<00:36,  5.88it/s]CFD PINN training progress:  78%|███████▊  | 785/1000 [02:13<00:36,  5.88it/s]CFD PINN training progress:  79%|███████▊  | 786/1000 [02:13<00:36,  5.88it/s]CFD PINN training progress:  79%|███████▊  | 787/1000 [02:13<00:36,  5.88it/s]CFD PINN training progress:  79%|███████▉  | 788/1000 [02:14<00:36,  5.88it/s]CFD PINN training progress:  79%|███████▉  | 789/1000 [02:14<00:35,  5.88it/s]CFD PINN training progress:  79%|███████▉  | 790/1000 [02:14<00:35,  5.87it/s]CFD PINN training progress:  79%|███████▉  | 791/1000 [02:14<00:35,  5.86it/s]CFD PINN training progress:  79%|███████▉  | 792/1000 [02:14<00:35,  5.87it/s]CFD PINN training progress:  79%|███████▉  | 793/1000 [02:14<00:35,  5.87it/s]CFD PINN training progress:  79%|███████▉  | 794/1000 [02:15<00:35,  5.88it/s]CFD PINN training progress:  80%|███████▉  | 795/1000 [02:15<00:34,  5.88it/s]CFD PINN training progress:  80%|███████▉  | 796/1000 [02:15<00:34,  5.88it/s]CFD PINN training progress:  80%|███████▉  | 797/1000 [02:15<00:34,  5.88it/s]CFD PINN training progress:  80%|███████▉  | 798/1000 [02:15<00:34,  5.89it/s]CFD PINN training progress:  80%|███████▉  | 799/1000 [02:15<00:34,  5.89it/s]CFD PINN training progress:  80%|████████  | 800/1000 [02:16<00:33,  5.89it/s]CFD PINN training progress:  80%|████████  | 801/1000 [02:16<00:33,  5.89it/s]CFD PINN training progress:  80%|████████  | 802/1000 [02:16<00:33,  5.89it/s]CFD PINN training progress:  80%|████████  | 803/1000 [02:16<00:33,  5.89it/s]CFD PINN training progress:  80%|████████  | 804/1000 [02:16<00:33,  5.89it/s]CFD PINN training progress:  80%|████████  | 805/1000 [02:16<00:33,  5.89it/s]CFD PINN training progress:  81%|████████  | 806/1000 [02:17<00:32,  5.89it/s]CFD PINN training progress:  81%|████████  | 807/1000 [02:17<00:32,  5.88it/s]CFD PINN training progress:  81%|████████  | 808/1000 [02:17<00:32,  5.88it/s]CFD PINN training progress:  81%|████████  | 809/1000 [02:17<00:32,  5.87it/s]CFD PINN training progress:  81%|████████  | 810/1000 [02:17<00:32,  5.88it/s]CFD PINN training progress:  81%|████████  | 811/1000 [02:17<00:32,  5.88it/s]CFD PINN training progress:  81%|████████  | 812/1000 [02:18<00:31,  5.88it/s]CFD PINN training progress:  81%|████████▏ | 813/1000 [02:18<00:31,  5.89it/s]CFD PINN training progress:  81%|████████▏ | 814/1000 [02:18<00:31,  5.89it/s]CFD PINN training progress:  82%|████████▏ | 815/1000 [02:18<00:31,  5.90it/s]CFD PINN training progress:  82%|████████▏ | 816/1000 [02:18<00:31,  5.89it/s]CFD PINN training progress:  82%|████████▏ | 817/1000 [02:18<00:31,  5.89it/s]CFD PINN training progress:  82%|████████▏ | 818/1000 [02:19<00:30,  5.89it/s]CFD PINN training progress:  82%|████████▏ | 819/1000 [02:19<00:30,  5.89it/s]CFD PINN training progress:  82%|████████▏ | 820/1000 [02:19<00:30,  5.89it/s]CFD PINN training progress:  82%|████████▏ | 821/1000 [02:19<00:30,  5.90it/s]CFD PINN training progress:  82%|████████▏ | 822/1000 [02:19<00:30,  5.89it/s]CFD PINN training progress:  82%|████████▏ | 823/1000 [02:20<00:30,  5.89it/s]CFD PINN training progress:  82%|████████▏ | 824/1000 [02:20<00:29,  5.89it/s]CFD PINN training progress:  82%|████████▎ | 825/1000 [02:20<00:29,  5.89it/s]CFD PINN training progress:  83%|████████▎ | 826/1000 [02:20<00:29,  5.89it/s]CFD PINN training progress:  83%|████████▎ | 827/1000 [02:20<00:29,  5.89it/s]CFD PINN training progress:  83%|████████▎ | 828/1000 [02:20<00:29,  5.89it/s]CFD PINN training progress:  83%|████████▎ | 829/1000 [02:21<00:29,  5.89it/s]CFD PINN training progress:  83%|████████▎ | 830/1000 [02:21<00:28,  5.88it/s]CFD PINN training progress:  83%|████████▎ | 831/1000 [02:21<00:28,  5.88it/s]CFD PINN training progress:  83%|████████▎ | 832/1000 [02:21<00:28,  5.88it/s]CFD PINN training progress:  83%|████████▎ | 833/1000 [02:21<00:28,  5.88it/s]CFD PINN training progress:  83%|████████▎ | 834/1000 [02:21<00:28,  5.89it/s]CFD PINN training progress:  84%|████████▎ | 835/1000 [02:22<00:28,  5.84it/s]CFD PINN training progress:  84%|████████▎ | 836/1000 [02:22<00:28,  5.85it/s]CFD PINN training progress:  84%|████████▎ | 837/1000 [02:22<00:27,  5.87it/s]CFD PINN training progress:  84%|████████▍ | 838/1000 [02:22<00:27,  5.87it/s]CFD PINN training progress:  84%|████████▍ | 839/1000 [02:22<00:27,  5.87it/s]CFD PINN training progress:  84%|████████▍ | 840/1000 [02:22<00:27,  5.87it/s]CFD PINN training progress:  84%|████████▍ | 841/1000 [02:23<00:27,  5.88it/s]CFD PINN training progress:  84%|████████▍ | 842/1000 [02:23<00:26,  5.89it/s]CFD PINN training progress:  84%|████████▍ | 843/1000 [02:23<00:26,  5.89it/s]CFD PINN training progress:  84%|████████▍ | 844/1000 [02:23<00:26,  5.88it/s]CFD PINN training progress:  84%|████████▍ | 845/1000 [02:23<00:26,  5.88it/s]CFD PINN training progress:  85%|████████▍ | 846/1000 [02:23<00:26,  5.88it/s]CFD PINN training progress:  85%|████████▍ | 847/1000 [02:24<00:26,  5.87it/s]CFD PINN training progress:  85%|████████▍ | 848/1000 [02:24<00:25,  5.88it/s]CFD PINN training progress:  85%|████████▍ | 849/1000 [02:24<00:25,  5.88it/s]CFD PINN training progress:  85%|████████▌ | 850/1000 [02:24<00:25,  5.88it/s]CFD PINN training progress:  85%|████████▌ | 851/1000 [02:24<00:25,  5.88it/s]CFD PINN training progress:  85%|████████▌ | 852/1000 [02:24<00:25,  5.88it/s]CFD PINN training progress:  85%|████████▌ | 853/1000 [02:25<00:25,  5.88it/s]CFD PINN training progress:  85%|████████▌ | 854/1000 [02:25<00:24,  5.88it/s]CFD PINN training progress:  86%|████████▌ | 855/1000 [02:25<00:24,  5.88it/s]CFD PINN training progress:  86%|████████▌ | 856/1000 [02:25<00:24,  5.87it/s]CFD PINN training progress:  86%|████████▌ | 857/1000 [02:25<00:24,  5.87it/s]CFD PINN training progress:  86%|████████▌ | 858/1000 [02:25<00:24,  5.87it/s]CFD PINN training progress:  86%|████████▌ | 859/1000 [02:26<00:23,  5.88it/s]CFD PINN training progress:  86%|████████▌ | 860/1000 [02:26<00:23,  5.89it/s]CFD PINN training progress:  86%|████████▌ | 861/1000 [02:26<00:23,  5.90it/s]CFD PINN training progress:  86%|████████▌ | 862/1000 [02:26<00:23,  5.89it/s]CFD PINN training progress:  86%|████████▋ | 863/1000 [02:26<00:23,  5.89it/s]CFD PINN training progress:  86%|████████▋ | 864/1000 [02:26<00:23,  5.89it/s]CFD PINN training progress:  86%|████████▋ | 865/1000 [02:27<00:22,  5.90it/s]CFD PINN training progress:  87%|████████▋ | 866/1000 [02:27<00:22,  5.90it/s]CFD PINN training progress:  87%|████████▋ | 867/1000 [02:27<00:22,  5.90it/s]CFD PINN training progress:  87%|████████▋ | 868/1000 [02:27<00:22,  5.90it/s]CFD PINN training progress:  87%|████████▋ | 869/1000 [02:27<00:22,  5.91it/s]CFD PINN training progress:  87%|████████▋ | 870/1000 [02:28<00:22,  5.91it/s]CFD PINN training progress:  87%|████████▋ | 871/1000 [02:28<00:21,  5.91it/s]CFD PINN training progress:  87%|████████▋ | 872/1000 [02:28<00:21,  5.90it/s]CFD PINN training progress:  87%|████████▋ | 873/1000 [02:28<00:21,  5.90it/s]CFD PINN training progress:  87%|████████▋ | 874/1000 [02:28<00:21,  5.89it/s]CFD PINN training progress:  88%|████████▊ | 875/1000 [02:28<00:21,  5.88it/s]CFD PINN training progress:  88%|████████▊ | 876/1000 [02:29<00:21,  5.88it/s]CFD PINN training progress:  88%|████████▊ | 877/1000 [02:29<00:20,  5.87it/s]CFD PINN training progress:  88%|████████▊ | 878/1000 [02:29<00:20,  5.86it/s]CFD PINN training progress:  88%|████████▊ | 879/1000 [02:29<00:20,  5.88it/s]CFD PINN training progress:  88%|████████▊ | 880/1000 [02:29<00:20,  5.89it/s]CFD PINN training progress:  88%|████████▊ | 881/1000 [02:29<00:20,  5.89it/s]CFD PINN training progress:  88%|████████▊ | 882/1000 [02:30<00:20,  5.89it/s]CFD PINN training progress:  88%|████████▊ | 883/1000 [02:30<00:19,  5.89it/s]CFD PINN training progress:  88%|████████▊ | 884/1000 [02:30<00:19,  5.89it/s]CFD PINN training progress:  88%|████████▊ | 885/1000 [02:30<00:19,  5.89it/s]CFD PINN training progress:  89%|████████▊ | 886/1000 [02:30<00:19,  5.89it/s]CFD PINN training progress:  89%|████████▊ | 887/1000 [02:30<00:19,  5.89it/s]CFD PINN training progress:  89%|████████▉ | 888/1000 [02:31<00:19,  5.88it/s]tensor(14.9564)
+tensor(0.0108)
+tensor(0.1439)
+tensor(16.3003)
+tensor(0.0109)
+tensor(0.1456)
+tensor(13.0093)
+tensor(0.0107)
+tensor(0.1409)
+tensor(14.9865)
+tensor(0.0108)
+tensor(0.1430)
+tensor(14.7909)
+tensor(0.0107)
+tensor(0.1436)
+tensor(13.6068)
+tensor(0.0108)
+tensor(0.1427)
+tensor(15.1859)
+tensor(0.0106)
+tensor(0.1414)
+tensor(15.0673)
+tensor(0.0107)
+tensor(0.1427)
+tensor(14.7372)
+tensor(0.0106)
+tensor(0.1401)
+tensor(15.0263)
+tensor(0.0106)
+tensor(0.1408)
+tensor(14.9041)
+tensor(0.0106)
+tensor(0.1406)
+tensor(16.2865)
+tensor(0.0106)
+tensor(0.1409)
+tensor(15.9013)
+tensor(0.0106)
+tensor(0.1399)
+tensor(16.3987)
+tensor(0.0106)
+tensor(0.1409)
+tensor(16.6564)
+tensor(0.0106)
+tensor(0.1412)
+tensor(14.6575)
+tensor(0.0116)
+tensor(0.1534)
+tensor(15.4627)
+tensor(0.0108)
+tensor(0.1436)
+tensor(14.0748)
+tensor(0.0103)
+tensor(0.1376)
+tensor(12.8804)
+tensor(0.0111)
+tensor(0.1467)
+tensor(14.2427)
+tensor(0.0104)
+tensor(0.1387)
+tensor(15.0443)
+tensor(0.0108)
+tensor(0.1448)
+tensor(14.4979)
+tensor(0.0117)
+tensor(0.1556)
+tensor(14.3223)
+tensor(0.0104)
+tensor(0.1392)
+tensor(15.1224)
+tensor(0.0112)
+tensor(0.1500)
+tensor(13.8876)
+tensor(0.0111)
+tensor(0.1480)
+tensor(15.0298)
+tensor(0.0102)
+tensor(0.1360)
+tensor(14.6011)
+tensor(0.0103)
+tensor(0.1376)
+tensor(14.9259)
+tensor(0.0113)
+tensor(0.1506)
+tensor(14.7134)
+tensor(0.0104)
+tensor(0.1395)
+tensor(14.8533)
+tensor(0.0107)
+tensor(0.1422)
+tensor(16.4788)
+tensor(0.0138)
+tensor(0.1846)
+tensor(16.4018)
+tensor(0.0124)
+tensor(0.1670)
+tensor(12.7862)
+tensor(0.0119)
+tensor(0.1593)
+tensor(14.4124)
+tensor(0.0152)
+tensor(0.2042)
+tensor(12.5234)
+tensor(0.0130)
+tensor(0.1766)
+tensor(15.4030)
+tensor(0.0147)
+tensor(0.1990)
+tensor(13.5865)
+tensor(0.0178)
+tensor(0.2393)
+tensor(14.7207)
+tensor(0.0170)
+tensor(0.2334)
+tensor(16.2917)
+tensor(0.0164)
+tensor(0.2237)
+tensor(13.3524)
+tensor(0.0181)
+tensor(0.2430)
+tensor(16.0245)
+tensor(0.0179)
+tensor(0.2444)
+tensor(13.3464)
+tensor(0.0153)
+tensor(0.2105)
+tensor(14.8685)
+tensor(0.0176)
+tensor(0.2375)
+tensor(15.7588)
+tensor(0.0191)
+tensor(0.2588)
+tensor(13.2063)
+tensor(0.0163)
+tensor(0.2231)
+tensor(16.0003)
+tensor(0.0175)
+tensor(0.2380)
+tensor(13.8196)
+tensor(0.0190)
+tensor(0.2551)
+tensor(14.6480)
+tensor(0.0174)
+tensor(0.2375)
+tensor(15.6450)
+tensor(0.0166)
+tensor(0.2261)
+tensor(13.1639)
+tensor(0.0175)
+tensor(0.2344)
+tensor(16.0070)
+tensor(0.0166)
+tensor(0.2245)
+tensor(13.2767)
+tensor(0.0147)
+tensor(0.2006)
+tensor(15.0140)
+tensor(0.0162)
+tensor(0.2173)
+tensor(15.1040)
+tensor(0.0153)
+tensor(0.2054)
+tensor(14.6932)
+tensor(0.0144)
+tensor(0.1948)
+tensor(15.7419)
+tensor(0.0148)
+tensor(0.1988)
+tensor(14.5003)
+tensor(0.0130)
+tensor(0.1737)
+tensor(14.7747)
+tensor(0.0119)
+tensor(0.1589)
+tensor(14.4079)
+tensor(0.0116)
+tensor(0.1549)
+tensor(13.5764)
+tensor(0.0098)
+tensor(0.1304)
+tensor(12.6997)
+tensor(0.0092)
+tensor(0.1215)
+tensor(13.6883)
+tensor(0.0096)
+tensor(0.1274)
+tensor(13.6593)
+tensor(0.0092)
+tensor(0.1226)
+tensor(13.6335)
+tensor(0.0092)
+tensor(0.1218)
+tensor(13.3378)
+tensor(0.0092)
+tensor(0.1221)
+tensor(14.0295)
+tensor(0.0092)
+tensor(0.1220)
+tensor(14.9971)
+tensor(0.0092)
+tensor(0.1226)
+tensor(12.7390)
+tensor(0.0093)
+tensor(0.1235)
+tensor(14.3290)
+tensor(0.0092)
+tensor(0.1221)
+tensor(14.4678)
+tensor(0.0092)
+tensor(0.1228)
+tensor(13.0371)
+tensor(0.0092)
+tensor(0.1215)
+tensor(14.0769)
+tensor(0.0092)
+tensor(0.1224)
+tensor(13.9699)
+tensor(0.0092)
+tensor(0.1230)
+tensor(14.1870)
+tensor(0.0092)
+tensor(0.1224)
+tensor(13.7102)
+tensor(0.0092)
+tensor(0.1215)
+tensor(14.7196)
+tensor(0.0092)
+tensor(0.1224)
+tensor(14.6650)
+tensor(0.0093)
+tensor(0.1234)
+tensor(15.0778)
+tensor(0.0093)
+tensor(0.1231)
+tensor(14.2178)
+tensor(0.0094)
+tensor(0.1244)
+tensor(14.3467)
+tensor(0.0092)
+tensor(0.1222)
+tensor(14.6107)
+tensor(0.0091)
+tensor(0.1211)
+tensor(13.6880)
+tensor(0.0090)
+tensor(0.1192)
+tensor(14.8538)
+tensor(0.0090)
+tensor(0.1206)
+tensor(14.7046)
+tensor(0.0090)
+tensor(0.1195)
+tensor(15.4690)
+tensor(0.0091)
+tensor(0.1213)
+tensor(14.3695)
+tensor(0.0091)
+tensor(0.1216)
+tensor(15.4809)
+tensor(0.0091)
+tensor(0.1218)
+tensor(14.5962)
+tensor(0.0090)
+tensor(0.1202)
+tensor(13.9490)
+tensor(0.0091)
+tensor(0.1217)
+tensor(14.0992)
+tensor(0.0090)
+tensor(0.1206)
+tensor(14.7388)
+tensor(0.0089)
+tensor(0.1192)
+tensor(14.6408)
+tensor(0.0104)
+tensor(0.1398)
+tensor(12.7144)
+tensor(0.0090)
+tensor(0.1214)
+tensor(14.6970)
+tensor(0.0101)
+tensor(0.1366)
+tensor(12.6182)
+tensor(0.0110)
+tensor(0.1482)
+tensor(14.7562)
+tensor(0.0109)
+tensor(0.1475)
+tensor(14.4494)
+tensor(0.0103)
+tensor(0.1407)
+tensor(13.7209)
+tensor(0.0119)
+tensor(0.1603)
+tensor(15.3325)
+tensor(0.0110)
+tensor(0.1489)
+tensor(15.5027)
+tensor(0.0113)
+tensor(0.1538)
+tensor(14.6668)
+tensor(0.0109)
+tensor(0.1481)
+tensor(14.4183)
+tensor(0.0092)
+tensor(0.1249)
+tensor(14.9137)
+tensor(0.0099)
+tensor(0.1338)
+tensor(14.7656)
+tensor(0.0101)
+tensor(0.1369)
+tensor(15.1149)
+tensor(0.0090)
+tensor(0.1221)
+tensor(14.1738)
+tensor(0.0096)
+tensor(0.1299)
+tensor(14.4151)
+tensor(0.0093)
+tensor(0.1253)
+tensor(14.4014)
+tensor(0.0085)
+tensor(0.1144)
+tensor(13.4192)
+tensor(0.0090)
+tensor(0.1220)
+tensor(14.3799)
+tensor(0.0092)
+tensor(0.1238)
+tensor(16.9860)
+tensor(0.0101)
+tensor(0.1366)
+tensor(16.3040)
+tensor(0.0146)
+tensor(0.1962)
+tensor(13.9587)
+tensor(0.0115)
+tensor(0.1572)
+tensor(14.6991)
+tensor(0.0114)
+tensor(0.1555)
+tensor(12.7494)
+tensor(0.0154)
+tensor(0.2087)
+tensor(15.2442)
+tensor(0.0160)
+tensor(0.2206)
+tensor(14.2386)
+tensor(0.0150)
+tensor(0.2078)
+tensor(14.5539)
+tensor(0.0179)
+tensor(0.2456)
+tensor(16.3395)
+tensor(0.0186)
+tensor(0.2583)
+tensor(13.1745)
+tensor(0.0154)
+tensor(0.2147)
+tensor(15.3745)
+tensor(0.0178)
+tensor(0.2458)
+tensor(15.6513)
+tensor(0.0189)
+tensor(0.2600)
+tensor(14.3578)
+tensor(0.0169)
+tensor(0.2361)
+tensor(16.6916)
+tensor(0.0182)
+tensor(0.2517)
+tensor(14.8904)
+tensor(0.0171)
+tensor(0.2332)
+tensor(14.7717)
+tensor(0.0148)
+tensor(0.2039)
+tensor(16.2928)
+tensor(0.0158)
+tensor(0.2171)
+tensor(14.6208)
+tensor(0.0133)
+tensor(0.1812)
+tensor(15.2956)
+tensor(0.0133)
+tensor(0.1811)
+tensor(14.2854)
+tensor(0.0125)
+tensor(0.1710)
+tensor(14.6567)
+tensor(0.0113)
+tensor(0.1532)
+tensor(12.7592)
+tensor(0.0102)
+tensor(0.1378)
+tensor(14.1983)
+tensor(0.0108)
+tensor(0.1457)
+tensor(12.8003)
+tensor(0.0100)
+tensor(0.1367)
+tensor(13.3514)
+tensor(0.0090)
+tensor(0.1221)
+tensor(12.4491)
+tensor(0.0103)
+tensor(0.1383)
+tensor(14.4839)
+tensor(0.0107)
+tensor(0.1450)
+tensor(13.0873)
+tensor(0.0100)
+tensor(0.1357)
+tensor(14.6286)
+tensor(0.0106)
+tensor(0.1439)
+tensor(13.0229)
+tensor(0.0110)
+tensor(0.1480)
+tensor(14.6411)
+tensor(0.0107)
+tensor(0.1452)
+tensor(15.2091)
+tensor(0.0110)
+tensor(0.1494)
+tensor(13.8507)
+tensor(0.0108)
+tensor(0.1461)
+tensor(14.8671)
+tensor(0.0102)
+tensor(0.1377)
+tensor(14.2266)
+tensor(0.0098)
+tensor(0.1333)
+tensor(14.3265)
+tensor(0.0095)
+tensor(0.1286)
+tensor(13.3277)
+tensor(0.0088)
+tensor(0.1190)
+tensor(14.0914)
+tensor(0.0089)
+tensor(0.1200)
+tensor(14.3978)
+tensor(0.0090)
+tensor(0.1226)
+tensor(13.4736)
+tensor(0.0082)
+tensor(0.1105)
+tensor(13.1166)
+tensor(0.0088)
+tensor(0.1182)
+tensor(13.7578)
+tensor(0.0083)
+tensor(0.1125)
+tensor(13.3496)
+tensor(0.0076)
+tensor(0.1036)
+tensor(12.5588)
+tensor(0.0080)
+tensor(0.1085)
+tensor(13.4552)
+tensor(0.0079)
+tensor(0.1074)
+tensor(13.4683)
+tensor(0.0076)
+tensor(0.1040)
+tensor(14.2815)
+tensor(0.0084)
+tensor(0.1141)
+tensor(13.7307)
+tensor(0.0078)
+tensor(0.1056)
+tensor(14.2476)
+tensor(0.0079)
+tensor(0.1081)
+tensor(14.3272)
+tensor(0.0081)
+tensor(0.1100)
+tensor(14.1028)
+tensor(0.0076)
+tensor(0.1036)
+tensor(14.0891)
+tensor(0.0076)
+tensor(0.1032)
+tensor(14.3237)
+tensor(0.0080)
+tensor(0.1096)
+tensor(14.8797)
+tensor(0.0077)
+tensor(0.1055)
+tensor(13.0582)
+tensor(0.0081)
+tensor(0.1096)
+tensor(13.8815)
+tensor(0.0083)
+tensor(0.1135)
+tensor(13.1012)
+tensor(0.0076)
+tensor(0.1040)
+tensor(13.6610)
+tensor(0.0083)
+tensor(0.1132)
+tensor(13.1244)
+tensor(0.0087)
+tensor(0.1191)
+tensor(13.4018)
+tensor(0.0081)
+tensor(0.1115)
+tensor(14.7555)
+tensor(0.0093)
+tensor(0.1289)
+tensor(14.4676)
+tensor(0.0090)
+tensor(0.1241)
+tensor(14.7990)
+tensor(0.0085)
+tensor(0.1171)
+tensor(15.0599)
+tensor(0.0092)
+tensor(0.1267)
+tensor(14.7970)
+tensor(0.0083)
+tensor(0.1149)
+tensor(14.1078)
+tensor(0.0074)
+tensor(0.1023)
+tensor(16.4805)
+tensor(0.0095)
+tensor(0.1310)
+tensor(16.8498)
+tensor(0.0090)
+tensor(0.1254)
+CFD PINN training progress:  89%|████████▉ | 889/1000 [02:31<00:18,  5.87it/s]CFD PINN training progress:  89%|████████▉ | 890/1000 [02:31<00:18,  5.87it/s]CFD PINN training progress:  89%|████████▉ | 891/1000 [02:31<00:18,  5.87it/s]CFD PINN training progress:  89%|████████▉ | 892/1000 [02:31<00:18,  5.87it/s]CFD PINN training progress:  89%|████████▉ | 893/1000 [02:31<00:18,  5.87it/s]CFD PINN training progress:  89%|████████▉ | 894/1000 [02:32<00:18,  5.88it/s]CFD PINN training progress:  90%|████████▉ | 895/1000 [02:32<00:17,  5.88it/s]CFD PINN training progress:  90%|████████▉ | 896/1000 [02:32<00:17,  5.88it/s]CFD PINN training progress:  90%|████████▉ | 897/1000 [02:32<00:17,  5.88it/s]CFD PINN training progress:  90%|████████▉ | 898/1000 [02:32<00:17,  5.88it/s]CFD PINN training progress:  90%|████████▉ | 899/1000 [02:32<00:17,  5.88it/s]CFD PINN training progress:  90%|█████████ | 900/1000 [02:33<00:17,  5.88it/s]CFD PINN training progress:  90%|█████████ | 901/1000 [02:33<00:16,  5.89it/s]CFD PINN training progress:  90%|█████████ | 902/1000 [02:33<00:16,  5.89it/s]CFD PINN training progress:  90%|█████████ | 903/1000 [02:33<00:16,  5.89it/s]CFD PINN training progress:  90%|█████████ | 904/1000 [02:33<00:16,  5.88it/s]CFD PINN training progress:  90%|█████████ | 905/1000 [02:33<00:16,  5.89it/s]CFD PINN training progress:  91%|█████████ | 906/1000 [02:34<00:15,  5.89it/s]CFD PINN training progress:  91%|█████████ | 907/1000 [02:34<00:15,  5.88it/s]CFD PINN training progress:  91%|█████████ | 908/1000 [02:34<00:15,  5.88it/s]CFD PINN training progress:  91%|█████████ | 909/1000 [02:34<00:15,  5.88it/s]CFD PINN training progress:  91%|█████████ | 910/1000 [02:34<00:15,  5.87it/s]CFD PINN training progress:  91%|█████████ | 911/1000 [02:34<00:15,  5.87it/s]CFD PINN training progress:  91%|█████████ | 912/1000 [02:35<00:15,  5.86it/s]CFD PINN training progress:  91%|█████████▏| 913/1000 [02:35<00:14,  5.87it/s]CFD PINN training progress:  91%|█████████▏| 914/1000 [02:35<00:14,  5.87it/s]CFD PINN training progress:  92%|█████████▏| 915/1000 [02:35<00:14,  5.87it/s]CFD PINN training progress:  92%|█████████▏| 916/1000 [02:35<00:14,  5.88it/s]CFD PINN training progress:  92%|█████████▏| 917/1000 [02:35<00:14,  5.88it/s]CFD PINN training progress:  92%|█████████▏| 918/1000 [02:36<00:13,  5.88it/s]CFD PINN training progress:  92%|█████████▏| 919/1000 [02:36<00:13,  5.88it/s]CFD PINN training progress:  92%|█████████▏| 920/1000 [02:36<00:13,  5.88it/s]CFD PINN training progress:  92%|█████████▏| 921/1000 [02:36<00:13,  5.88it/s]CFD PINN training progress:  92%|█████████▏| 922/1000 [02:36<00:13,  5.89it/s]CFD PINN training progress:  92%|█████████▏| 923/1000 [02:37<00:13,  5.89it/s]CFD PINN training progress:  92%|█████████▏| 924/1000 [02:37<00:12,  5.89it/s]CFD PINN training progress:  92%|█████████▎| 925/1000 [02:37<00:12,  5.90it/s]CFD PINN training progress:  93%|█████████▎| 926/1000 [02:37<00:12,  5.90it/s]CFD PINN training progress:  93%|█████████▎| 927/1000 [02:37<00:12,  5.90it/s]CFD PINN training progress:  93%|█████████▎| 928/1000 [02:37<00:12,  5.90it/s]CFD PINN training progress:  93%|█████████▎| 929/1000 [02:38<00:12,  5.89it/s]CFD PINN training progress:  93%|█████████▎| 930/1000 [02:38<00:11,  5.88it/s]CFD PINN training progress:  93%|█████████▎| 931/1000 [02:38<00:11,  5.88it/s]CFD PINN training progress:  93%|█████████▎| 932/1000 [02:38<00:11,  5.88it/s]CFD PINN training progress:  93%|█████████▎| 933/1000 [02:38<00:11,  5.88it/s]CFD PINN training progress:  93%|█████████▎| 934/1000 [02:38<00:11,  5.89it/s]CFD PINN training progress:  94%|█████████▎| 935/1000 [02:39<00:11,  5.89it/s]CFD PINN training progress:  94%|█████████▎| 936/1000 [02:39<00:10,  5.89it/s]CFD PINN training progress:  94%|█████████▎| 937/1000 [02:39<00:10,  5.89it/s]CFD PINN training progress:  94%|█████████▍| 938/1000 [02:39<00:10,  5.89it/s]CFD PINN training progress:  94%|█████████▍| 939/1000 [02:39<00:10,  5.89it/s]CFD PINN training progress:  94%|█████████▍| 940/1000 [02:39<00:10,  5.89it/s]CFD PINN training progress:  94%|█████████▍| 941/1000 [02:40<00:10,  5.89it/s]CFD PINN training progress:  94%|█████████▍| 942/1000 [02:40<00:09,  5.90it/s]CFD PINN training progress:  94%|█████████▍| 943/1000 [02:40<00:09,  5.90it/s]CFD PINN training progress:  94%|█████████▍| 944/1000 [02:40<00:09,  5.90it/s]CFD PINN training progress:  94%|█████████▍| 945/1000 [02:40<00:09,  5.89it/s]CFD PINN training progress:  95%|█████████▍| 946/1000 [02:40<00:09,  5.89it/s]CFD PINN training progress:  95%|█████████▍| 947/1000 [02:41<00:09,  5.89it/s]CFD PINN training progress:  95%|█████████▍| 948/1000 [02:41<00:08,  5.89it/s]CFD PINN training progress:  95%|█████████▍| 949/1000 [02:41<00:08,  5.90it/s]CFD PINN training progress:  95%|█████████▌| 950/1000 [02:41<00:08,  5.91it/s]CFD PINN training progress:  95%|█████████▌| 951/1000 [02:41<00:08,  5.91it/s]CFD PINN training progress:  95%|█████████▌| 952/1000 [02:41<00:08,  5.91it/s]CFD PINN training progress:  95%|█████████▌| 953/1000 [02:42<00:07,  5.89it/s]CFD PINN training progress:  95%|█████████▌| 954/1000 [02:42<00:07,  5.89it/s]CFD PINN training progress:  96%|█████████▌| 955/1000 [02:42<00:07,  5.89it/s]CFD PINN training progress:  96%|█████████▌| 956/1000 [02:42<00:07,  5.89it/s]CFD PINN training progress:  96%|█████████▌| 957/1000 [02:42<00:07,  5.87it/s]CFD PINN training progress:  96%|█████████▌| 958/1000 [02:42<00:07,  5.87it/s]CFD PINN training progress:  96%|█████████▌| 959/1000 [02:43<00:06,  5.88it/s]CFD PINN training progress:  96%|█████████▌| 960/1000 [02:43<00:06,  5.89it/s]CFD PINN training progress:  96%|█████████▌| 961/1000 [02:43<00:06,  5.89it/s]CFD PINN training progress:  96%|█████████▌| 962/1000 [02:43<00:06,  5.88it/s]CFD PINN training progress:  96%|█████████▋| 963/1000 [02:43<00:06,  5.88it/s]CFD PINN training progress:  96%|█████████▋| 964/1000 [02:43<00:06,  5.88it/s]CFD PINN training progress:  96%|█████████▋| 965/1000 [02:44<00:05,  5.88it/s]CFD PINN training progress:  97%|█████████▋| 966/1000 [02:44<00:05,  5.86it/s]CFD PINN training progress:  97%|█████████▋| 967/1000 [02:44<00:05,  5.86it/s]CFD PINN training progress:  97%|█████████▋| 968/1000 [02:44<00:05,  5.88it/s]CFD PINN training progress:  97%|█████████▋| 969/1000 [02:44<00:05,  5.89it/s]CFD PINN training progress:  97%|█████████▋| 970/1000 [02:44<00:05,  5.90it/s]CFD PINN training progress:  97%|█████████▋| 971/1000 [02:45<00:04,  5.90it/s]CFD PINN training progress:  97%|█████████▋| 972/1000 [02:45<00:04,  5.90it/s]CFD PINN training progress:  97%|█████████▋| 973/1000 [02:45<00:04,  5.90it/s]CFD PINN training progress:  97%|█████████▋| 974/1000 [02:45<00:04,  5.90it/s]CFD PINN training progress:  98%|█████████▊| 975/1000 [02:45<00:04,  5.90it/s]CFD PINN training progress:  98%|█████████▊| 976/1000 [02:46<00:04,  5.90it/s]CFD PINN training progress:  98%|█████████▊| 977/1000 [02:46<00:03,  5.90it/s]CFD PINN training progress:  98%|█████████▊| 978/1000 [02:46<00:03,  5.90it/s]CFD PINN training progress:  98%|█████████▊| 979/1000 [02:46<00:03,  5.90it/s]CFD PINN training progress:  98%|█████████▊| 980/1000 [02:46<00:03,  5.90it/s]CFD PINN training progress:  98%|█████████▊| 981/1000 [02:46<00:03,  5.89it/s]CFD PINN training progress:  98%|█████████▊| 982/1000 [02:47<00:03,  5.89it/s]CFD PINN training progress:  98%|█████████▊| 983/1000 [02:47<00:02,  5.89it/s]CFD PINN training progress:  98%|█████████▊| 984/1000 [02:47<00:02,  5.89it/s]CFD PINN training progress:  98%|█████████▊| 985/1000 [02:47<00:02,  5.88it/s]CFD PINN training progress:  99%|█████████▊| 986/1000 [02:47<00:02,  5.89it/s]CFD PINN training progress:  99%|█████████▊| 987/1000 [02:47<00:02,  5.90it/s]CFD PINN training progress:  99%|█████████▉| 988/1000 [02:48<00:02,  5.89it/s]CFD PINN training progress:  99%|█████████▉| 989/1000 [02:48<00:01,  5.88it/s]CFD PINN training progress:  99%|█████████▉| 990/1000 [02:48<00:01,  5.88it/s]CFD PINN training progress:  99%|█████████▉| 991/1000 [02:48<00:01,  5.88it/s]CFD PINN training progress:  99%|█████████▉| 992/1000 [02:48<00:01,  5.88it/s]CFD PINN training progress:  99%|█████████▉| 993/1000 [02:48<00:01,  5.88it/s]CFD PINN training progress:  99%|█████████▉| 994/1000 [02:49<00:01,  5.88it/s]CFD PINN training progress: 100%|█████████▉| 995/1000 [02:49<00:00,  5.89it/s]CFD PINN training progress: 100%|█████████▉| 996/1000 [02:49<00:00,  5.88it/s]CFD PINN training progress: 100%|█████████▉| 997/1000 [02:49<00:00,  5.88it/s]CFD PINN training progress: 100%|█████████▉| 998/1000 [02:49<00:00,  5.89it/s]CFD PINN training progress: 100%|█████████▉| 999/1000 [02:49<00:00,  5.89it/s]CFD PINN training progress: 100%|██████████| 1000/1000 [02:50<00:00,  5.88it/s]CFD PINN training progress: 100%|██████████| 1000/1000 [02:50<00:00,  5.88it/s]
+tensor(17.1100)
+tensor(0.0129)
+tensor(0.1786)
+tensor(13.1905)
+tensor(0.0092)
+tensor(0.1284)
+tensor(14.0465)
+tensor(0.0096)
+tensor(0.1347)
+tensor(12.3433)
+tensor(0.0118)
+tensor(0.1638)
+tensor(15.1080)
+tensor(0.0124)
+tensor(0.1752)
+tensor(16.2103)
+tensor(0.0119)
+tensor(0.1679)
+tensor(13.2527)
+tensor(0.0137)
+tensor(0.1913)
+tensor(13.3180)
+tensor(0.0123)
+tensor(0.1742)
+tensor(14.5872)
+tensor(0.0125)
+tensor(0.1772)
+tensor(12.0892)
+tensor(0.0155)
+tensor(0.2174)
+tensor(15.3307)
+tensor(0.0165)
+tensor(0.2356)
+tensor(12.7033)
+tensor(0.0149)
+tensor(0.2141)
+tensor(14.2609)
+tensor(0.0199)
+tensor(0.2804)
+tensor(16.3602)
+tensor(0.0209)
+tensor(0.2984)
+tensor(13.9060)
+tensor(0.0173)
+tensor(0.2481)
+tensor(14.7089)
+tensor(0.0211)
+tensor(0.2980)
+tensor(16.5347)
+tensor(0.0211)
+tensor(0.3013)
+tensor(14.5470)
+tensor(0.0175)
+tensor(0.2497)
+tensor(14.8852)
+tensor(0.0207)
+tensor(0.2903)
+tensor(16.8295)
+tensor(0.0198)
+tensor(0.2812)
+tensor(13.8581)
+tensor(0.0156)
+tensor(0.2210)
+tensor(14.3383)
+tensor(0.0177)
+tensor(0.2478)
+tensor(15.4357)
+tensor(0.0184)
+tensor(0.2590)
+tensor(13.8596)
+tensor(0.0158)
+tensor(0.2238)
+tensor(13.8695)
+tensor(0.0171)
+tensor(0.2395)
+tensor(15.4724)
+tensor(0.0228)
+tensor(0.3189)
+tensor(12.8150)
+tensor(0.0185)
+tensor(0.2639)
+tensor(16.3452)
+tensor(0.0205)
+tensor(0.2892)
+tensor(13.3155)
+tensor(0.0232)
+tensor(0.3234)
+tensor(14.8744)
+tensor(0.0222)
+tensor(0.3164)
+tensor(14.6354)
+tensor(0.0202)
+tensor(0.2886)
+tensor(13.2194)
+tensor(0.0237)
+tensor(0.3325)
+tensor(16.4755)
+tensor(0.0250)
+tensor(0.3539)
+tensor(12.5318)
+tensor(0.0206)
+tensor(0.2960)
+tensor(15.6497)
+tensor(0.0241)
+tensor(0.3401)
+tensor(14.7493)
+tensor(0.0265)
+tensor(0.3711)
+tensor(14.2781)
+tensor(0.0230)
+tensor(0.3308)
+tensor(16.8969)
+tensor(0.0228)
+tensor(0.3266)
+tensor(12.7844)
+tensor(0.0235)
+tensor(0.3270)
+tensor(16.5113)
+tensor(0.0226)
+tensor(0.3194)
+tensor(12.1813)
+tensor(0.0189)
+tensor(0.2703)
+tensor(15.8495)
+tensor(0.0227)
+tensor(0.3197)
+tensor(14.0132)
+tensor(0.0228)
+tensor(0.3184)
+tensor(13.5776)
+tensor(0.0190)
+tensor(0.2703)
+tensor(15.7900)
+tensor(0.0201)
+tensor(0.2845)
+tensor(13.1514)
+tensor(0.0224)
+tensor(0.3108)
+tensor(16.2810)
+tensor(0.0203)
+tensor(0.2858)
+tensor(11.8228)
+tensor(0.0157)
+tensor(0.2213)
+tensor(14.5703)
+tensor(0.0183)
+tensor(0.2556)
+tensor(14.0443)
+tensor(0.0204)
+tensor(0.2838)
+tensor(14.2695)
+tensor(0.0187)
+tensor(0.2641)
+tensor(16.7635)
+tensor(0.0193)
+tensor(0.2708)
+tensor(13.4440)
+tensor(0.0194)
+tensor(0.2670)
+tensor(15.8729)
+tensor(0.0169)
+tensor(0.2343)
+tensor(12.5853)
+tensor(0.0140)
+tensor(0.1955)
+tensor(13.8350)
+tensor(0.0164)
+tensor(0.2257)
+tensor(13.9064)
+tensor(0.0162)
+tensor(0.2223)
+tensor(12.5044)
+tensor(0.0133)
+tensor(0.1847)
+tensor(15.2603)
+tensor(0.0148)
+tensor(0.2047)
+tensor(13.0395)
+tensor(0.0165)
+tensor(0.2261)
+tensor(15.8151)
+tensor(0.0158)
+tensor(0.2183)
+tensor(12.1371)
+tensor(0.0123)
+tensor(0.1708)
+tensor(14.3468)
+tensor(0.0137)
+tensor(0.1889)
+tensor(13.4298)
+tensor(0.0141)
+tensor(0.1930)
+tensor(14.1675)
+tensor(0.0127)
+tensor(0.1751)
+tensor(15.5771)
+tensor(0.0132)
+tensor(0.1811)
+tensor(13.6499)
+tensor(0.0122)
+tensor(0.1663)
+tensor(13.8699)
+tensor(0.0105)
+tensor(0.1436)
+tensor(14.1065)
+tensor(0.0107)
+tensor(0.1469)
+tensor(13.6093)
+tensor(0.0102)
+tensor(0.1398)
+tensor(12.2037)
+tensor(0.0085)
+tensor(0.1162)
+tensor(13.4646)
+tensor(0.0088)
+tensor(0.1202)
+tensor(13.8577)
+tensor(0.0087)
+tensor(0.1190)
+tensor(12.8176)
+tensor(0.0080)
+tensor(0.1085)
+tensor(12.4609)
+tensor(0.0082)
+tensor(0.1120)
+tensor(12.8578)
+tensor(0.0079)
+tensor(0.1078)
+tensor(12.2735)
+tensor(0.0072)
+tensor(0.0978)
+tensor(12.2882)
+tensor(0.0077)
+tensor(0.1054)
+tensor(12.9488)
+tensor(0.0083)
+tensor(0.1134)
+tensor(13.2146)
+tensor(0.0079)
+tensor(0.1087)
+tensor(13.6237)
+tensor(0.0082)
+tensor(0.1120)
+tensor(12.7856)
+tensor(0.0078)
+tensor(0.1063)
+tensor(13.4499)
+tensor(0.0077)
+tensor(0.1061)
+tensor(14.0861)
+tensor(0.0082)
+tensor(0.1129)
+tensor(13.9160)
+tensor(0.0080)
+tensor(0.1101)
+tensor(13.3386)
+tensor(0.0076)
+tensor(0.1043)
+tensor(13.7542)
+tensor(0.0077)
+tensor(0.1060)
+tensor(13.6893)
+tensor(0.0075)
+tensor(0.1025)
+tensor(13.2769)
+tensor(0.0073)
+tensor(0.1001)
+tensor(13.3020)
+tensor(0.0074)
+tensor(0.1009)
+tensor(13.5883)
+tensor(0.0070)
+tensor(0.0957)
+tensor(13.2868)
+tensor(0.0070)
+tensor(0.0950)
+tensor(13.2435)
+tensor(0.0071)
+tensor(0.0964)
+tensor(13.4467)
+tensor(0.0071)
+tensor(0.0964)
+tensor(13.3104)
+tensor(0.0071)
+tensor(0.0962)
+tensor(13.0170)
+tensor(0.0071)
+tensor(0.0962)
+tensor(13.2354)
+tensor(0.0070)
+tensor(0.0962)
+tensor(13.8455)
+tensor(0.0074)
+tensor(0.1018)
+tensor(13.7855)
+tensor(0.0071)
+tensor(0.0978)
+tensor(13.9291)
+tensor(0.0073)
+tensor(0.1004)
+tensor(13.6921)
+tensor(0.0069)
+tensor(0.0943)
+tensor(13.4098)
+tensor(0.0069)
+tensor(0.0941)
+tensor(12.7470)
+tensor(0.0067)
+tensor(0.0912)
+tensor(12.9753)
+tensor(0.0065)
+tensor(0.0890)
+tensor(13.3454)
+tensor(0.0066)
+tensor(0.0911)
+tensor(13.3177)
+tensor(0.0066)
+tensor(0.0902)
+tensor(13.3743)
+tensor(0.0068)
+tensor(0.0940)
+tensor(13.4024)
+tensor(0.0066)
+tensor(0.0913)
+tensor(13.5198)
+tensor(0.0067)
+tensor(0.0930)
+tensor(13.3251)
+tensor(0.0067)
+tensor(0.0922)
+tensor(13.9412)
+tensor(0.0070)
+tensor(0.0969)
+tensor(14.0284)
+tensor(0.0069)
+tensor(0.0958)
+'train' wall-time (seconds): 170.090
+
+Prediction of fluid properties...
+	DEBUG: Applying scaler...
+	DEBUG: Scaler applied
+	DEBUG: len(x): 400400
+	DEBUG: len(y): 400400
+	DEBUG: len(t): 400400
+'inference' wall-time (seconds): 0.001
+
+	Fluid properties prediction complete
+
+Creating animation _pred...
+	Animation _pred completed
+
+Creating animation _residual...
+	Animation _residual completed
+
+Saving CFDPINN model to /home/harry/pinns/models/model_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pt...
+	Model /home/harry/pinns/models/model_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pt saved
+
