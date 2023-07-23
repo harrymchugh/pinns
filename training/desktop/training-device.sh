@@ -3,10 +3,10 @@
 source ${HOME}/pytorch-venv/bin/activate
 export CFDPINN_ROOT="${HOME}/pinns"
 
-for epochs in 1000; do
+for epochs in 200; do
 for testpct in 0.2; do
 for adaption in lrannealing; do
-for device in cuda; do
+for device in cuda cpu; do
 
 export NUMX="20"
 export NUMY="20"
