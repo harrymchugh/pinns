@@ -228,6 +228,15 @@ def parse_args():
         dest="output_data_path")   
 
     #PINN setup and variables
+    parser.add_argument("--device",
+        action="store",
+        type=str,
+        choices=["cuda","cpu"],
+        required=False,
+        default="cpu",
+        help="The type of device used for PyTorch operations",
+        dest="device")
+    
     parser.add_argument("--save-model-path",
         action="store",
         type=str,
