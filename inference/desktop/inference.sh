@@ -20,7 +20,7 @@ cfdpinn \
     --initial_u 1 \
     --load-scaler-path $CFDPINN_ROOT/models/scaler_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pkl \
     --load-model-path $CFDPINN_ROOT/models/model_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pt \
-    --static-plots
+    --static-plots |& tee $CFDPINN_ROOT/inference/desktop/logs/inf_10x20_withmodel_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.log
 
 mv \
     ${CFDPINN_ROOT}/plots/static.png \
@@ -42,7 +42,7 @@ cfdpinn \
     --initial_u 1 \
     --load-scaler-path $CFDPINN_ROOT/models/scaler_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pkl \
     --load-model-path $CFDPINN_ROOT/models/model_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pt \
-    --static-plots
+    --static-plots |& tee $CFDPINN_ROOT/inference/desktop/logs/inf_20x10_withmodel_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.log
 
 mv \
     ${CFDPINN_ROOT}/plots/static.png \
@@ -64,7 +64,8 @@ cfdpinn \
     --initial_u 1 \
     --load-scaler-path $CFDPINN_ROOT/models/scaler_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pkl \
     --load-model-path $CFDPINN_ROOT/models/model_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pt \
-    --static-plots
+    --static-plots |& tee $CFDPINN_ROOT/inference/desktop/logs/inf_20x20_withmodel_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.log
+
 
 mv \
     ${CFDPINN_ROOT}/plots/static.png \
@@ -86,7 +87,8 @@ cfdpinn \
     --initial_u 1 \
     --load-scaler-path $CFDPINN_ROOT/models/scaler_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pkl \
     --load-model-path $CFDPINN_ROOT/models/model_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.pt \
-    --static-plots
+    --static-plots |& tee $CFDPINN_ROOT/inference/desktop/logs/inf_100x100_withmodel_cavity_nu0.01_U1_20x20_epochs1000_lrannealing_testpcnt0.8.log
+
 
 mv \
     ${CFDPINN_ROOT}/plots/static.png \
