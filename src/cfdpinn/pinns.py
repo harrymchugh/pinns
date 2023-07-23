@@ -1,20 +1,25 @@
 #!/usr/bin/env python3
 
 import torch
+
 from numpy import absolute
 from numpy import zeros
 from numpy import min,max,median,std
+
 from tqdm import tqdm
+
 from cfdpinn.timing import function_timer
+
 from time import time
-from torch.profiler import profile, record_function, ProfilerActivity
+
 from softadapt import LossWeightedSoftAdapt
 
 from torch.utils.tensorboard import SummaryWriter
 
 class CfdPinn(torch.nn.Module):
     def __init__(self,args):
-        """_summary_
+        """
+        The class for the CFDPINN neural networks.
         """
         super().__init__()
         self.linear_stack = torch.nn.Sequential(
@@ -52,10 +57,8 @@ class CfdPinn(torch.nn.Module):
         self.choose_model_device(args)
 
     def choose_model_device(self,args):
-        """_summary_
-
-        Args:
-            args (_type_): _description_
+        """
+        A function to set PyTorch training and inference device.
         """
         if args.device:
             self.device = args.device
@@ -69,6 +72,9 @@ class CfdPinn(torch.nn.Module):
 
     def lossfn(self,data,train_or_test):
         """
+        A loss function that considers 2D Navier-Stokes and 
+        returns multi-objective components and applies
+        weighting if necessary.
         """
         #Get gradients required for 2D-Navier stokes
         u = data[f"{train_or_test}_interior_pred"][:,0]
@@ -108,6 +114,7 @@ class CfdPinn(torch.nn.Module):
 
         data[f"{train_or_test}_pde_loss"] = pde_loss_total
 
+        #Compute boundary loss and data residual
         data[f"{train_or_test}_boundary_loss"] = \
             criterion(
                 data[f"{train_or_test}_boundary_labels"],
@@ -122,6 +129,8 @@ class CfdPinn(torch.nn.Module):
 
     def forward(self, x, y, t):
         """
+        The forward pass of the CFDPINN.
+        Predict fluid properties from X,Y,T inputs.
         """
         inputs = torch.cat(
             [
@@ -136,6 +145,7 @@ class CfdPinn(torch.nn.Module):
     @function_timer
     def train(self,data,args):
         """
+        The control or logic loop for training the CFDPINN.
         """
         data["train_data_loss_weight_prev"] = 0
         data["train_pde_loss_weight_prev"] = 0
@@ -175,6 +185,8 @@ class CfdPinn(torch.nn.Module):
 
     def train_loop(self,data,epoch):
         """
+        The function called during each epoch of
+        CFDPINN training
         """
         #Ensure gradients are set to zero
         self.optimizer.zero_grad()
@@ -217,11 +229,9 @@ class CfdPinn(torch.nn.Module):
         self.optimizer.step()
 
     def weight_adaption(self,data,epoch):
-        """_summary_
-
-        Args:
-            data (_type_): _description_
-            epoch (_type_): _description_
+        """
+        Apply the user chosen weighting methodology to 
+        the various loss tensors in the multi-objective function.
         """
         if self.adaption == "softadapt":
             data = self.apply_softadapt(data,epoch)
@@ -239,10 +249,28 @@ class CfdPinn(torch.nn.Module):
         return data
 
     def apply_softadapt(self,data,epoch):
-        """_summary_
+        """
+        Implement the SoftAdapt weighting algorithm.
 
-        Returns:
-            _type_: _description_
+        Uses the library softadapt https://github.com/dr-aheydari/SoftAdapt
+        which implements the algorithm described in the paper below.
+
+        @article{DBLP:journals/corr/abs-1912-12355,
+            author    = {A. Ali Heydari and
+                    Craig A. Thompson and
+                    Asif Mehmood},
+            title     = {SoftAdapt: Techniques for Adaptive Loss Weighting of Neural Networks
+                    with Multi-Part Loss Functions},
+            journal   = {CoRR},
+            volume    = {abs/1912.12355},
+            year      = {2019},
+            url       = {http://arxiv.org/abs/1912.12355},
+            eprinttype = {arXiv},
+            eprint    = {1912.12355},
+            timestamp = {Fri, 03 Jan 2020 16:10:45 +0100},
+            biburl    = {https://dblp.org/rec/journals/corr/abs-1912-12355.bib},
+            bibsource = {dblp computer science bibliography, https://dblp.org}
+        }
         """
         adapt_weights = torch.tensor([1,1,1])
         loss_weighted_softadapt_object  = LossWeightedSoftAdapt(beta=0.1)
@@ -266,10 +294,15 @@ class CfdPinn(torch.nn.Module):
         return data
     
     def apply_lrannealing(self,data,epoch):
-        """_summary_
+        """
+        Applies the Learning rate annealing algorithm by hand.
 
-        Returns:
-            _type_: _description_
+        As described by Wang et al. 2020 in the paper below:
+
+        Wang, S., Teng, Y., and Perdikaris, P. 
+        Understanding and mitigating gradient pathologies in 
+        physics-informed neural networks. arXiv e-prints (Jan. 2020), 
+        arXiv:2001.04536.        
         """
         #Calculate dBoundaryLoss/dTheta
         data_labels = ["boundary","pde","data"]
@@ -281,32 +314,10 @@ class CfdPinn(torch.nn.Module):
 
             for name, param in self.named_parameters():
                 if "weight" in name:
-                    #print(f"There are {len(param.grad.view(-1))} weights in layer {name}{param}")
                     data[f"{data_label}_grads_mean"].append(torch.mean(torch.abs(param.grad.view(-1))))
                     data[f"{data_label}_grads_max"].append(torch.max(torch.abs(param.grad.view(-1))))
 
-            #data[f"{data_label}_grads"] = torch.cat(data[f"{data_label}_grads"])
             self.optimizer.zero_grad()
-        
-        # a = data[f"pde_grads_mean"]
-        # a_max = data[f"pde_grads_max"]
-        # print(f"data[pde_grads_mean] has {len(a)} values")
-        # print(f"data[pde_grads_mean] values are {a}")
-        # print(f"data[pde_grads_max] values are {a_max}")
-
-        # b = data[f"boundary_grads_mean"]
-        # b_max = data[f"boundary_grads_max"]
-        # print(f"data[boundary_grads_mean] has {len(b)} values")
-        # print(f"data[boundary_grads_mean] values are {b}")
-        # print(f"data[boundary_grads_max] values are {b_max}")
-
-        # c = data[f"data_grads_mean"]
-        # c_max = data[f"data_grads_max"]
-        # print(f"data[data_grads_mean] has {len(c)} values")
-        # print(f"data[data_grads_mean] values are {c}")
-        # print(f"data[data_grads_max] values are {c_max}")
-
-        # print(self.linear_stack[6].weight.grad)
 
         #Compute adaptive weight for each component of total loss
         #relative to the mean gradient of data_loss w.r.t layer weights
@@ -331,17 +342,11 @@ class CfdPinn(torch.nn.Module):
         data["train_boundary_loss_weight"] = data["train_boundary_loss_weight"]*self.alpha + (1-self.alpha)*data["train_boundary_loss_weight_prev"]
         data["train_boundary_loss_weight_prev"] = data["train_boundary_loss_weight"]
 
-        print(data["train_data_loss_weight"])
-        print(data["train_pde_loss_weight"])
-        print(data["train_boundary_loss_weight"])
-
         return data
     
     def dummy_adaption(self,data,epoch):
-        """_summary_
-
-        Returns:
-            _type_: _description_
+        """
+        Equally weight all loss components
         """
         data["train_boundary_loss_weight"] = 1
         data["train_pde_loss_weight"] = 1
@@ -351,6 +356,8 @@ class CfdPinn(torch.nn.Module):
 
     def test_loop(self,data,epoch):
         """
+        The function called during each testing phase
+        of the training loop.
         """
         data_labels = ["interior","boundary"]
         for data_label in data_labels:
@@ -382,6 +389,8 @@ class CfdPinn(torch.nn.Module):
 
     def tensorboard_outputs(self,data,epoch,train_or_test):
         """
+        Write QC data to Tensorboard for real-time and
+        post-mortem analysis
         """
         if train_or_test == "train":
             #Raw losses
@@ -408,12 +417,19 @@ class CfdPinn(torch.nn.Module):
             self.writer.add_scalar('test_total_loss',data["test_total_loss"],epoch)
 
 def save_model(pinn):
+    """
+    Write the CFDPINN model to disk for later use.
+    """
     print(f"Saving CFDPINN model to {pinn.model_output_path}...")
     torch.save(pinn.to("cpu"), pinn.model_output_path)
     print(f"\tModel {pinn.model_output_path} saved\n")
 
 def predict_fluid(data,pinn,geom,args):
     """
+    A high-level function to conduct prediction of fluid 
+    properties using a trained CFDPINN model.
+
+    This includes pre-processing and post-processing
     """
     print("Prediction of fluid properties...")
 
@@ -453,7 +469,10 @@ def predict_fluid(data,pinn,geom,args):
 
 @function_timer
 def inference(pinn,args,x,y,t):
-    """_summary_
+    """
+    A function to run the forward process of the CFDPINN model
+    Including logic for accurate timing information recording on
+    both CPU and GPUs.
     """
     # If we are timing inference data we must
     # take into consideration the GPU initialization time
@@ -490,12 +509,14 @@ def inference(pinn,args,x,y,t):
                     _ = pinn(x,y,t)
                     ender.record()
                     torch.cuda.synchronize()
+                    #Beware torch.cuda.Event using milliseconds
+                    #Conversion using * 0.001 to seconds is required
                     curr_time = starter.elapsed_time(ender) * 0.001
                     timings[repetition] = curr_time
 
         else:
             with torch.inference_mode():
-                #Get stats over 100 inferencing iterations
+                #Get stats over multiple inference iterations
                 for repetition in range(repetitions):
                     start = time()
                     _ = pinn(x,y,t)
@@ -531,7 +552,9 @@ def inference(pinn,args,x,y,t):
     return prediction
 
 def compute_residual(data):
-    """_summary_
+    """
+    Compute the residual data between simulated
+    and predicted fluid properties.
     """
     data["u_residual"] = absolute(data["u"] - data["u_pred"])
     data["v_residual"] = absolute(data["v"] - data["v_pred"])
@@ -540,10 +563,8 @@ def compute_residual(data):
     return data
 
 def load_pinn(args):
-    """_summary_
-
-    Args:
-        args (_type_): _description_
+    """
+    Load a CFDPINN model from disk.
     """
     pinn = torch.load(args.load_model_path)
     pinn.choose_model_device(args)

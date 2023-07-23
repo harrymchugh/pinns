@@ -13,19 +13,14 @@ from cfdpinn.pinns import load_pinn
 from cfdpinn.pinns import save_model
 from cfdpinn.plots import static_plots
 from cfdpinn.plots import create_animation
-from cfdpinn.timing import function_timer
 from cfdpinn.outputs import save_prediction_data
 from cfdpinn.outputs import save_training_data
 
 from pickle import load
 
-from torch.profiler import profile, record_function, ProfilerActivity
-from torch.cuda import is_available
-from torch import get_num_threads
-
 def main():
     """
-    Driver function of the CFDPINN application
+    The driver function of the CFDPINN application
     """
     #Get command line arguments
     args = parse_args()
@@ -33,8 +28,7 @@ def main():
     #Setup the time-space grids
     geom = setup_geom(args)
     
-    #Read in simulation data for training or when 
-    #explicitly requested (e.g for generating plots)
+    #Read in simulation data
     if not args.no_train:
         data = load_simulation_data(args,geom)
     elif args.load_sim:
@@ -59,7 +53,7 @@ def main():
     if not args.no_train:
             pinn.train(data,args)
     
-    #Inference only mode
+    #Preprocessing for inference-only mode
     if args.no_train:
         data["scaler"] = load(open(args.load_scaler_path,"rb"))
         data = merge_features(data,geom)
@@ -70,7 +64,7 @@ def main():
     if args.prediction_animation:
         create_animation(data,geom,args.num_frames,array_label="pred")
 
-    #Create animation from predicted fluid
+    #Create residual animation from predicted fluid
     if args.residual_animation:
         data = compute_residual(data)
         create_animation(data,geom,args.num_frames,array_label="residual")

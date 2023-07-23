@@ -3,12 +3,14 @@
 from numpy import zeros
 from os import listdir
 from Ofpp import parse_internal_field
-import re
-from math import ceil
 
 def load_simulation_data(args, geom):
     """
-    
+    A function to read in OpenFOAM data from default
+    write format.
+
+    Leverages a library Ofpp available at https://github.com/xu-xianghua/ofpp
+    Courtesy of Xianghua Xu  
     """
     print("Loading simulation data...")
     data = dict()
@@ -36,12 +38,6 @@ def load_simulation_data(args, geom):
     if "0_orig" in openfoam_outputs:
         openfoam_outputs.remove("0_orig")
     openfoam_outputs.sort()
-
-    # max_time = ceil(float(max(openfoam_outputs)))
-    # float_regex = re.compile(f"^[{geom['t_end']}-{max_time}][.][0-9]*")
-    # int_regex = re.compile(f"^[{geom['t_end']+1}-{max_time}]$")
-    # openfoam_outputs = [i for i in openfoam_outputs if not float_regex.match(i)]
-    # openfoam_outputs = [i for i in openfoam_outputs if not int_regex.match(i)]
 
     if geom["stride"]:
         openfoam_outputs = openfoam_outputs[::geom["stride"]]

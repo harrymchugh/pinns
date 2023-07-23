@@ -4,11 +4,9 @@ import os
 from numpy import save
 
 def save_prediction_data(data,args):
-    """_summary_
-
-    Args:
-        data (_type_): _description_
-        args (_type_): _description_
+    """
+    A function for writing fluid property data produced
+    by PINN inference.
     """
     print("Saving predicted fluid properties...")
 
@@ -31,11 +29,9 @@ def save_prediction_data(data,args):
     print("\tPredicted fluid properties saved\n")
 
 def save_training_data(data,args):
-    """_summary_
-
-    Args:
-        data (_type_): _description_
-        args (_type_): _description_
+    """
+    A function for writing fluid property data used 
+    during the PINN training process.
     """
     print("Saving fluid property training data...")
 

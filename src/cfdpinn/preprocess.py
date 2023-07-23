@@ -33,13 +33,15 @@ def preprocess(data,geom,args):
     data = apply_scaling(data)
     data = apply_train_test_split(data,args.test_size,scaled=True)
 
-    #Make boundary arrays contiguous for DL framework
+    #Make boundary arrays contiguous for PyTorch
     data = make_boundary_arrays_contiguous(data)
 
     return data
 
 def scaling_object(data):
     """
+    Fit a standard scaler to the training data
+    features and return it.
     """
     _scaler = StandardScaler()
     scaler = _scaler.fit(data["features"])
@@ -48,6 +50,8 @@ def scaling_object(data):
 
 def apply_scaling(data):
     """
+    Apply the data scaler to all training locations
+    to be used in PINN training
     """
     data_labels = ["basewall","interior","leftwall","rightwall"]
     for data_label in data_labels:
@@ -58,6 +62,9 @@ def apply_scaling(data):
 
 def get_training_locations(data,args):
     """
+    Store the index of training locations chosen
+    by train test split. This allows plotting for
+    future visualization.
     """
     #First need to apply train_test_splitting to 
     #replicate real train_test_split
@@ -82,6 +89,8 @@ def get_training_locations(data,args):
 
 def apply_train_test_split(data,test_size,scaled):
     """
+    Apply train-test splitting for all training data
+    arrays.
     """
     if scaled == True:
         label = "scaled_"
@@ -184,6 +193,10 @@ def apply_train_test_split(data,test_size,scaled):
 
 def make_boundary_arrays_contiguous(data):
     """
+    Concatenate boundary condition arrays into a 
+    contiguous array to ease training of the PINN
+    as all boundary arrays have the same boundary 
+    condition currently.
     """
     data_components = ["u","v","p","x","y","t"]
     train_test_components = ["train","test"]
@@ -201,6 +214,7 @@ def make_boundary_arrays_contiguous(data):
 
 def extract_boundaries(data):
     """
+    Extract boundary data from U,V and P arrays
     """
     #Handling data labels; fluid properties
     array_labels = ["u", "v", "p"]
@@ -251,6 +265,7 @@ def extract_boundaries(data):
 
 def extract_interior(data):
     """
+    Extract interior data from U,V and P arrays.
     """
     #Handling data labels; fluid properties
     array_labels = ["u", "v", "p"]
@@ -277,6 +292,7 @@ def extract_interior(data):
 
 def merge_features(data,geom):
     """
+    Concatenate features together into a single array.
     """
     data["y"], data["t"], data["x"] = np.meshgrid(
         np.linspace(geom["y_start"],geom["y_end"],geom["numy"]),
@@ -296,6 +312,10 @@ def merge_features(data,geom):
 
 def convert_to_tensors(data,device):
     """
+    Convert numpy arrays into tensors
+    and ensure they reside on the correct PyTorch device
+    and have the correct gradient tracking applied
+    for automatic differentiation.
     """
     geom_components = ["interior","boundary"]
     train_test_components = ["train","test"]

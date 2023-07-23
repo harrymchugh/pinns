@@ -7,6 +7,10 @@ import math
 
 def create_animation(data,geom,num_frames,array_label):
     """
+    A function to handle the creation of a fluid property
+    animation generated from repeated static plots.
+
+    Shows fluid properties but also train/testing locations.
     """
     fig, ax = plt.subplots(2,2, figsize=(15, 12))
 
@@ -70,6 +74,7 @@ def create_animation(data,geom,num_frames,array_label):
 
 def animate_subplot(i,ax,data,geom,label,num_frames):
     """
+    The function to create each frame of the animation
     """ 
     #Indexing values for plotting and GIF creation
     animation_num_frames = num_frames
@@ -257,6 +262,8 @@ def animate_subplot(i,ax,data,geom,label,num_frames):
 
 def static_plots(data,args,geom):
     """
+    A function to create a static plot at the mid-way
+    timestep of the fluid simulation.
     """
     y_index = int(np.floor(geom["numy"] * 0.8))
     y_value = geom["grid2d_y"][y_index][0]
@@ -399,5 +406,3 @@ def static_plots(data,args,geom):
 
     output_path = (f"./plots/static.png")
     plt.savefig(output_path)
-    
-    return 0

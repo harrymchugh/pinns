@@ -9,7 +9,8 @@ from decimal import Decimal
 def setup_geom(args):
     """
     Return a dictionary holding all geometry information
-    for the input simulation data
+    for the simulation data either for training or 
+    as a target for inference
     """
     print("Setting up geometry...")
 

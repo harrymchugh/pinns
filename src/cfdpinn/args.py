@@ -4,7 +4,8 @@ import argparse
 
 def parse_args():
     """
-    Argument parsing function
+    A function to capture command line arguments
+    to control program logic
     """
     boiler_plate_welcome()
 
@@ -16,7 +17,6 @@ def parse_args():
         help="Enable debug output",
         dest="debug")
 
-    #OpenFOAM and geometry args
     parser.add_argument("--case-type",
         action="store",
         type=str,
@@ -29,7 +29,7 @@ def parse_args():
         action="store",
         type=str,
         required=False,
-        help="The direcotry of the OpenFOAM case used for PINN training",
+        help="The directory of the OpenFOAM case used for PINN training",
         dest="case_dir")
 
     parser.add_argument("--start-time",
@@ -129,7 +129,6 @@ def parse_args():
         help="Load simulation data regardless of training or inference",
         dest="load_sim")  
 
-    #Data preprocessing for PINN training
     parser.add_argument("--no-train",
         action="store_true",
         default=False,
@@ -164,7 +163,6 @@ def parse_args():
         dest="load_scaler_path"
         )
     
-    #MP4 animations
     parser.add_argument("--num-frames",
         action="store",
         type=int,
@@ -197,7 +195,6 @@ def parse_args():
             U_mag,U,V,P over all timesteps",
         dest="residual_animation")
     
-    #Static plots
     parser.add_argument("--static-plots",
         action="store_true",
         required=False,
@@ -205,7 +202,6 @@ def parse_args():
         help="Produce static plots for analysis",
         dest="static_plots")
     
-    #Output raw training and prediction data
     parser.add_argument("--output-pred-data",
         action="store_true",
         required=False,
@@ -227,7 +223,6 @@ def parse_args():
         help="Output raw training data NumPY arrays for U,V,P",
         dest="output_data_path")   
 
-    #PINN setup and variables
     parser.add_argument("--device",
         action="store",
         type=str,
@@ -275,22 +270,6 @@ def parse_args():
         help="The path to save Tensorboard profiling outputs",
         dest="profile_path") 
 
-    parser.add_argument("--trace-path",
-        action="store",
-        type=str,
-        required=False,
-        default="trace.json",
-        help="File path for profiling trace json file",
-        dest="trace_path")  
-
-    parser.add_argument("--stack-path",
-        action="store",
-        type=str,
-        required=False,
-        default="stack.txt",
-        help="File path for profiling call-graph file",
-        dest="stack_path")   
-
     parser.add_argument("--tensorboard",
         action="store_true",
         required=False,
@@ -322,7 +301,6 @@ def parse_args():
         help="The learning rate of the ADAM Optimizer used to train the PINN",
         dest="learning_rate")
     
-    #Timing utilities
     parser.add_argument("--inference-timing",
         action="store_true",
         required=False,
@@ -330,14 +308,6 @@ def parse_args():
         help="Report timings for inference of fluid properties",
         dest="inference_timing")
 
-    #Verbose logging
-    parser.add_argument("-v",
-        action="store_true",
-        required=False,
-        default=False,
-        help="Enable verbose logging",
-        dest="verbose")
-    
     parser.add_argument("--adaption",
         action="store",
         type=str,
@@ -356,6 +326,7 @@ def parse_args():
 
 def boiler_plate_welcome():
     """
+    A boiler plate welcome to the program
     """
     print("#################")
     print("##  CFD PINN   ##")
