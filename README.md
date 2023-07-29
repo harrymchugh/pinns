@@ -1,8 +1,8 @@
 # CFDPINN
-Author: Harry McHugh
-Supervisor: Adrian Jackson
+**Author**: Harry McHugh \
+**Supervisor**: Adrian Jackson
 
-Title: 
+**Title**: 
 
 ```On the suitability of physics informed neural networks to accelerate computational fluid dynamics ```
 

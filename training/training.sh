@@ -1,11 +1,15 @@
 #!/bin/bash
 
+mkdir -p /mnt/profiles/tboard
+mkdir -p /mnt/tboard
+mkdir -p /mnt/models
+
 cfdpinn \
     --debug \
     --profile \
-    --profile-path /mnt/profiles/tboard/ \
+    --profile-path /mnt/profiles/tboard/model_001/ \
     --tensorboard \
-    --tensorboard-path /mnt/tboard/ \
+    --tensorboard-path /mnt/tboard/model_001/ \
     --case-type cavity \
     --case-dir /mnt/openfoam/cases/cavity_nu0.01_U1/ \
     --start-time 0 \
@@ -18,7 +22,11 @@ cfdpinn \
     --initial_u 1 \
     --test-percent 0.7 \
     --lr 0.001 \
-    --epochs 5 \
-    --save-scaler-path /mnt/models/tmp.pkl \
-    --save-model-path /mnt/models/tmp.pt
+    --epochs 100 \
+    --save-scaler-path /mnt/models/scaler_001.pkl \
+    --save-model-path /mnt/models/model_001.pt \
+    --training-animation \
+    --prediction-animation \
+    --residual-animation \
+    --static-plots \
 

@@ -33,11 +33,11 @@ With the SIF file you can now execute OpenFOAM and CFDPINN training codes on wha
 To run the cavity OpenFOAM simulation with Docker or Apptainer:
 
 ```
-apptainer run --no-home -B $CFDPINN_ROOT/openfoam:/mnt cfdpinn.sif /bin/bash -c /mnt/scripts/cavity.sh
+apptainer run --no-home -B $CFDPINN_ROOT/openfoam:/mnt cfdpinn.sif /bin/bash -c /mnt/scripts/cavity-nu0.01-U1-20x20.sh
 ```
 
 ```
-docker run -v $CFDPINN_ROOT/openfoam:/mnt harrymchugh/cfdpinn /bin/bash -c /mnt/scripts/cavity.sh
+docker run -v $CFDPINN_ROOT/openfoam:/mnt harrymchugh/cfdpinn /bin/bash -c /mnt/scripts/cavity-nu0.01-U1-20x20.sh
 ```
 
 To run the CFDPINN network training process on the cavity simulation data
