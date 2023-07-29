@@ -125,5 +125,11 @@ Tensorboard is an excellent tool for monitoring, debugging and analysing perform
 To start a Tensorboard server and expose its data for viewing in a web browser local to the host OS running the container run the following commands.
 
 ```
-docker run 
+docker run --expose 8080 -v $CFDPINN:/mnt -- tensorboard --logdir=/mnt/tboard --port 8080
+```
+
+and for apptainer:
+
+```
+apptainer
 ```
