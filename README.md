@@ -1,4 +1,10 @@
 # CFDPINN
+Author: Harry McHugh
+Supervisor: Adrian Jackson
+
+Title: 
+
+```On the suitability of physics informed neural networks to accelerate computational fluid dynamics ```
 
 ![Static plot showing CFDPINN output](./images/static.png)
 ## Project Motivation
@@ -23,5 +29,7 @@ Training \
 Inference
 
 ## CFDPINN application arguments
-
+Args
 ## Tensorboard
+Metrics \
+Profiling
