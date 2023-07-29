@@ -73,13 +73,7 @@ apptainer run --nv <apptainer args>
 
 The docker approach has been tested in a Google Cloud VM with an L4 GPU attached:
 
-- Training time using CPU:
-- Training time using GPU:
-
 The apptainer approach has been tested on the Cirrus GPU nodes using a single V100 card.
-
-- Training time using CPU:
-- Training time using GPU:
 
 Please note that the use of AMD GPUs has not been tested.
 
