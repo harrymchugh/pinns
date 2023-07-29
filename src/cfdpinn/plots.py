@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 import math
+from os import getcwd
 
 def create_animation(data,geom,num_frames,array_label):
     """
@@ -16,10 +17,15 @@ def create_animation(data,geom,num_frames,array_label):
 
     if array_label == "train":
         label = ""
+        save_label = "_training"
+    
     elif array_label == "pred":
         label = "_pred"
+        save_label = "_prediction"
+    
     elif array_label == "residual":
         label = "_residual"
+        save_label = "_residual"
 
     print(f"Creating animation {label}...")
 
@@ -55,7 +61,7 @@ def create_animation(data,geom,num_frames,array_label):
         orientation='vertical')
     
     writervideo = animation.FFMpegWriter(fps=20)
-    output_path = (f"./animations/tmp{label}.mp4")
+    output_path = (f"{getcwd()}/animation{save_label}.mp4")
     
     fluid_animation = \
         animation.FuncAnimation(
@@ -70,7 +76,7 @@ def create_animation(data,geom,num_frames,array_label):
     
     fluid_animation.save(output_path,writer=writervideo)
 
-    print(f"\tAnimation {label} completed\n")
+    print(f"\tAnimation {save_label[1:]} completed\n")
 
 def animate_subplot(i,ax,data,geom,label,num_frames):
     """
@@ -404,5 +410,5 @@ def static_plots(data,args,geom):
     axs["p"].set_xlabel("Y index-value")
     axs["p"].set_ylabel("Pressure (Pa)")
 
-    output_path = (f"./plots/static.png")
+    output_path = (f"{getcwd()}/static.png")
     plt.savefig(output_path)
