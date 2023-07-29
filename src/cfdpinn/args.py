@@ -17,6 +17,7 @@ def parse_args():
         help="Enable debug output",
         dest="debug")
 
+    ## OpenFOAM case setup
     parser.add_argument("--case-type",
         action="store",
         type=str,
@@ -122,7 +123,48 @@ def parse_args():
         default=1,
         help="The u (x) velocity of the fluid flowing over the cavity top wall",
         dest="initial_u_lid")
+    
+    ##Animation and plots
+    parser.add_argument("--num-frames",
+        action="store",
+        type=int,
+        required=False,
+        default=20,
+        help="Number of frames for the fluid animations",
+        dest="num_frames")
 
+    parser.add_argument("--training-animation",
+        action="store_true",
+        required=False,
+        default=False,
+        help="Output MP4 showing training locations with training \
+            U_mag,U,V,P over all timesteps",
+        dest="training_animation")
+    
+    parser.add_argument("--prediction-animation",
+        action="store_true",
+        required=False,
+        default=False,
+        help="Output MP4 showing training locations with predicted \
+            U_mag,U,V,P over all timesteps",
+        dest="prediction_animation")
+    
+    parser.add_argument("--residual-animation",
+        action="store_true",
+        required=False,
+        default=False,
+        help="Output MP4 showing training locations with residual \
+            U_mag,U,V,P over all timesteps",
+        dest="residual_animation")
+    
+    parser.add_argument("--static-plots",
+        action="store_true",
+        required=False,
+        default=False,
+        help="Produce static plots for analysis",
+        dest="static_plots")
+
+    ## PINNs
     parser.add_argument("--load-simulation",
         action="store_true",
         required=False,
@@ -163,66 +205,6 @@ def parse_args():
         dest="load_scaler_path"
         )
     
-    parser.add_argument("--num-frames",
-        action="store",
-        type=int,
-        required=False,
-        default=20,
-        help="Number of frames for the fluid animations",
-        dest="num_frames")
-
-    parser.add_argument("--training-animation",
-        action="store_true",
-        required=False,
-        default=False,
-        help="Output MP4 showing training locations with training \
-            U_mag,U,V,P over all timesteps",
-        dest="training_animation")
-    
-    parser.add_argument("--prediction-animation",
-        action="store_true",
-        required=False,
-        default=False,
-        help="Output MP4 showing training locations with predicted \
-            U_mag,U,V,P over all timesteps",
-        dest="prediction_animation")
-    
-    parser.add_argument("--residual-animation",
-        action="store_true",
-        required=False,
-        default=False,
-        help="Output MP4 showing training locations with residual \
-            U_mag,U,V,P over all timesteps",
-        dest="residual_animation")
-    
-    parser.add_argument("--static-plots",
-        action="store_true",
-        required=False,
-        default=False,
-        help="Produce static plots for analysis",
-        dest="static_plots")
-    
-    parser.add_argument("--output-pred-data",
-        action="store_true",
-        required=False,
-        default=False,
-        help="Output raw predicted NumPY arrays for U,V,P",
-        dest="output_pred_data")
-
-    parser.add_argument("--output-train-data",
-        action="store_true",
-        required=False,
-        default=False,
-        help="Output raw training data NumPY arrays for U,V,P",
-        dest="output_train_data")
-
-    parser.add_argument("--output-data-path",
-        action="store",
-        required=False,
-        type=str,
-        help="Output raw training data NumPY arrays for U,V,P",
-        dest="output_data_path")   
-
     parser.add_argument("--device",
         action="store",
         type=str,
@@ -274,7 +256,7 @@ def parse_args():
         action="store_true",
         required=False,
         default=False,
-        help="Log training metrics with Tensorboard functionality",
+        help="Log training adn testing metrics with Tensorboard functionality",
         dest="tensorboard")
     
     parser.add_argument("--tensorboard-path",
@@ -282,7 +264,7 @@ def parse_args():
         type=str,
         required=False,
         default="",
-        help="The path to save Tensorboard outputs",
+        help="The path to save Tensorboard training/testing metrics",
         dest="tensorboard_path")
     
     parser.add_argument("--epochs",

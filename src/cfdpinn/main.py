@@ -73,12 +73,6 @@ def main():
     if not args.no_train:
         save_model(pinn)
         
-    if args.output_train_data:
-        save_training_data(data,args)
-
-    if args.output_pred_data:
-        save_prediction_data(data,args)
-
     #Produce plots for analysis
     if args.static_plots:
         static_plots(data,args,geom)
