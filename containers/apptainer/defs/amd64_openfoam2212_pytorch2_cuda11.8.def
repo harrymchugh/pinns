@@ -2,7 +2,7 @@ Bootstrap: docker
 From: ubuntu:latest
 
 %files
-    ../../docker/Dockerfiles/repo-key /
+    repo-key /
 
 %post
     DEBIAN_FRONTEND=noninteractive
@@ -20,13 +20,13 @@ From: ubuntu:latest
 
     rm -rf /var/lib/apt/lists/*
 
-    chmod 600 /repo-key \  
-    echo "IdentityFile /repo-key" >> /etc/ssh/ssh_config \  
-    echo -e "StrictHostKeyChecking no" >> /etc/ssh/ssh_config \
-    git clone git@github.com:harrymchugh/pinns.git \ 
-    cd pinns \
-    pip install --upgrade pip \
-    pip install setuptools --upgrade \
+    chmod 600 /repo-key
+    echo "IdentityFile /repo-key" >> /etc/ssh/ssh_config
+    echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+    git clone git@github.com:harrymchugh/pinns.git
+    cd pinns
+    pip install --upgrade pip
+    pip install setuptools --upgrade
     pip install .
 
 %runscript
