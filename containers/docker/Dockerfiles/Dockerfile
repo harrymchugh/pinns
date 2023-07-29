@@ -35,7 +35,7 @@ COPY repo-key /
 RUN chmod 600 /repo-key \  
   && echo "IdentityFile /repo-key" >> /etc/ssh/ssh_config \  
   && echo -e "StrictHostKeyChecking no" >> /etc/ssh/ssh_config \
-  && git clone git@github.com:harrymchugh/pinns.git \ 
+  && git clone --depth 1 git@github.com:harrymchugh/pinns.git \ 
   && cd pinns \
   && pip install --upgrade pip \
   && pip install setuptools --upgrade \

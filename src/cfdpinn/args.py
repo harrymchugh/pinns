@@ -156,13 +156,31 @@ def parse_args():
         help="Output MP4 showing training locations with residual \
             U_mag,U,V,P over all timesteps",
         dest="residual_animation")
-    
+
+    parser.add_argument("--animations-path",
+        action="store",
+        type=str,
+        required=False,
+        default="",
+        help="The output path for the animations",
+        dest="animations_path"
+        )
+
     parser.add_argument("--static-plots",
         action="store_true",
         required=False,
         default=False,
         help="Produce static plots for analysis",
         dest="static_plots")
+
+    parser.add_argument("--static-plots-path",
+        action="store",
+        type=str,
+        required=False,
+        default="",
+        help="The output path for the static plots",
+        dest="static_plots_path"
+        )
 
     ## PINNs
     parser.add_argument("--load-simulation",

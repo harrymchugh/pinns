@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 import math
-from os import getcwd
 
 def create_animation(data,geom,num_frames,array_label):
     """
@@ -61,7 +60,7 @@ def create_animation(data,geom,num_frames,array_label):
         orientation='vertical')
     
     writervideo = animation.FFMpegWriter(fps=20)
-    output_path = (f"{getcwd()}/animation{save_label}.mp4")
+    output_path = (f"{args.animations_path}/animation{save_label}.mp4")
     
     fluid_animation = \
         animation.FuncAnimation(
@@ -410,5 +409,5 @@ def static_plots(data,args,geom):
     axs["p"].set_xlabel("Y index-value")
     axs["p"].set_ylabel("Pressure (Pa)")
 
-    output_path = (f"{getcwd()}/static.png")
+    output_path = (f"{args.static_plots_path}/static.png")
     plt.savefig(output_path)

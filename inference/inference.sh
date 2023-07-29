@@ -16,4 +16,5 @@ cfdpinn \
     --initial_u 1 \
     --load-scaler-path /mnt/models/scaler_001.pkl \
     --load-model-path /mnt/models/model_001.pt \
-    --static-plots
+    --static-plots \
+    --static-plots-path /mnt/plots/

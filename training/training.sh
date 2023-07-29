@@ -1,9 +1,5 @@
 #!/bin/bash
 
-mkdir -p /mnt/profiles/tboard
-mkdir -p /mnt/tboard
-mkdir -p /mnt/models
-
 cfdpinn \
     --debug \
     --profile \
@@ -22,11 +18,13 @@ cfdpinn \
     --initial_u 1 \
     --test-percent 0.7 \
     --lr 0.001 \
-    --epochs 100 \
+    --epochs 1 \
     --save-scaler-path /mnt/models/scaler_001.pkl \
     --save-model-path /mnt/models/model_001.pt \
     --training-animation \
     --prediction-animation \
     --residual-animation \
+    --animations-path /mnt/plots/ \
     --static-plots \
+    --static-plots-path /mnt/plots/
 
