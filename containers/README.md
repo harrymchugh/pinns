@@ -107,6 +107,14 @@ Please note that the use of AMD GPUs has not been tested.
 
 The recommended way to obtain the CFDPINN container image is to use Docker/Apptainer to pull/download the container in the appropriate format from Docker Hub.
 
-However, should you wish to build the container manually a Dockerfile and an Apptainer definition files are provided in the apptainer/defs and Docker/Dockerfiles directories.
+However, should you wish to build the container manually a Dockerfile and an Apptainer definition files are provided in the apptainer/defs and Docker/Dockerfiles directories. Change directory to the location of the Dockerfile/Def file and execute the following commands depending on whether you want a Docker container or Apptainer SIF file.
+
+```
+sudo docker build --no-cache --tag harrymchugh/cfdpinn .
+```
+
+```
+apptainer build --fakeroot cfdpinn.sif cfdpinn.def
+```
 
 To build the Docker image you must have sudo access, for Apptainer you may be able to build this as an regular user.
