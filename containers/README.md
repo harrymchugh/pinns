@@ -118,3 +118,12 @@ apptainer build --fakeroot cfdpinn.sif cfdpinn.def
 ```
 
 To build the Docker image you must have sudo access, for Apptainer you may be able to build this as an regular user.
+
+## Tensorboard
+Tensorboard is an excellent tool for monitoring, debugging and analysing performance of PyTorch.
+
+To start a Tensorboard server and expose its data for viewing in a web browser local to the host OS running the container run the following commands.
+
+```
+docker run 
+```
