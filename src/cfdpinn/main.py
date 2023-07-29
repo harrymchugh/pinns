@@ -62,12 +62,12 @@ def main():
     
     #Create animation from predicted fluid
     if args.prediction_animation:
-        create_animation(data,geom,args.num_frames,array_label="pred")
+        create_animation(data,geom,args.num_frames,args,array_label="pred")
 
     #Create residual animation from predicted fluid
     if args.residual_animation:
         data = compute_residual(data)
-        create_animation(data,geom,args.num_frames,array_label="residual")
+        create_animation(data,geom,args.num_frames,args,array_label="residual")
 
     #Save model and if requested training and predicted fields
     if not args.no_train:

@@ -5,7 +5,7 @@ import matplotlib.animation as animation
 import numpy as np
 import math
 
-def create_animation(data,geom,num_frames,array_label):
+def create_animation(data,geom,num_frames,args,array_label):
     """
     A function to handle the creation of a fluid property
     animation generated from repeated static plots.
