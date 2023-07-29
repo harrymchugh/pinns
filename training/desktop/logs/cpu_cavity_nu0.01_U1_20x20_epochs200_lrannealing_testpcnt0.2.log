@@ -1,28 +1,0 @@
-#################
-##  CFD PINN   ##
-#################
-
-Namespace(debug=True, case_type='cavity', case_dir='/home/harry/pinns/openfoam/cases/cavity_nu0.01_U1/', start_time=0.0, end_time=5.0, sim_dt=0.001, load_dt=0.005, startx=0, starty=0, endx=1, endy=1, numx=20, numy=20, viscosity=0.01, initial_u_lid=1.0, load_sim=False, no_train=False, test_size=0.2, save_scaler_path='/home/harry/pinns/models/cpu_scaler_cavity_nu0.01_U1_20x20_epochs200_lrannealing_testpcnt0.2.pkl', load_scaler_path='', num_frames=20, training_animation=False, prediction_animation=True, residual_animation=True, static_plots=True, output_pred_data=False, output_train_data=False, output_data_path=None, device='cpu', pinn_output_path='/home/harry/pinns/models/cpu_model_cavity_nu0.01_U1_20x20_epochs200_lrannealing_testpcnt0.2.pt', optimizer='adam', load_model_path=None, profile=False, profile_path='', trace_path='trace.json', stack_path='stack.txt', tensorboard=True, tensorboard_path='/home/harry/pinns/tboard/cpu_cavity_nu0.01_U1_20x20_epochs200_lrannealing_testpcnt0.2/', epochs=200, learning_rate=0.001, inference_timing=False, verbose=False, adaption='lrannealing')
-Setting up geometry...
-Geometry summary:
-	geom[x_start]: 0
-	geom[x_end]: 1
-	geom[numx]: 20
-	geom[y_start]: 0
-	geom[y_end]: 1
-	geom[numy]: 20
-	geom[t_start]: 0.0
-	geom[t_end]: 5.0
-	geom[t_dt]: 0.005
-	geom[numt]: 1001
-	geom[stride]: 5
-	Geometry setup completed
-
-Loading simulation data...
-shape: (1001, 20, 20)
-
-	Simulation data loaded
-
-DEBUG: PINN device: cpu
-
-CFD PINN training progress:   0%|          | 0/200 [00:00<?, ?it/s]CFD PINN training progress:   0%|          | 1/200 [00:11<39:35, 11.94s/it]CFD PINN training progress:   1%|          | 2/200 [00:23<38:58, 11.81s/it]CFD PINN training progress:   2%|▏         | 3/200 [00:35<38:34, 11.75s/it]CFD PINN training progress:   2%|▏         | 4/200 [00:47<38:47, 11.88s/it]CFD PINN training progress:   2%|▎         | 5/200 [00:59<38:21, 11.80s/it]CFD PINN training progress:   3%|▎         | 6/200 [01:10<38:04, 11.77s/it]CFD PINN training progress:   4%|▎         | 7/200 [01:22<37:40, 11.71s/it]CFD PINN training progress:   4%|▍         | 8/200 [01:33<36:57, 11.55s/it]CFD PINN training progress:   4%|▍         | 9/200 [01:44<36:22, 11.43s/it]
