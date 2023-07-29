@@ -8,19 +8,19 @@ The container can be downloaded with docker pull for use on local workstations, 
 docker pull harrymchugh/cfdpinn
 ```
 
-With the container availabe on your system you can now run scripts to reproduce the OpenFOAM simulations and nerual network training.
+With the container available on your system you can now run scripts to reproduce the OpenFOAM simulations and neural network training.
 
 ## Apptainer
 
-Running docker on multi-tenant environments is usually problematic.
+Running docker containers on multi-tenant environments is usually problematic.
 
 Apptainer is a similar container based solution better suited to multi-tenant systems such as ARCHER2 and Cirrus.
 
 Apptainer (or singularity as it was previously known) can be installed via Spack if it is not already available via system wide install. 
 
-Once apptainer is installed you can simply pull the CFDPINN docker container from Docker Hub using apptainer.
+Once Apptainer is installed you can simply pull the CFDPINN docker container from Docker Hub using Apptainer.
 
-During this process apptainer will conver the Docker image into an apptainer SIF file format.
+During this process Apptainer will convert the Docker image into an Apptainer SIF file format.
 
 ```
 apptainer pull docker://harrymchugh/cfdpinn:latest
@@ -89,12 +89,14 @@ docker run --gpus <docker args>
 Apptainer can expose GPUs attached to the host system by running the `--nv` flag to the apptainer run command.
 
 Apptainer achieves this be searching the host system for the NVIDIA driver and CUDA runtime libraries and bind mounting them into the container.
+
 Should the drivers or libraries be missing or installed in uncommon locations on the host, this may not work.
 
 ```
 apptainer run --nv <apptainer args>
 ```
 
+### Testing
 The docker approach has been tested in a Google Cloud VM with an L4 GPU attached:
 
 The apptainer approach has been tested on the Cirrus GPU nodes using a single V100 card.
