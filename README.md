@@ -1,5 +1,6 @@
-# README
+# CFDPINN
 
+![Static plot showing CFDPINN output](./images/static.png)
 ## Project Motivation
 Many computational simulations are too intensive to be useful, even with the use of modern supercomputing facilities. 
 
@@ -7,92 +8,20 @@ This is particularly true of fluid dynamics codes, and even more so, when the Re
 
 Machine learning has scope to improve the performance of these simulations, by shifting much of the computation "offline" into the model training phase, leaving almost real-time simulation via inference.
 
-### Project hypothesis
-The performance of physical simulations using PDE's typically suffer when numerical stability constraints are applied such as the Courant-Freidrich-Lewy (CFL) condition, also known as the Courant number. 
+## Project hypothesis
+Physics informed neural networks have been seen to perform better than traditional deep learning models when learning physical laws.
 
-## Courant number
-Typically CFD codes will maintain a delta_t (time step value) that satisfies the CFD criteria.
-The pseudo-code for this loop is:
-- Compute initial velocity field
-- Loop over cells in mesh and using cell-size and velocity compute cells CFL number
-- Adjust time step so that the highest CFL number in the simulation (considering all cells) is below a tolerance value. (In LES this number is typically 0.5 to 1)
+Therefore, 
 
-The "ML kernel" approach does not require a CFL condition as the inference is mesh-less.
-Therefore the we could potentially "ignore" the smallest cells from the CFL field and therefore time step calculation.
+## Installing CFDPINN
+Best way is docker \
+Otherwise use Pip
 
-If velocity is held constant smaller cells have a higher CFL number, therefore excluding them from the CFL calculation and time-step evaluation is likely to result in larger time-steps and therefore overall greater simulation performance.
-  
-## Hybrid ML-Simulation code
-In the case of fluid simulations this is seen at the boundary conditions where low mean velocity requires very small cell sizes and timesteps.
+## Running CFDPINN
+Openfoam \
+Training \
+Inference
 
-This project hypothesizes that by replacing traditional simulation code in the regions of the mesh with very small cell size with machine-learning model kernels the overall performance of the code can be improved, whilst retaining the trusted solution of the main bulk of the simulation.
+## CFDPINN application arguments
 
-## Project plan
-
-The full goal of this repository is to gradually build up knowledge of PINNs by using progressively more complex PDEs.
-
-The first step is to solve the 1D heat equation explicitly to provide training data and to define initial and boundary conditions.`\
-
-To Do:
-- Implement matplotlib animation so we can see the heat profile developing
-
-From this, a traditional deep neural-network will be constructed with which we will contrast a PINN will incorporates the physics conditions described in the explicit solver.\
-
-To Do:
-- Create NN class that outputs u for a given x,t
-  - Choose random points over x,t including BC and IC
-- Plot loss function (MSE over epochs to ensure convergence)
-  - Adjust epochs if necessary
-- Plot real vs predict vs residual using animation.
-- Do hyper-tuning of parameters using TensorBoard for QC
-  - activation
-  - optimizer
-  - number and shape of layers
-  - batch size
-  - epochs
-
-This process should showcase simply why a PINN is a superior choice for modelling fluid dynamics behavior.\
-
-To Do:
-- Define loss for IC
-- Define loss for BC (left and right wall)
-- Define total PDE loss
-- Plot real vs predict vs residual using animation for both PINN and NN.
-- Do hyper-tuning of parameters 
-  - activation
-  - optimizer
-  - number and shape of layers
-  - batch size
-  - epochs
-  - use of dropout
-  - use of regularization
-  - variable initialization 
-
-Other ideas that we could look at to investigate the performance of PINNs include Seq2Seq and curriculum learning.
-
-From here we can increase the dimensionality of the PINN by extending it to the 2D heat equation, this will allow us to then change focus from the heat equation to more complex fluid PDEs such as the stream function.
-
-Once a successful 2D PINN for a fluid PDE such as the stream function is produced we can take simulated LES data from OpenFOAM and the governing equation (this will need significant expertise in understanding the PDE and the initial/boundary conditions) to create an OpenFOAM-LES PINN.
-
-The PINN process will require some degree of hyper-parameter tuning; particularly model architecture such as number of layers, weights, training epochs and activation functions.
-
-The last step will be to edit OpenFOAM such that a hybrid PINN-solver can be implemented where the smallest cells near the boundary conditions are updated using the PINN but the central turbulent fluid is updated using the solver.
-
-We will then benchmark the accuracy and performance of:
-
-- OpenFOAM alone
-- PINN alone
-- Hybrid OpenFOAM-PINN solver
-
-### Reproducability
-Include definition files and various auxiliary files needed to build a Docker/Apptainer file so that the work can be run agnostically with whatever hardware is available.
-  - Run on bare-metal like Archer/Cirrus/Laptop
-  - allow to run on Codespaces with devcontainer.json
-  - supply a Colab notebook to run on Google Colab
-
-### Likely future work
-PINNs are set in terms of their computational domain so if all the above works then using DeepONets would be desirable to generalise the problem.
-
-Other model architecture incorporated into the DNN.
-
-Use of accelerated libraries such as ZenDNN.
+## Tensorboard
