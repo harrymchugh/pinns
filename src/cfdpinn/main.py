@@ -47,7 +47,7 @@ def main():
     
     #Produce animations if necessary
     if args.training_animation:
-        create_animation(data,geom,args.num_frames,array_label="train")
+        create_animation(data,geom,args.num_frames,args,array_label="train")
 
     #PINN training and testing loop
     if not args.no_train:
