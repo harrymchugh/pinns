@@ -18,7 +18,7 @@ Apptainer is a similar container based solution better suited to multi-tenant sy
 
 Apptainer (or singularity as it was previously known) can be installed via Spack if it is not already available via system wide install. 
 
-Once apptainer is installed you can simply pull the cfdpinn docker container from Docker Hub using apptainer.
+Once apptainer is installed you can simply pull the CFDPINN docker container from Docker Hub using apptainer.
 
 During this process apptainer will conver the Docker image into an apptainer SIF file format.
 
@@ -26,7 +26,7 @@ During this process apptainer will conver the Docker image into an apptainer SIF
 apptainer pull docker://harrymchugh/cfdpinn:latest
 ```
 
-With the SIF file you can now execute OpenFOAM and cfdpinn training codes on whatever hardware you have available.
+With the SIF file you can now execute OpenFOAM and CFDPINN training codes on whatever hardware you have available.
 
 ## OpenFOAM and PINN training
 
@@ -40,19 +40,29 @@ apptainer run --no-home -B $CFDPINN_ROOT/openfoam:/mnt cfdpinn.sif /bin/bash -c 
 docker run -v $CFDPINN_ROOT/openfoam:/mnt harrymchugh/cfdpinn /bin/bash -c /mnt/scripts/cavity.sh
 ```
 
-To run the CFDPINN training process on the cavity simulation data
+To run the CFDPINN network training process on the cavity simulation data
 
 ```
-apptainer run --no-home -B $CFDPINN_ROOT/data/cavity:/cavity -B $CFDPINN_ROOT/training:/training cfdpinn.sif /bin/bash -c /training/cfdpinn.sh
+apptainer run --no-home -B $CFDPINN_ROOT/openfoam/cases:/mnt -B $CFDPINN_ROOT/training:/mnt cfdpinn.sif /bin/bash -c /mnt/docker/training.sh
 ```
 
 ```
-docker run foo
+docker run -v $CFDPINN_ROOT/openfoam/cases:/mnt -v $CFDPINN_ROOT/training:/mnt harrymchugh/cfdpinn /bin/bash -c /mnt/docker/training.sh
+```
+
+Similarly the inference scripts can be run in the same manner:
+
+```
+apptainer run --no-home -B $CFDPINN_ROOT/openfoam/cases:/mnt -B $CFDPINN_ROOT/training:/mnt cfdpinn.sif /bin/bash -c /mnt/docker/inference.sh
+```
+
+```
+docker run -v $CFDPINN_ROOT/openfoam/cases:/mnt -v $CFDPINN_ROOT/inference:/mnt harrymchugh/cfdpinn /bin/bash -c /mnt/docker/inference.sh
 ```
 
 ## Using NVIDIA GPUs
 
-Neural network training time can be sigificantly sped up by using GPUs.
+Neural network training time, and inference, can be significantly sped up by using GPUs.
 
 Docker can expose GPUs attached to the host system by adding additional arguments to docker run.
 
@@ -64,7 +74,7 @@ docker run --gpus all <docker args>
 
 Apptainer can expose GPUs attached to the host system by running the `--nv` flag to the apptainer run command.
 
-Apptainer acheives this be searching the host system for the NVIDIA driver and CUDA runtime libraries and bindmounting them into the container.
+Apptainer achieves this be searching the host system for the NVIDIA driver and CUDA runtime libraries and bind mounting them into the container.
 Should the drivers or libraries be missing or installed in uncommon locations on the host, this may not work.
 
 ```
@@ -79,8 +89,8 @@ Please note that the use of AMD GPUs has not been tested.
 
 ## Building CFDPINN container locally
 
-The reccommended way to otain the cfdpinn container image is to use Docker/Apptainer pull to download the container in the appropriate format from Docker Hub.
+The reccommended way to obtain the CFDPINN container image is to use Docker/Apptainer to pull/download the container in the appropriate format from Docker Hub.
 
 However, should you wish to build the container manually a Dockerfile and an Apptainer definition files are provided in the apptainer/defs and Docker/Dockerfiles directories.
 
-To build the Docker image you must have sudo access, for Apptainer you may be able to build this as an unprivelaged user.
+To build the Docker image you must have sudo access, for Apptainer you may be able to build this as an regular user.
