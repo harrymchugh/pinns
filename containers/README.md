@@ -28,6 +28,20 @@ apptainer pull docker://harrymchugh/cfdpinn:latest
 
 With the SIF file you can now execute OpenFOAM and CFDPINN training codes on whatever hardware you have available.
 
+### TMPDIR and running out of space error
+For large containers such as the CFDPINN container a common issue that users can run into is an error that suggests there is a lack of space. This is due to the way Apptainer uses temporary directories when building/pulling containers.
+
+It can typically be rectified by setting the APPTAINER_TMPDIR directory to somewhere with lots of storage available.
+
+```
+mkdir apptainer_tmp                  
+export APPTAINER_TMPDIR=$PWD/apptainer_tmp
+```
+
+Once the SIF file is successfully created the apptainer_tmp directory can safely be deleted.
+
+
+
 ## OpenFOAM and PINN training
 
 Clone this repository and set the $CFDPINN_ROOT environment variable to the root of the repository.
@@ -107,17 +121,13 @@ Please note that the use of AMD GPUs has not been tested.
 
 The recommended way to obtain the CFDPINN container image is to use Docker/Apptainer to pull/download the container in the appropriate format from Docker Hub.
 
-However, should you wish to build the container manually a Dockerfile and an Apptainer definition files are provided in the apptainer/defs and Docker/Dockerfiles directories. Change directory to the location of the Dockerfile/Def file and execute the following commands depending on whether you want a Docker container or Apptainer SIF file.
+However, should you wish to build the container manually a Dockerfile file is provided [here](./docker/Dockerfiles/Dockerfile). Change directory to the location of the Dockerfile and execute the following commands.
 
 ```
 sudo docker build --no-cache --tag harrymchugh/cfdpinn .
 ```
 
-```
-apptainer build --fakeroot cfdpinn.sif cfdpinn.def
-```
-
-To build the Docker image you must have sudo access, for Apptainer you may be able to build this as an regular user.
+To build the Docker image you must have sudo access.
 
 ## Tensorboard
 Tensorboard is an excellent tool for monitoring, debugging and analysing performance of PyTorch.
