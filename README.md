@@ -65,6 +65,70 @@ For full observation of the available parameters in CFDPINN run the following co
 
 ```
 cfdpinn -h
+
+CFD PINN
+
+options:
+  -h, --help            show this help message and exit
+  --debug               Enable debug output
+  --case-type {cavity}  CFDPINN currently only supports OpenFOAM simulations for lid-driven cavity flow
+  --case-dir CASE_DIR   The directory of the OpenFOAM case used for PINN training
+  --start-time START_TIME
+                        The first value of the OpenFOAM output timesteps
+  --end-time END_TIME   The last value of the OpenFOAM output timesteps
+  --sim-dt SIM_DT       The original timestep value of the OpenFOAM case
+  --load-dt LOAD_DT     The desired timestep for the loaded OpenFOAM case. This allows the user to decimate the OpenFOAM simulation
+                        data. For example a simulation run at 0.01 can be loaded at 0.05 to reduce training time
+  --startx STARTX       The x value of the first cell
+  --starty STARTY       The y value of the first cell
+  --endx ENDX           The x value of the last cell
+  --endy ENDY           The y value of the last cell
+  --numx NUMX           The number of cells in the x-dimension of the OpenFOAM case
+  --numy NUMY           The number of cells in the y-dimension of the OpenFOAM case
+  --viscosity VISCOSITY
+                        The viscosity of the fluid used in the OpenFOAM case
+  --initial_u INITIAL_U_LID
+                        The u (x) velocity of the fluid flowing over the cavity top wall
+  --num-frames NUM_FRAMES
+                        Number of frames for the fluid animations
+  --training-animation  Output MP4 showing training locations with training U_mag,U,V,P over all timesteps
+  --prediction-animation
+                        Output MP4 showing training locations with predicted U_mag,U,V,P over all timesteps
+  --residual-animation  Output MP4 showing training locations with residual U_mag,U,V,P over all timesteps
+  --animations-path ANIMATIONS_PATH
+                        The output path for the animations
+  --static-plots        Produce static plots for analysis
+  --static-plots-path STATIC_PLOTS_PATH
+                        The output path for the static plots
+  --load-simulation     Load simulation data regardless of training or inference
+  --no-train            Don't train a model, only inference
+  --test-percent TEST_SIZE
+                        The percentage of OpenFOAM case data to retain to use as in the testing function of the PINN training
+                        process
+  --save-scaler-path SAVE_SCALER_PATH
+                        The output path for the data scalar generated alongside a given input dataset. Required for future use of
+                        the model on new data
+  --load-scaler-path LOAD_SCALER_PATH
+                        The path to load the data scalar for use with inference mode
+  --device {cuda,cpu}   The type of device used for PyTorch operations, default is to use GPU is available but fall back to CPU if a
+                        GPU cannot be found
+  --save-model-path PINN_OUTPUT_PATH
+                        Full path for the output of the trained PINN
+  --optimizer {adam,sgd}
+                        The type of optimizer used for model training
+  --load-model-path LOAD_MODEL_PATH
+                        Path to load a model in inference only mode
+  --profile             Run profiling on train and inference
+  --profile-path PROFILE_PATH
+                        The path to save Tensorboard profiling outputs
+  --tensorboard         Log training adn testing metrics with Tensorboard functionality
+  --tensorboard-path TENSORBOARD_PATH
+                        The path to save Tensorboard training/testing metrics
+  --epochs EPOCHS       The number of epochs to train the PINN
+  --lr LEARNING_RATE    The learning rate of the ADAM Optimizer used to train the PINN
+  --inference-timing    Report timings for inference of fluid properties
+  --adaption {lrannealing,softadapt,noadaption}
+                        The type of loss function weighting to use
 ```
 ## Tensorboard; debugging, profiling and performance
 In addition to simply running OpenFOAM simulation, training and inference CFDPINN allows users to use Tensorboard to interrogate profiling data (to assess PyTorch performance) and to view machine learning metrics such as testing and training losses in real-time or once training is complete.
