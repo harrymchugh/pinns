@@ -228,8 +228,9 @@ def parse_args():
         type=str,
         choices=["cuda","cpu"],
         required=False,
-        default="cpu",
-        help="The type of device used for PyTorch operations",
+        default="cuda",
+        help="The type of device used for PyTorch operations, default is to use GPU is available \
+            but fall back to CPU if a GPU cannot be found",
         dest="device")
     
     parser.add_argument("--save-model-path",

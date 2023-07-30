@@ -59,11 +59,15 @@ class CfdPinn(torch.nn.Module):
     def choose_model_device(self,args):
         """
         A function to set PyTorch training and inference device.
+
+        If a GPU is available it will be used, unless the user
+        has specifically asked for the CPU with --device cpu at 
+        the command line
         """
-        if args.device:
-            self.device = args.device
+        if args.device == "cpu":
+            self.device = "cpu"
         else:
-            self.device = 'cuda' if is_available() else 'cpu'
+            self.device = "cuda" if is_available() else "cpu"
 
         self.to(self.device)
         

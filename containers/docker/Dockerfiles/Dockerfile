@@ -12,7 +12,7 @@ LABEL "author"="Harry McHugh"
 
 RUN apt-get update \
  && apt-get -y install --no-install-recommends \
-    apt-utils vim-tiny nano-tiny wget ca-certificates rsync \
+    apt-utils vim-tiny nano-tiny wget ca-certificates rsync ffmpeg \
     sudo passwd libnss-wrapper \
  && rm -rf /var/lib/apt/lists/*
 
