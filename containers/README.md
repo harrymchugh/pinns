@@ -97,7 +97,7 @@ Docker can expose GPUs attached to the host system by adding additional argument
 Please note that the NVIDIA-container-toolkit must be installed on the host system.
 
 ```
-docker run --gpus <docker args> 
+docker run --gpus all <docker args> 
 ```
 
 Apptainer can expose GPUs attached to the host system by running the `--nv` flag to the apptainer run command.
