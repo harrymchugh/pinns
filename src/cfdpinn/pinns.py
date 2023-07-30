@@ -67,7 +67,7 @@ class CfdPinn(torch.nn.Module):
         if args.device == "cpu":
             self.device = "cpu"
         else:
-            self.device = "cuda" if torch.is_available() else "cpu"
+            self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
         self.to(self.device)
         
