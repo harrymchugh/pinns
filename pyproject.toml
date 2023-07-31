@@ -22,6 +22,7 @@ dependencies = [
     "matplotlib",
     "scikit-learn",
     "tdqm",
+    "ffmpeg",
     "softadapt@git+https://github.com/dr-aheydari/SoftAdapt.git#egg=5fc955f"
 ]
 license = {file = "LICENSE"}
