@@ -2,7 +2,7 @@
 
 cfdpinn \
     --debug \
-    --device gpu \
+    --device cuda \
     --no-train \
     --case-type cavity \
     --case-dir /mnt/openfoam/cases/cavity_nu0.01_U1/ \
