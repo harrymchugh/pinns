@@ -143,3 +143,5 @@ and for Apptainer:
 ```
 apptainer run -B $CFDPINN_ROOT:/mnt cfdpinn.sif tensorboard --logdir=/mnt/tboard --port 6006 --bind_all
 ```
+
+Then to view the TensorBoard output open http://localhost:6006 in your browser.
