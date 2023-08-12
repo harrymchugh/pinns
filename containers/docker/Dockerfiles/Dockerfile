@@ -30,12 +30,8 @@ RUN apt-get update \
  && pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 \
  && rm -rf /var/lib/apt/lists/*
 
-COPY repo-key /
 
-RUN chmod 600 /repo-key \  
-  && echo "IdentityFile /repo-key" >> /etc/ssh/ssh_config \  
-  && echo -e "StrictHostKeyChecking no" >> /etc/ssh/ssh_config \
-  && git clone --depth 1 git@github.com:harrymchugh/pinns.git \ 
+RUN git clone --depth 1 git@github.com:harrymchugh/pinns.git \ 
   && cd pinns \
   && pip install --upgrade pip \
   && pip install setuptools --upgrade \
