@@ -63,7 +63,7 @@ mkdir -p $CFDPINN_ROOT/plots
 To run the cavity OpenFOAM simulation with Docker or Apptainer:
 
 ```
-apptainer run -B $CFDPINN_ROOT:/mnt cfdpinn.sif /bin/bash -c /mnt/openfoam/scripts/cavity-nu0.01-U1-20x20.sh
+apptainer run -B $CFDPINN_ROOT:/mnt cfdpinn_latest.sif /bin/bash -c /mnt/openfoam/scripts/cavity-nu0.01-U1-20x20.sh
 ```
 
 ```
@@ -73,7 +73,7 @@ docker run -v $CFDPINN_ROOT:/mnt harrymchugh/cfdpinn /bin/bash -c /mnt/openfoam/
 Once the OpenFOAM simulations are complete you can run the CFDPINN network training process on the cavity simulation data.
 
 ```
-apptainer run -B $CFDPINN_ROOT:/mnt cfdpinn.sif /bin/bash -c /mnt/training/training.sh
+apptainer run -B $CFDPINN_ROOT:/mnt cfdpinn_latest.sif /bin/bash -c /mnt/training/training.sh
 ```
 
 ```
@@ -83,7 +83,7 @@ docker run -v $CFDPINN_ROOT:/mnt harrymchugh/cfdpinn /bin/bash -c /mnt/training/
 Similarly the inference scripts can be run in the same manner:
 
 ```
-apptainer run -B $CFDPINN_ROOT:/mnt cfdpinn.sif /bin/bash -c /mnt/inference/inference.sh
+apptainer run -B $CFDPINN_ROOT:/mnt cfdpinn_latest.sif /bin/bash -c /mnt/inference/inference.sh
 ```
 
 ```
@@ -143,7 +143,7 @@ docker run -p 8888:8888 -p 6006:6006 -v $CFDPINN_ROOT:/mnt harrymchugh/cfdpinn t
 and for Apptainer:
 
 ```
-apptainer run -B $CFDPINN_ROOT:/mnt cfdpinn.sif tensorboard --logdir=/mnt/tboard --port 6006 --bind_all
+apptainer run -B $CFDPINN_ROOT:/mnt cfdpinn_latest.sif tensorboard --logdir=/mnt/tboard --port 6006 --bind_all
 ```
 
 Then to view the TensorBoard output open http://localhost:6006 in your browser.
