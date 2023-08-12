@@ -28,6 +28,8 @@ apptainer pull docker://harrymchugh/cfdpinn:latest
 
 With the SIF file you can now execute OpenFOAM and CFDPINN training codes on whatever hardware you have available.
 
+Note most apptainer commands can be directly substituted with singularity if that is what is installed on your machine. For example `apptainer pull` would become `singularity pull`.
+
 ### TMPDIR and running out of space error
 For large containers such as the CFDPINN container a common issue that users can run into is an error that suggests there is a lack of space. This is due to the way Apptainer uses temporary directories when building/pulling containers.
 
