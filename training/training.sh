@@ -2,7 +2,7 @@
 
 cfdpinn \
     --debug \
-    --device gpu \
+    --device cuda \
     --profile \
     --profile-path /mnt/profiles/tboard/model_001/ \
     --tensorboard \
